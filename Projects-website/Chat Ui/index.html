@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat UI - CodingX Indonet</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0b1a2e, #1a2f3f);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 1200px;
+            width: 100%;
+            height: 90vh;
+            background: #111b21;
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Sidebar */
+        .chat-sidebar {
+            width: 350px;
+            background: #1f2c34;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #2a3942;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: #1f2c34;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2a3942;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .user-info h4 {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .user-info p {
+            color: #8696a0;
+            font-size: 0.8rem;
+        }
+
+        .sidebar-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .sidebar-actions i {
+            color: #8696a0;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .sidebar-actions i:hover {
+            color: #25D366;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            padding: 15px;
+            background: #1f2c34;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            background: #2a3942;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: #8696a0;
+        }
+
+        /* Chats List */
+        .chats-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .chat-item:hover {
+            background: #2a3942;
+        }
+
+        .chat-item.active {
+            background: #2a3942;
+        }
+
+        .chat-avatar {
+            position: relative;
+        }
+
+        .chat-avatar .avatar {
+            width: 50px;
+            height: 50px;
+            background: #25D366;
+        }
+
+        .online-status {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #25D366;
+            border-radius: 50%;
+            border: 2px solid #1f2c34;
+        }
+
+        .chat-info {
+            flex: 1;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .chat-name {
+            color: white;
+            font-weight: 500;
+        }
+
+        .chat-time {
+            color: #8696a0;
+            font-size: 0.7rem;
+        }
+
+        .chat-preview {
+            color: #8696a0;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .unread-badge {
+            background: #25D366;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0b141a;
+        }
+
+        .chat-header-area {
+            padding: 15px 25px;
+            background: #1f2c34;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2a3942;
+        }
+
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-user-info .avatar {
+            width: 40px;
+            height: 40px;
+        }
+
+        .chat-user-details h3 {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .chat-user-details p {
+            color: #8696a0;
+            font-size: 0.8rem;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .chat-actions i {
+            color: #8696a0;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Messages */
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message-date {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .date-badge {
+            background: #1f2c34;
+            color: #8696a0;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .message-wrapper {
+            display: flex;
+            margin-bottom: 5px;
+        }
+
+        .message-wrapper.sent {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 65%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .message-wrapper.sent .message-bubble {
+            background: #005c4b;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-wrapper.received .message-bubble {
+            background: #1f2c34;
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-text {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .message-meta {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 5px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .message-status i {
+            font-size: 0.8rem;
+        }
+
+        .message-status .read {
+            color: #53bdeb;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            padding: 20px;
+            background: #1f2c34;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .input-actions i {
+            color: #8696a0;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .message-input {
+            flex: 1;
+            background: #2a3942;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: white;
+            outline: none;
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            background: #25D366;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-button:hover {
+            background: #20b859;
+            transform: scale(1.1);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 10px 15px;
+            background: #1f2c34;
+            border-radius: 15px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #8696a0;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-container {
+                flex-direction: column;
+            }
+
+            .chat-sidebar {
+                width: 100%;
+                height: 40%;
+            }
+
+            .chat-area {
+                height: 60%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Sidebar -->
+        <div class="chat-sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <div class="avatar">CW</div>
+                    <div class="user-info">
+                        <h4>CodingX Indonet</h4>
+                        <p>Online</p>
+                    </div>
+                </div>
+                <div class="sidebar-actions">
+                    <i class="fa-regular fa-circle"></i>
+                    <i class="fa-regular fa-message"></i>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Search or start new chat">
+            </div>
+
+            <div class="chats-list" id="chatsList">
+                <!-- Akan diisi JavaScript -->
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="chat-header-area">
+                <div class="chat-user-info">
+                    <div class="avatar">BS</div>
+                    <div class="chat-user-details">
+                        <h3 id="currentChatName">Budi Santoso</h3>
+                        <p id="currentChatStatus">Online</p>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-video"></i>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <!-- Akan diisi JavaScript -->
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-actions">
+                    <i class="fa-regular fa-face-smile"></i>
+                    <i class="fa-solid fa-paperclip"></i>
+                </div>
+                <input type="text" class="message-input" id="messageInput" placeholder="Type a message">
+                <button class="send-button" id="sendButton">
+                    <i class="fa-regular fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample chats data
+        const chats = [
+            {
+                id: 1,
+                name: "Budi Santoso",
+                avatar: "BS",
+                lastMessage: "Ok, nanti saya kesana",
+                time: "10:30",
+                unread: 3,
+                online: true,
+                messages: [
+                    { id: 1, text: "Halo, apa kabar?", type: "received", time: "10:30", status: "read" },
+                    { id: 2, text: "Baik, nih. Ada apa?", type: "sent", time: "10:31", status: "read" },
+                    { id: 3, text: "Mau nanya soal project kemarin, bisa ketemu?", type: "received", time: "10:32", status: "read" },
+                    { id: 4, text: "Bisa banget. Jam 3 sore gimana?", type: "sent", time: "10:33", status: "read" },
+                    { id: 5, text: "Ok, nanti saya kesana", type: "received", time: "10:34", status: "read" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Siti Aminah",
+                avatar: "SA",
+                lastMessage: "Makasih ya udah bantu",
+                time: "09:15",
+                unread: 0,
+                online: false,
+                messages: [
+                    { id: 1, text: "Makasih ya udah bantu", type: "sent", time: "09:15", status: "delivered" },
+                    { id: 2, text: "Sama-sama, senang bisa bantu", type: "received", time: "09:16", status: "read" },
+                    { id: 3, text: "Next time saya traktir", type: "sent", time: "09:17", status: "read" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Ahmad Hidayat",
+                avatar: "AH",
+                lastMessage: "File nya sudah saya kirim",
+                time: "Kemarin",
+                unread: 5,
+                online: true,
+                messages: [
+                    { id: 1, text: "File nya sudah saya kirim", type: "received", time: "Kemarin", status: "read" },
+                    { id: 2, text: "Oke, nanti saya cek", type: "sent", time: "Kemarin", status: "read" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Dewi Lestari",
+                avatar: "DL",
+                lastMessage: "Selamat malam pak",
+                time: "Kemarin",
+                unread: 0,
+                online: false,
+                messages: [
+                    { id: 1, text: "Selamat malam pak", type: "received", time: "Kemarin", status: "read" }
+                ]
+            }
+        ];
+
+        // State
+        let currentChat = chats[0];
+        let typingTimeout;
+
+        // DOM Elements
+        const chatsList = document.getElementById('chatsList');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const currentChatName = document.getElementById('currentChatName');
+        const currentChatStatus = document.getElementById('currentChatStatus');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Load chats list
+        function loadChats() {
+            chatsList.innerHTML = chats.map(chat => `
+                <div class="chat-item ${chat.id === currentChat.id ? 'active' : ''}" onclick="selectChat(${chat.id})">
+                    <div class="chat-avatar">
+                        <div class="avatar">${chat.avatar}</div>
+                        ${chat.online ? '<span class="online-status"></span>' : ''}
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <span class="chat-name">${chat.name}</span>
+                            <span class="chat-time">${chat.time}</span>
+                        </div>
+                        <div class="chat-preview">
+                            ${chat.lastMessage}
+                            ${chat.unread > 0 ? `<span class="unread-badge">${chat.unread}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Select chat
+        window.selectChat = function(chatId) {
+            currentChat = chats.find(c => c.id === chatId);
+            currentChatName.textContent = currentChat.name;
+            currentChatStatus.textContent = currentChat.online ? 'Online' : 'Offline';
+            loadMessages();
+            loadChats(); // Refresh active state
+        };
+
+        // Load messages
+        function loadMessages() {
+            let lastDate = '';
+            messagesContainer.innerHTML = currentChat.messages.map(msg => {
+                const messageDate = new Date().toDateString(); // Simulate date
+                
+                let dateHtml = '';
+                if (messageDate !== lastDate) {
+                    dateHtml = `
+                        <div class="message-date">
+                            <span class="date-badge">Today</span>
+                        </div>
+                    `;
+                    lastDate = messageDate;
+                }
+
+                return dateHtml + `
+                    <div class="message-wrapper ${msg.type === 'sent' ? 'sent' : 'received'}">
+                        <div class="message-bubble">
+                            <div class="message-text">${msg.text}</div>
+                            <div class="message-meta">
+                                <span>${msg.time}</span>
+                                <span class="message-status">
+                                    ${msg.type === 'sent' ? 
+                                        `<i class="fa-${msg.status === 'read' ? 'solid' : 'regular'} fa-check-double ${msg.status === 'read' ? 'read' : ''}"></i>` : 
+                                        ''}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Send message
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            const now = new Date();
+            const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            const newMessage = {
+                id: Date.now(),
+                text: text,
+                type: 'sent',
+                time: time,
+                status: 'sent'
+            };
+
+            currentChat.messages.push(newMessage);
+            currentChat.lastMessage = text;
+            currentChat.time = 'Just now';
+
+            loadMessages();
+            messageInput.value = '';
+
+            // Simulate reply after 2 seconds
+            setTimeout(() => {
+                const replyMessage = {
+                    id: Date.now(),
+                    text: "Pesan diterima, Bos-Tuan Besar! 💼📝💰",
+                    type: 'received',
+                    time: new Date().getHours() + ':' + new Date().getMinutes().toString().padStart(2, '0'),
+                    status: 'read'
+                };
+                currentChat.messages.push(replyMessage);
+                loadMessages();
+
+                // Update last message status to read
+                const lastSent = currentChat.messages.filter(m => m.type === 'sent').pop();
+                if (lastSent) {
+                    lastSent.status = 'read';
+                }
+                loadMessages();
+            }, 2000);
+
+            // Show typing indicator
+            showTypingIndicator();
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typingHtml = `
+                <div class="message-wrapper received">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.insertAdjacentHTML('beforeend', typingHtml);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Remove after 2 seconds
+            setTimeout(() => {
+                const typingIndicator = document.querySelector('.typing-indicator')?.closest('.message-wrapper');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }, 2000);
+        }
+
+        // Simulate incoming messages
+        function simulateIncomingMessage() {
+            const messages = [
+                "Halo, apa kabar?",
+                "Ada project baru nih",
+                "Makasih banyak ya!",
+                "Siap, nanti saya kabari"
+            ];
+
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                    const now = new Date();
+                    const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+                    const newMessage = {
+                        id: Date.now(),
+                        text: randomMessage,
+                        type: 'received',
+                        time: time,
+                        status: 'read'
+                    };
+
+                    currentChat.messages.push(newMessage);
+                    loadMessages();
+
+                    // Show notification
+                    showNotification('New message from ' + currentChat.name);
+                }
+            }, 15000);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            if (Notification.permission === 'granted') {
+                new Notification(message);
+            }
+        }
+
+        // Request notification permission
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+
+        // Event Listeners
+        sendButton.addEventListener('click', sendMessage);
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize
+        loadChats();
+        loadMessages();
+        simulateIncomingMessage();
+    </script>
+</body>
+</html>

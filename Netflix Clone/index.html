@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamFlix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E50914;
+    --red-dark: #B20710;
+    --black: #0A0A0A;
+    --dark: #141414;
+    --card-bg: #1c1c1c;
+    --text: #FFFFFF;
+    --muted: #999;
+    --font-title: 'Bebas Neue', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 48px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, transparent 100%);
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(0,0,0,0.97); }
+
+  .logo {
+    font-family: var(--font-title);
+    font-size: 2.2rem;
+    color: var(--red);
+    letter-spacing: 2px;
+    text-decoration: none;
+    user-select: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .btn-signin {
+    background: var(--red);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-signin:hover { background: var(--red-dark); }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    transition: all 0.3s;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.97);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--red); }
+  .mobile-close {
+    position: absolute;
+    top: 20px; right: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('images/squidgame.webp') center/cover no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    object-fit: cover;
+    filter: contrast(1.2) brightness(1.1);
+    transform: scale(1.05);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.85) 40%, transparent 100%),
+                linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 48px;
+    max-width: 650px;
+    animation: fadeInUp 0.8s ease both;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: var(--font-title);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
+  }
+
+  .hero-desc {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    color: #ddd;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+  .hero-meta .rating {
+    color: #2ecc71;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .hero-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: #555; }
+
+  .hero-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-play {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-play:hover { background: rgba(255,255,255,0.85); transform: scale(1.03); }
+  .btn-play svg { width: 20px; height: 20px; }
+
+  .btn-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(109,109,110,0.7);
+    color: #fff;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .btn-info:hover { background: rgba(109,109,110,0.5); }
+  .btn-info svg { width: 20px; height: 20px; }
+
+  /* SECTIONS */
+  .section {
+    padding: 40px 48px;
+  }
+
+  .section-title {
+    font-family: var(--font-title);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.2em;
+    background: var(--red);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* SLIDER */
+  .slider-wrapper {
+    position: relative;
+  }
+
+  .slider {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 4px;
+  }
+  .slider::-webkit-scrollbar { display: none; }
+
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    width: 40px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+    font-size: 1.2rem;
+  }
+  .slider-btn:hover { background: rgba(229,9,20,0.8); }
+  .slider-btn.prev { left: -20px; }
+  .slider-btn.next { right: -20px; }
+
+  /* CARDS */
+  .card {
+    flex: 0 0 200px;
+    scroll-snap-align: start;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s, z-index 0s 0.3s;
+    background: var(--card-bg);
+  }
+  .card:hover {
+    transform: scale(1.08);
+    z-index: 10;
+    transition: transform 0.3s, z-index 0s;
+  }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.3s;
+  }
+  .card:hover .card-thumb { filter: brightness(0.4); }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover .card-overlay { opacity: 1; }
+
+  .card-title {
+    font-family: var(--font-title);
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .card-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: #aaa;
+    flex-wrap: wrap;
+  }
+  .card-info .match { color: #2ecc71; font-weight: 700; }
+  .card-info .age {
+    border: 1px solid #aaa;
+    padding: 1px 4px;
+    font-size: 0.65rem;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .card-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .card-btn:hover { border-color: #fff; background: rgba(255,255,255,0.15); }
+  .card-btn.play-btn {
+    background: #fff;
+    border-color: #fff;
+    color: #000;
+  }
+  .card-btn.play-btn:hover { background: rgba(255,255,255,0.8); }
+
+  /* FEATURED BANNER */
+  .featured {
+    position: relative;
+    margin: 0 48px 40px;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 220px;
+  }
+  .featured-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .featured-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(229,9,20,0.85) 0%, rgba(0,0,0,0.7) 100%);
+    display: flex;
+    align-items: center;
+    padding: 32px 40px;
+    gap: 24px;
+  }
+  .featured-text h2 {
+    font-family: var(--font-title);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .featured-text p {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.85);
+    max-width: 500px;
+    line-height: 1.5;
+  }
+  .featured-btn {
+    flex-shrink: 0;
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: var(--font-body);
+    white-space: nowrap;
+  }
+  .featured-btn:hover { background: rgba(255,255,255,0.85); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid #222;
+    padding: 48px;
+    margin-top: 40px;
+  }
+  .footer-logo {
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    color: var(--red);
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    display: block;
+  }
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    list-style: none;
+  }
+  .footer-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: #fff; }
+  .footer-copy {
+    color: #444;
+    font-size: 0.75rem;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: #181818;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalIn 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-hero {
+    position: relative;
+    height: 280px;
+  }
+  .modal-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .modal-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #181818 0%, transparent 60%);
+  }
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: rgba(0,0,0,0.7);
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.2); }
+
+  .modal-content {
+    padding: 24px 32px 32px;
+  }
+  .modal-title {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .modal-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .modal-meta .match { color: #2ecc71; font-weight: 700; }
+  .modal-desc {
+    color: #ddd;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+  .modal-genre {
+    font-size: 0.8rem;
+    color: #888;
+  }
+  .modal-genre span { color: #aaa; }
+
+  .modal-btns {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #fff;
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* SEARCH BAR */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 6px 12px;
+    transition: background 0.2s;
+  }
+  .search-bar:focus-within {
+    background: rgba(0,0,0,0.8);
+    border-color: #fff;
+  }
+  .search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    width: 140px;
+  }
+  .search-bar input::placeholder { color: #aaa; }
+  .search-bar svg { color: #aaa; width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .search-bar { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 24px; }
+    .section { padding: 30px 24px; }
+    .featured { margin: 0 24px 30px; }
+    footer { padding: 32px 24px; }
+    .slider-btn { display: none; }
+  }
+
+  @media (max-width: 667px) {
+    .hero { min-height: 100svh; }
+    .hero-content { padding: 0 16px; max-width: 100%; }
+    .hero-badge { font-size: 0.65rem; }
+    .hero-desc { font-size: 0.85rem; }
+    .hero-btns { gap: 10px; }
+    .btn-play, .btn-info { padding: 11px 20px; font-size: 0.9rem; }
+
+    .section { padding: 24px 16px; }
+    .section-title { font-size: 1.2rem; }
+
+    .card { flex: 0 0 140px; }
+
+    .featured { margin: 0 16px 24px; height: auto; }
+    .featured-overlay { padding: 20px; flex-direction: column; align-items: flex-start; }
+    .featured-text p { font-size: 0.8rem; }
+
+    footer { padding: 24px 16px; }
+    .footer-links { gap: 16px; }
+
+    .modal-content { padding: 16px 20px 24px; }
+    .modal-hero { height: 200px; }
+  }
+
+  /* Scrollbar global */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="logo">STREAMFLIX</a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">TV Shows</a></li>
+    <li><a href="#">Movies</a></li>
+    <li><a href="#">New & Popular</a></li>
+    <li><a href="#">My List</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Titles, people, genres" id="searchInput" oninput="filterCards(this.value)">
+    </div>
+    <button class="btn-signin">Sign In</button>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="#" onclick="toggleMenu()">Home</a>
+  <a href="#" onclick="toggleMenu()">TV Shows</a>
+  <a href="#" onclick="toggleMenu()">Movies</a>
+  <a href="#" onclick="toggleMenu()">New & Popular</a>
+  <a href="#" onclick="toggleMenu()">My List</a>
+  <button class="btn-signin">Sign In</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-badge">🔥 Trending Now #1</span>
+    <h1 class="hero-title">Squid<br>Game</h1>
+    <div class="hero-meta">
+      <span class="rating">98% Match</span>
+      <span class="dot"></span>
+      <span>2024</span>
+      <span class="dot"></span>
+      <span>TV-MA</span>
+      <span class="dot"></span>
+      <span>2 Seasons</span>
+    </div>
+    <p class="hero-desc">Hundreds of cash-strapped players accept a strange invitation to compete in children's games. Inside, a tempting prize awaits with deadly high stakes. A survival game that has a whopping 45.6 billion-won prize at stake.</p>
+    <div class="hero-btns">
+      <button class="btn-play" onclick="showToast('▶ Memulai Squid Game...')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
+        Play
+      </button>
+      <button class="btn-info" onclick="openModal(0)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4M12 8h.01"/></svg>
+        More Info
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Trending Now -->
+<section class="section">
+  <h2 class="section-title">Trending Now</h2>
+  <div class="slider-wrapper">
+    <button class="slider-btn prev" onclick="slide('trending',-1)">&#8249;</button>
+    <div class="slider" id="trending"></div>
+    <button class="slider-btn next" onclick="slide('trending',1)">&#8250;</button>
+  </div>
+</section>
+
+<!-- FEATURED BANNER -->
+<div class="featured">
+  <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80" alt="Featured" class="featured-bg">
+  <div class="featured-overlay">
+    <div class="featured-text">
+      <h2>Download & Watch Offline</h2>
+      <p>Save your favorites easily and always have something to watch. Anytime, anywhere.</p>
+    </div>
+    <button class="featured-btn" onclick="showToast('📥 Fitur download aktif!')">Download Now</button>
+  </div>
+</div>
+
+<!-- SECTION: Top Rated -->
+<section class="section">
+  <h2 class="section-title">Top Rated</h2>
+  <div class="slider-wrapper">
+    <button class="slider-btn prev" onclick="slide('toprated',-1)">&#8249;</button>
+    <div class="slider" id="toprated"></div>
+    <button class="slider-btn next" onclick="slide('toprated',1)">&#8250;</button>
+  </div>
+</section>
+
+<!-- SECTION: Continue Watching -->
+<section class="section">
+  <h2 class="section-title">Continue Watching</h2>
+  <div class="slider-wrapper">
+    <button class="slider-btn prev" onclick="slide('continue',-1)">&#8249;</button>
+    <div class="slider" id="continue"></div>
+    <button class="slider-btn next" onclick="slide('continue',1)">&#8250;</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">STREAMFLIX</span>
+  <ul class="footer-links">
+    <li><a href="#">Audio & Subtitles</a></li>
+    <li><a href="#">Media Center</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Contact Us</a></li>
+    <li><a href="#">Help Center</a></li>
+    <li><a href="#">Terms of Use</a></li>
+    <li><a href="#">Jobs</a></li>
+    <li><a href="#">Cookie Preferences</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 StreamFlix — Fictional UI Clone for Demo Purposes</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-hero">
+      <img id="modalImg" src="" alt="">
+      <div class="modal-hero-overlay"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-content">
+      <div class="modal-btns">
+        <button class="btn-play" style="font-size:0.9rem;padding:10px 22px" onclick="showToast('▶ Memulai film...')">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><path d="M5 3l14 9-14 9V3z"/></svg> Play
+        </button>
+        <button class="btn-info" style="font-size:0.9rem;padding:10px 22px" onclick="addToMyList()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg> My List
+        </button>
+      </div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta" id="modalMeta"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <p class="modal-genre" id="modalGenre"></p>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const movies = [
+  {
+    title: "Squid Game",
+    year: "2021–2024",
+    match: "98",
+    age: "TV-MA",
+    duration: "2 Seasons",
+    genre: "Survival, Thriller, Drama",
+    desc: "Ratusan pemain yang kekurangan uang menerima undangan misterius untuk berkompetisi dalam permainan anak-anak dengan taruhan mematikan. Hadiah 45,6 miliar won menanti sang pemenang.",
+    img: "images/squidgame.webp",
+    thumb: "images/squidgame.webp"
+  },
+  {
+    title: "Stranger Things",
+    year: "2016–2025",
+    match: "97",
+    age: "TV-14",
+    duration: "5 Seasons",
+    genre: "Sci-Fi, Horror, Drama",
+    desc: "Saat seorang anak menghilang, kota kecil Hawkins mengungkap misteri yang melibatkan eksperimen rahasia, kekuatan supernatural, dan makhluk mengerikan dari dimensi lain.",
+    img: "images/stranger-things.webp",
+    thumb: "images/stranger-things.webp"
+  },
+  {
+    title: "Wednesday",
+    year: "2022–2024",
+    match: "95",
+    age: "TV-14",
+    duration: "2 Seasons",
+    genre: "Fantasy, Comedy, Mystery",
+    desc: "Wednesday Addams menyelidiki rangkaian pembunuhan misterius sambil mencoba menguasai kemampuan psikokinetiknya dan berteman di Nevermore Academy.",
+    img: "images/wednesday.webp",
+    thumb: "images/wednesday.webp"
+  },
+  {
+    title: "Dahmer",
+    year: "2022",
+    match: "91",
+    age: "TV-MA",
+    duration: "Limited Series",
+    genre: "Crime, Drama, Thriller",
+    desc: "Kisah nyata yang menggugah tentang bagaimana Jeffrey Dahmer, pembunuh berantai, lolos dari pengawasan selama lebih dari satu dekade meski ada kegagalan sistemik berulang.",
+    img: "images/dahmer.jpg",
+    thumb: "images/dahmer.jpg"
+  },
+  {
+    title: "Bridgerton",
+    year: "2020–2024",
+    match: "93",
+    age: "TV-MA",
+    duration: "3 Seasons",
+    genre: "Romance, Drama, Historical",
+    desc: "Di balik kemewahan London era Regency, keluarga Bridgerton berjuang menemukan cinta sejati di tengah gosip society dan tekanan sosial yang penuh intrik.",
+    img: "images/bridgerton.jpg",
+    thumb: "images/bridgerton.jpg"
+  },
+  {
+    title: "The Crown",
+    year: "2016–2023",
+    match: "96",
+    age: "TV-MA",
+    duration: "6 Seasons",
+    genre: "Drama, Historical, Biography",
+    desc: "Serial ini menceritakan kehidupan pribadi dan politik Ratu Elizabeth II serta tokoh-tokoh berpengaruh di kerajaan Inggris selama beberapa dekade.",
+    img: "images/thecrown.webp",
+    thumb: "images/thecrown.webp"
+  },
+  {
+    title: "Ozark",
+    year: "2017–2022",
+    match: "94",
+    age: "TV-MA",
+    duration: "4 Seasons",
+    genre: "Crime, Drama, Thriller",
+    desc: "Seorang perencana keuangan memindahkan keluarganya ke Ozarks setelah skema pencucian uang untuk kartel narkoba Mexico menjadi sangat berbahaya.",
+    img: "images/ozark.avif",
+    thumb: "images/ozark.avif"
+  },
+  {
+    title: "Money Heist",
+    year: "2017–2021",
+    match: "97",
+    age: "TV-MA",
+    duration: "5 Parts",
+    genre: "Crime, Thriller, Action",
+    desc: "Seorang kriminal jenius yang dikenal sebagai Professor merekrut delapan perampok untuk melaksanakan perampokan terbesar dalam sejarah Spanyol.",
+    img: "images/moneyheist.webp",
+    thumb: "images/moneyheist.webp"
+  },
+  {
+    title: "Dark",
+    year: "2017–2020",
+    match: "99",
+    age: "TV-MA",
+    duration: "3 Seasons",
+    genre: "Sci-Fi, Mystery, Thriller",
+    desc: "Empat keluarga yang saling terhubung di kota Winden, Jerman, terperangkap dalam paradoks waktu yang merentang melampaui kehidupan satu insan.",
+    img: "images/dark.webp",
+    thumb: "images/dark.webp"
+  },
+  {
+    title: "You",
+    year: "2018–2023",
+    match: "92",
+    age: "TV-MA",
+    duration: "4 Seasons",
+    genre: "Thriller, Drama, Romance",
+    desc: "Joe Goldberg, seorang manajer toko buku yang karismatik, jatuh terobsesi dengan wanita yang dia temui dan rela melakukan apa saja untuk memilikinya.",
+    img: "images/you.jpg",
+    thumb: "images/you.jpg"
+  }
+];
+
+const myList = new Set();
+
+function buildCard(movie, idx) {
+  return `
+    <div class="card" onclick="openModal(${idx})" data-title="${movie.title.toLowerCase()}">
+      <img class="card-thumb" src="${movie.thumb}" alt="${movie.title}" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-actions">
+          <button class="card-btn play-btn" onclick="event.stopPropagation();showToast('▶ ${movie.title}')">▶</button>
+          <button class="card-btn" onclick="event.stopPropagation();toggleList(${idx},this)" title="My List">+</button>
+          <button class="card-btn" onclick="event.stopPropagation();showToast('👍 Disukai!')">👍</button>
+        </div>
+        <div class="card-title">${movie.title}</div>
+        <div class="card-info">
+          <span class="match">${movie.match}% Match</span>
+          <span class="age">${movie.age}</span>
+          <span>${movie.duration}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function populateSliders() {
+  const trending = document.getElementById('trending');
+  const toprated = document.getElementById('toprated');
+  const cont = document.getElementById('continue');
+
+  movies.forEach((m, i) => {
+    trending.innerHTML += buildCard(m, i);
+    // Reverse for top rated
+    const j = movies.length - 1 - i;
+    toprated.innerHTML += buildCard(movies[j], j);
+    // First 5 for continue
+    if (i < 5) cont.innerHTML += buildCard(m, i);
+  });
+}
+
+function slide(id, dir) {
+  const el = document.getElementById(id);
+  el.scrollBy({ left: dir * 600, behavior: 'smooth' });
+}
+
+function openModal(idx) {
+  const m = movies[idx];
+  document.getElementById('modalImg').src = m.img;
+  document.getElementById('modalTitle').textContent = m.title;
+  document.getElementById('modalMeta').innerHTML = `
+    <span class="match">${m.match}% Match</span>
+    <span>${m.year}</span>
+    <span>${m.age}</span>
+    <span>${m.duration}</span>
+  `;
+  document.getElementById('modalDesc').textContent = m.desc;
+  document.getElementById('modalGenre').innerHTML = `<span>Genre:</span> ${m.genre}`;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+function toggleList(idx, btn) {
+  if (myList.has(idx)) {
+    myList.delete(idx);
+    btn.textContent = '+';
+    showToast('Dihapus dari My List');
+  } else {
+    myList.add(idx);
+    btn.textContent = '✓';
+    showToast('✅ Ditambahkan ke My List!');
+  }
+}
+
+function addToMyList() {
+  showToast('✅ Ditambahkan ke My List!');
+}
+
+let toastTimeout;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Search filter
+function filterCards(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const title = card.dataset.title || '';
+    card.style.display = (!q || title.includes(q)) ? '' : 'none';
+  });
+}
+
+// Keyboard ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Init
+populateSliders();
+</script>
+</body>
+</html>

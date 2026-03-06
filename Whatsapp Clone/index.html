@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WhatsApp Clone - CodingX Indonet</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --whatsapp-green: #00a884;
+            --whatsapp-dark-green: #008069;
+            --whatsapp-teal: #128C7E;
+            --whatsapp-light-green: #DCF8C6;
+            --whatsapp-bg: #111b21;
+            --whatsapp-header: #202c33;
+            --whatsapp-input: #2a3942;
+            --whatsapp-hover: #2d3d45;
+            --whatsapp-border: #2f3b43;
+            --whatsapp-text: #e9edef;
+            --whatsapp-text-secondary: #8696a0;
+            --whatsapp-message-out: #005c4b;
+            --whatsapp-message-in: #202c33;
+            --whatsapp-tick: #53bdeb;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 20px;
+            --border-radius-sm: 6px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-full: 9999px;
+        }
+
+        body {
+            background-color: #0a1014;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* WhatsApp Container */
+        .whatsapp-container {
+            width: 100%;
+            max-width: 1800px;
+            height: 100vh;
+            background-color: var(--whatsapp-bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--whatsapp-header);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--whatsapp-text);
+            border-bottom: 1px solid var(--whatsapp-border);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xl);
+        }
+
+        .header-left img {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius-full);
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--whatsapp-text);
+        }
+
+        .header-right {
+            display: flex;
+            gap: var(--spacing-xl);
+        }
+
+        .header-right i {
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--whatsapp-text-secondary);
+            transition: color 0.2s;
+        }
+
+        .header-right i:hover {
+            color: var(--whatsapp-text);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar Kiri (Chat List) */
+        .chat-sidebar {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--whatsapp-bg);
+            border-right: 1px solid var(--whatsapp-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background-color: var(--whatsapp-header);
+        }
+
+        .search-box {
+            background-color: var(--whatsapp-input);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .search-box i {
+            color: var(--whatsapp-text-secondary);
+            font-size: 14px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--whatsapp-text);
+            width: 100%;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--whatsapp-text-secondary);
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            background-color: var(--whatsapp-header);
+            padding: 0 var(--spacing-md);
+            border-bottom: 1px solid var(--whatsapp-border);
+        }
+
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: var(--spacing-md) 0;
+            color: var(--whatsapp-text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab-item.active {
+            color: var(--whatsapp-light-green);
+        }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--whatsapp-light-green);
+        }
+
+        /* Chat List */
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--whatsapp-border) transparent;
+        }
+
+        .chat-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-list::-webkit-scrollbar-thumb {
+            background-color: var(--whatsapp-border);
+            border-radius: var(--border-radius-full);
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) var(--spacing-lg);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid var(--whatsapp-border);
+        }
+
+        .chat-item:hover {
+            background-color: var(--whatsapp-hover);
+        }
+
+        .chat-item.active {
+            background-color: var(--whatsapp-hover);
+        }
+
+        .chat-avatar {
+            position: relative;
+        }
+
+        .chat-avatar img {
+            width: 49px;
+            height: 49px;
+            border-radius: var(--border-radius-full);
+            object-fit: cover;
+        }
+
+        .online-status {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background-color: #25D366;
+            border-radius: var(--border-radius-full);
+            border: 2px solid var(--whatsapp-bg);
+        }
+
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .chat-name {
+            font-weight: 500;
+            color: var(--whatsapp-text);
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-time {
+            font-size: 11px;
+            color: var(--whatsapp-text-secondary);
+        }
+
+        .chat-message {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .message-preview {
+            font-size: 13px;
+            color: var(--whatsapp-text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-preview i {
+            font-size: 12px;
+            margin-right: 2px;
+        }
+
+        .unread-badge {
+            background-color: var(--whatsapp-green);
+            color: white;
+            border-radius: var(--border-radius-full);
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: 500;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .tick-status {
+            color: var(--whatsapp-text-secondary);
+            font-size: 12px;
+        }
+
+        .tick-status.read {
+            color: var(--whatsapp-tick);
+        }
+
+        /* Chat Area Utama */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #0b141a;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230b141a" /><circle cx="50" cy="50" r="40" fill="none" stroke="%23202c33" stroke-width="1" /></svg>');
+            background-size: 200px 200px;
+        }
+
+        /* Chat Header */
+        .chat-area-header {
+            background-color: var(--whatsapp-header);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--whatsapp-border);
+        }
+
+        .chat-area-user {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .chat-area-user img {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius-full);
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--whatsapp-text);
+            font-size: 16px;
+        }
+
+        .user-status {
+            font-size: 12px;
+            color: var(--whatsapp-text-secondary);
+        }
+
+        .chat-area-actions {
+            display: flex;
+            gap: var(--spacing-xl);
+        }
+
+        .chat-area-actions i {
+            font-size: 20px;
+            color: var(--whatsapp-text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .chat-area-actions i:hover {
+            color: var(--whatsapp-text);
+        }
+
+        /* Messages Container */
+        .messages-container {
+            flex: 1;
+            padding: var(--spacing-lg);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+            scrollbar-width: thin;
+            scrollbar-color: var(--whatsapp-border) transparent;
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background-color: var(--whatsapp-border);
+            border-radius: var(--border-radius-full);
+        }
+
+        /* Message Bubbles */
+        .message-date {
+            text-align: center;
+            margin: var(--spacing-md) 0;
+        }
+
+        .date-badge {
+            background-color: var(--whatsapp-header);
+            color: var(--whatsapp-text-secondary);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--border-radius-full);
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .message-wrapper {
+            display: flex;
+            margin-bottom: 2px;
+        }
+
+        .message-wrapper.out {
+            justify-content: flex-end;
+        }
+
+        .message-wrapper.in {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 65%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message-wrapper.out .message-bubble {
+            background-color: var(--whatsapp-message-out);
+            color: var(--whatsapp-text);
+            border-top-right-radius: 2px;
+        }
+
+        .message-wrapper.in .message-bubble {
+            background-color: var(--whatsapp-message-in);
+            color: var(--whatsapp-text);
+            border-top-left-radius: 2px;
+        }
+
+        .message-text {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-right: 50px;
+        }
+
+        .message-meta {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 2px;
+            margin-top: 2px;
+            font-size: 11px;
+            color: var(--whatsapp-text-secondary);
+        }
+
+        .message-wrapper.out .message-meta {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .message-time {
+            font-size: 11px;
+        }
+
+        .message-status i {
+            font-size: 12px;
+        }
+
+        .message-status .read {
+            color: var(--whatsapp-tick);
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            background-color: var(--whatsapp-header);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            border-top: 1px solid var(--whatsapp-border);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .input-actions i {
+            font-size: 24px;
+            color: var(--whatsapp-text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .input-actions i:hover {
+            color: var(--whatsapp-text);
+        }
+
+        .message-input {
+            flex: 1;
+            background-color: var(--whatsapp-input);
+            border: none;
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            color: var(--whatsapp-text);
+            font-size: 15px;
+            outline: none;
+        }
+
+        .message-input::placeholder {
+            color: var(--whatsapp-text-secondary);
+        }
+
+        .send-button {
+            background-color: var(--whatsapp-green);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-full);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .send-button i {
+            font-size: 22px;
+        }
+
+        .send-button:hover {
+            background-color: var(--whatsapp-teal);
+        }
+
+        /* Empty State */
+        .empty-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--whatsapp-text-secondary);
+            gap: var(--spacing-lg);
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .empty-chat i {
+            font-size: 60px;
+            color: var(--whatsapp-border);
+        }
+
+        .empty-chat h3 {
+            color: var(--whatsapp-text);
+            font-weight: 400;
+        }
+
+        /* Status Page */
+        .status-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+            background-color: var(--whatsapp-bg);
+        }
+
+        .my-status {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--whatsapp-border);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .my-status-avatar {
+            position: relative;
+        }
+
+        .my-status-avatar img {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--border-radius-full);
+            object-fit: cover;
+        }
+
+        .add-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: var(--whatsapp-green);
+            width: 22px;
+            height: 22px;
+            border-radius: var(--border-radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--whatsapp-bg);
+        }
+
+        .add-status i {
+            font-size: 12px;
+            color: white;
+        }
+
+        .my-status-info h4 {
+            color: var(--whatsapp-text);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .my-status-info p {
+            color: var(--whatsapp-text-secondary);
+            font-size: 13px;
+        }
+
+        .status-section-title {
+            color: var(--whatsapp-text-secondary);
+            font-size: 14px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-sm) 0;
+            cursor: pointer;
+        }
+
+        .status-avatar {
+            position: relative;
+        }
+
+        .status-avatar img {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--border-radius-full);
+            object-fit: cover;
+            border: 2px solid var(--whatsapp-green);
+            padding: 2px;
+        }
+
+        .status-avatar.viewed img {
+            border-color: var(--whatsapp-border);
+        }
+
+        .status-info h5 {
+            color: var(--whatsapp-text);
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .status-info p {
+            color: var(--whatsapp-text-secondary);
+            font-size: 12px;
+        }
+
+        /* Calls Page */
+        .calls-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+        }
+
+        .call-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-md) 0;
+            cursor: pointer;
+        }
+
+        .call-avatar img {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--border-radius-full);
+            object-fit: cover;
+        }
+
+        .call-info {
+            flex: 1;
+        }
+
+        .call-name {
+            color: var(--whatsapp-text);
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .call-details {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--whatsapp-text-secondary);
+            font-size: 13px;
+        }
+
+        .call-details i {
+            font-size: 12px;
+        }
+
+        .call-details.missed {
+            color: #f15c6d;
+        }
+
+        .call-time {
+            color: var(--whatsapp-text-secondary);
+            font-size: 12px;
+        }
+
+        .call-action i {
+            font-size: 22px;
+            color: var(--whatsapp-green);
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-sidebar {
+                max-width: 100%;
+            }
+            
+            .chat-area {
+                display: none;
+            }
+            
+            .chat-area.active {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1000;
+            }
+            
+            .back-button {
+                display: block !important;
+            }
+        }
+
+        .back-button {
+            display: none;
+            margin-right: var(--spacing-sm);
+        }
+
+        .back-button i {
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="whatsapp-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <img src="https://i.pravatar.cc/150?img=1" alt="Profile">
+                <span class="app-title">WhatsApp</span>
+            </div>
+            <div class="header-right">
+                <i class="fas fa-camera"></i>
+                <i class="fas fa-ellipsis-vertical"></i>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar Kiri -->
+            <div class="chat-sidebar">
+                <!-- Search -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Cari chat atau pesan">
+                    </div>
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="tab-nav">
+                    <div class="tab-item active" data-tab="chats">
+                        <i class="fas fa-comment"></i> Chats
+                    </div>
+                    <div class="tab-item" data-tab="status">
+                        <i class="fas fa-circle"></i> Status
+                    </div>
+                    <div class="tab-item" data-tab="calls">
+                        <i class="fas fa-phone"></i> Panggilan
+                    </div>
+                </div>
+
+                <!-- Chats List -->
+                <div class="chat-list" id="chats-list">
+                    <!-- Chat Item 1 - Active -->
+                    <div class="chat-item active" data-chat-id="1" data-user="Budi Santoso">
+                        <div class="chat-avatar">
+                            <img src="https://i.pravatar.cc/150?img=2" alt="Avatar">
+                            <span class="online-status"></span>
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <span class="chat-name">Budi Santoso</span>
+                                <span class="chat-time">10:30</span>
+                            </div>
+                            <div class="chat-message">
+                                <div class="message-preview">
+                                    <i class="fas fa-check-double tick-status read"></i>
+                                    Ok, nanti saya kesana
+                                </div>
+                                <span class="unread-badge">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Item 2 -->
+                    <div class="chat-item" data-chat-id="2" data-user="Siti Aminah">
+                        <div class="chat-avatar">
+                            <img src="https://i.pravatar.cc/150?img=3" alt="Avatar">
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <span class="chat-name">Siti Aminah</span>
+                                <span class="chat-time">09:15</span>
+                            </div>
+                            <div class="chat-message">
+                                <div class="message-preview">
+                                    <i class="fas fa-check tick-status"></i>
+                                    Makasih ya udah bantu
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Item 3 -->
+                    <div class="chat-item" data-chat-id="3" data-user="Ahmad Hidayat">
+                        <div class="chat-avatar">
+                            <img src="https://i.pravatar.cc/150?img=4" alt="Avatar">
+                            <span class="online-status"></span>
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <span class="chat-name">Ahmad Hidayat</span>
+                                <span class="chat-time">Kemarin</span>
+                            </div>
+                            <div class="chat-message">
+                                <div class="message-preview">
+                                    <i class="fas fa-check-double tick-status read"></i>
+                                    File nya sudah saya kirim
+                                </div>
+                                <span class="unread-badge">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Item 4 -->
+                    <div class="chat-item" data-chat-id="4" data-user="Dewi Lestari">
+                        <div class="chat-avatar">
+                            <img src="https://i.pravatar.cc/150?img=5" alt="Avatar">
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <span class="chat-name">Dewi Lestari</span>
+                                <span class="chat-time">Kemarin</span>
+                            </div>
+                            <div class="chat-message">
+                                <div class="message-preview">
+                                    <i class="fas fa-check tick-status"></i>
+                                    Selamat malam pak
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Item 5 -->
+                    <div class="chat-item" data-chat-id="5" data-user="Rizki Pratama">
+                        <div class="chat-avatar">
+                            <img src="https://i.pravatar.cc/150?img=6" alt="Avatar">
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <span class="chat-name">Rizki Pratama</span>
+                                <span class="chat-time">2 hari</span>
+                            </div>
+                            <div class="chat-message">
+                                <div class="message-preview">
+                                    <i class="fas fa-check-double tick-status read"></i>
+                                    Siap bos!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Item 6 -->
+                    <div class="chat-item" data-chat-id="6" data-user="Maya Sari">
+                        <div class="chat-avatar">
+                            <img src="https://i.pravatar.cc/150?img=7" alt="Avatar">
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <span class="chat-name">Maya Sari</span>
+                                <span class="chat-time">3 hari</span>
+                            </div>
+                            <div class="chat-message">
+                                <div class="message-preview">
+                                    <i class="fas fa-check tick-status"></i>
+                                    Hallo? Masih online?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status List (hidden initially) -->
+                <div class="status-container" id="status-list" style="display: none;">
+                    <!-- My Status -->
+                    <div class="my-status">
+                        <div class="my-status-avatar">
+                            <img src="https://i.pravatar.cc/150?img=1" alt="My Status">
+                            <div class="add-status">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                        <div class="my-status-info">
+                            <h4>Status saya</h4>
+                            <p>Ketuk untuk tambah status</p>
+                        </div>
+                    </div>
+
+                    <div class="status-section-title">Pembaruan terkini</div>
+                    
+                    <!-- Status Item 1 -->
+                    <div class="status-item">
+                        <div class="status-avatar">
+                            <img src="https://i.pravatar.cc/150?img=2" alt="Status">
+                        </div>
+                        <div class="status-info">
+                            <h5>Budi Santoso</h5>
+                            <p>5 menit yang lalu</p>
+                        </div>
+                    </div>
+
+                    <!-- Status Item 2 -->
+                    <div class="status-item">
+                        <div class="status-avatar viewed">
+                            <img src="https://i.pravatar.cc/150?img=3" alt="Status">
+                        </div>
+                        <div class="status-info">
+                            <h5>Siti Aminah</h5>
+                            <p>1 jam yang lalu</p>
+                        </div>
+                    </div>
+
+                    <!-- Status Item 3 -->
+                    <div class="status-item">
+                        <div class="status-avatar">
+                            <img src="https://i.pravatar.cc/150?img=4" alt="Status">
+                        </div>
+                        <div class="status-info">
+                            <h5>Ahmad Hidayat</h5>
+                            <p>3 jam yang lalu</p>
+                        </div>
+                    </div>
+
+                    <!-- Status Item 4 -->
+                    <div class="status-item">
+                        <div class="status-avatar viewed">
+                            <img src="https://i.pravatar.cc/150?img=5" alt="Status">
+                        </div>
+                        <div class="status-info">
+                            <h5>Dewi Lestari</h5>
+                            <p>5 jam yang lalu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calls List (hidden initially) -->
+                <div class="calls-container" id="calls-list" style="display: none;">
+                    <!-- Call Item 1 -->
+                    <div class="call-item">
+                        <div class="call-avatar">
+                            <img src="https://i.pravatar.cc/150?img=2" alt="Call">
+                        </div>
+                        <div class="call-info">
+                            <div class="call-name">Budi Santoso</div>
+                            <div class="call-details missed">
+                                <i class="fas fa-phone-alt"></i>
+                                <span>Hari ini, 10:30</span>
+                            </div>
+                        </div>
+                        <div class="call-action">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                    </div>
+
+                    <!-- Call Item 2 -->
+                    <div class="call-item">
+                        <div class="call-avatar">
+                            <img src="https://i.pravatar.cc/150?img=3" alt="Call">
+                        </div>
+                        <div class="call-info">
+                            <div class="call-name">Siti Aminah</div>
+                            <div class="call-details">
+                                <i class="fas fa-phone-alt"></i>
+                                <span>Kemarin, 20:15</span>
+                            </div>
+                        </div>
+                        <div class="call-action">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                    </div>
+
+                    <!-- Call Item 3 -->
+                    <div class="call-item">
+                        <div class="call-avatar">
+                            <img src="https://i.pravatar.cc/150?img=4" alt="Call">
+                        </div>
+                        <div class="call-info">
+                            <div class="call-name">Ahmad Hidayat</div>
+                            <div class="call-details">
+                                <i class="fas fa-video"></i>
+                                <span>2 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="call-action">
+                            <i class="fas fa-video"></i>
+                        </div>
+                    </div>
+
+                    <!-- Call Item 4 -->
+                    <div class="call-item">
+                        <div class="call-avatar">
+                            <img src="https://i.pravatar.cc/150?img=5" alt="Call">
+                        </div>
+                        <div class="call-info">
+                            <div class="call-name">Dewi Lestari</div>
+                            <div class="call-details missed">
+                                <i class="fas fa-phone-alt"></i>
+                                <span>3 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="call-action">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Area Utama -->
+            <div class="chat-area" id="chat-area">
+                <!-- Chat Header -->
+                <div class="chat-area-header">
+                    <div class="chat-area-user">
+                        <div class="back-button" onclick="toggleMobileChat()">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <img src="https://i.pravatar.cc/150?img=2" alt="Avatar" id="chat-user-avatar">
+                        <div class="user-info">
+                            <span class="user-name" id="chat-user-name">Budi Santoso</span>
+                            <span class="user-status" id="chat-user-status">online</span>
+                        </div>
+                    </div>
+                    <div class="chat-area-actions">
+                        <i class="fas fa-video"></i>
+                        <i class="fas fa-phone"></i>
+                        <i class="fas fa-ellipsis-vertical"></i>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="messages-container" id="messages-container">
+                    <!-- Date -->
+                    <div class="message-date">
+                        <span class="date-badge">Hari ini</span>
+                    </div>
+
+                    <!-- Incoming Message -->
+                    <div class="message-wrapper in">
+                        <div class="message-bubble">
+                            <div class="message-text">Halo, apa kabar?</div>
+                            <div class="message-meta">
+                                <span class="message-time">10.30</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Outgoing Message -->
+                    <div class="message-wrapper out">
+                        <div class="message-bubble">
+                            <div class="message-text">Baik, nih. Ada apa?</div>
+                            <div class="message-meta">
+                                <span class="message-time">10.31</span>
+                                <span class="message-status">
+                                    <i class="fas fa-check-double read"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Incoming Message -->
+                    <div class="message-wrapper in">
+                        <div class="message-bubble">
+                            <div class="message-text">Mau nanya soal project kemarin, bisa ketemu?</div>
+                            <div class="message-meta">
+                                <span class="message-time">10.32</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Outgoing Message -->
+                    <div class="message-wrapper out">
+                        <div class="message-bubble">
+                            <div class="message-text">Bisa banget. Jam 3 sore gimana?</div>
+                            <div class="message-meta">
+                                <span class="message-time">10.33</span>
+                                <span class="message-status">
+                                    <i class="fas fa-check-double read"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Incoming Message -->
+                    <div class="message-wrapper in">
+                        <div class="message-bubble">
+                            <div class="message-text">Ok, nanti saya kesana</div>
+                            <div class="message-meta">
+                                <span class="message-time">10.34</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Outgoing Message with image -->
+                    <div class="message-wrapper out">
+                        <div class="message-bubble">
+                            <div class="message-text">Siap! Nanti kabarin ya</div>
+                            <div class="message-meta">
+                                <span class="message-time">10.35</span>
+                                <span class="message-status">
+                                    <i class="fas fa-check-double read"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-area">
+                    <div class="input-actions">
+                        <i class="fas fa-plus-circle"></i>
+                        <i class="fas fa-camera"></i>
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <input type="text" class="message-input" placeholder="Ketik pesan" id="message-input">
+                    <button class="send-button" id="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State (when no chat selected on desktop) -->
+            <div class="empty-chat" id="empty-chat" style="display: none;">
+                <i class="fab fa-whatsapp"></i>
+                <h3>WhatsApp Clone by CodingX Indonet</h3>
+                <p>Pilih chat untuk mulai mengobrol</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentChatId = '1'; // Default chat
+        let currentTab = 'chats';
+        let isMobile = window.innerWidth <= 768;
+
+        // DOM Elements
+        const chatItems = document.querySelectorAll('.chat-item');
+        const chatArea = document.getElementById('chat-area');
+        const emptyChat = document.getElementById('empty-chat');
+        const chatUserName = document.getElementById('chat-user-name');
+        const chatUserAvatar = document.getElementById('chat-user-avatar');
+        const messagesContainer = document.getElementById('messages-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const tabItems = document.querySelectorAll('.tab-item');
+        const chatsList = document.getElementById('chats-list');
+        const statusList = document.getElementById('status-list');
+        const callsList = document.getElementById('calls-list');
+
+        // Tab Navigation
+        tabItems.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Update active tab
+                tabItems.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding list
+                const tabName = this.dataset.tab;
+                currentTab = tabName;
+                
+                if (tabName === 'chats') {
+                    chatsList.style.display = 'block';
+                    statusList.style.display = 'none';
+                    callsList.style.display = 'none';
+                } else if (tabName === 'status') {
+                    chatsList.style.display = 'none';
+                    statusList.style.display = 'block';
+                    callsList.style.display = 'none';
+                } else if (tabName === 'calls') {
+                    chatsList.style.display = 'none';
+                    statusList.style.display = 'none';
+                    callsList.style.display = 'block';
+                }
+            });
+        });
+
+        // Chat selection
+        chatItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Update active chat
+                chatItems.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Get chat info
+                const chatId = this.dataset.chatId;
+                const userName = this.dataset.user;
+                const avatarImg = this.querySelector('.chat-avatar img').src;
+                
+                currentChatId = chatId;
+                
+                // Update chat header
+                chatUserName.textContent = userName;
+                chatUserAvatar.src = avatarImg;
+                
+                // Show chat area, hide empty state
+                if (chatArea) {
+                    chatArea.style.display = 'flex';
+                    if (emptyChat) emptyChat.style.display = 'none';
+                }
+                
+                // On mobile, hide sidebar and show chat
+                if (isMobile) {
+                    document.querySelector('.chat-sidebar').style.display = 'none';
+                    chatArea.classList.add('active');
+                }
+                
+                // Load different messages based on chat
+                loadMessages(chatId, userName);
+            });
+        });
+
+        // Load messages function
+        function loadMessages(chatId, userName) {
+            const messages = {
+                '1': [
+                    { type: 'in', text: 'Halo, apa kabar?', time: '10.30' },
+                    { type: 'out', text: 'Baik, nih. Ada apa?', time: '10.31', status: 'read' },
+                    { type: 'in', text: 'Mau nanya soal project kemarin, bisa ketemu?', time: '10.32' },
+                    { type: 'out', text: 'Bisa banget. Jam 3 sore gimana?', time: '10.33', status: 'read' },
+                    { type: 'in', text: 'Ok, nanti saya kesana', time: '10.34' },
+                    { type: 'out', text: 'Siap! Nanti kabarin ya', time: '10.35', status: 'read' }
+                ],
+                '2': [
+                    { type: 'out', text: 'Makasih ya udah bantu', time: '09.15', status: 'sent' },
+                    { type: 'in', text: 'Sama-sama, senang bisa bantu', time: '09.16' },
+                    { type: 'out', text: 'Next time saya traktir', time: '09.17', status: 'read' },
+                    { type: 'in', text: 'Wah makasih banyak 😊', time: '09.18' }
+                ],
+                '3': [
+                    { type: 'in', text: 'File nya sudah saya kirim', time: 'Kemarin' },
+                    { type: 'out', text: 'Oke, nanti saya cek', time: 'Kemarin', status: 'read' },
+                    { type: 'in', text: 'Jangan lupa ya', time: 'Kemarin' }
+                ],
+                '4': [
+                    { type: 'in', text: 'Selamat malam pak', time: 'Kemarin' },
+                    { type: 'out', text: 'Malam juga bu', time: 'Kemarin', status: 'sent' }
+                ],
+                '5': [
+                    { type: 'out', text: 'Siap bos!', time: '2 hari', status: 'read' },
+                    { type: 'in', text: 'Mantap 👍', time: '2 hari' }
+                ],
+                '6': [
+                    { type: 'in', text: 'Hallo? Masih online?', time: '3 hari' }
+                ]
+            };
+
+            const chatMessages = messages[chatId] || messages['1'];
+            
+            // Build messages HTML
+            let messagesHTML = '<div class="message-date"><span class="date-badge">Hari ini</span></div>';
+            
+            chatMessages.forEach(msg => {
+                if (msg.type === 'in') {
+                    messagesHTML += `
+                        <div class="message-wrapper in">
+                            <div class="message-bubble">
+                                <div class="message-text">${msg.text}</div>
+                                <div class="message-meta">
+                                    <span class="message-time">${msg.time}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const statusIcon = msg.status === 'read' ? 'fa-check-double read' : 'fa-check';
+                    messagesHTML += `
+                        <div class="message-wrapper out">
+                            <div class="message-bubble">
+                                <div class="message-text">${msg.text}</div>
+                                <div class="message-meta">
+                                    <span class="message-time">${msg.time}</span>
+                                    <span class="message-status">
+                                        <i class="fas ${statusIcon}"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            messagesContainer.innerHTML = messagesHTML;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Send message
+        sendButton.addEventListener('click', function() {
+            sendMessage();
+        });
+
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (messageText === '') return;
+            
+            // Add current time
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeStr = `${hours}.${minutes}`;
+            
+            // Create new message element
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = 'message-wrapper out';
+            messageWrapper.innerHTML = `
+                <div class="message-bubble">
+                    <div class="message-text">${messageText}</div>
+                    <div class="message-meta">
+                        <span class="message-time">${timeStr}</span>
+                        <span class="message-status">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageWrapper);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Clear input
+            messageInput.value = '';
+            
+            // Simulate reply after 2 seconds
+            setTimeout(() => {
+                const replyWrapper = document.createElement('div');
+                replyWrapper.className = 'message-wrapper in';
+                replyWrapper.innerHTML = `
+                    <div class="message-bubble">
+                        <div class="message-text">Pesan diterima, Bos-Tuan Besar! 💼📝💰</div>
+                        <div class="message-meta">
+                            <span class="message-time">${timeStr}</span>
+                        </div>
+                    </div>
+                `;
+                messagesContainer.appendChild(replyWrapper);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Update message status to read
+                const lastOutMessage = messagesContainer.querySelector('.message-wrapper.out:last-child .message-status i');
+                if (lastOutMessage) {
+                    lastOutMessage.className = 'fas fa-check-double read';
+                }
+            }, 2000);
+        }
+
+        // Mobile back button
+        function toggleMobileChat() {
+            if (isMobile) {
+                document.querySelector('.chat-sidebar').style.display = 'block';
+                chatArea.classList.remove('active');
+            }
+        }
+
+        // Window resize handler
+        window.addEventListener('resize', function() {
+            isMobile = window.innerWidth <= 768;
+            
+            if (!isMobile) {
+                document.querySelector('.chat-sidebar').style.display = 'flex';
+                chatArea.classList.remove('active');
+            }
+        });
+
+        // Initialize with first chat selected
+        setTimeout(() => {
+            const firstChat = document.querySelector('.chat-item.active');
+            if (firstChat) {
+                const userName = firstChat.dataset.user;
+                const avatarImg = firstChat.querySelector('.chat-avatar img').src;
+                chatUserName.textContent = userName;
+                chatUserAvatar.src = avatarImg;
+                loadMessages('1', userName);
+            }
+        }, 100);
+
+        // Status item click
+        document.querySelectorAll('.status-item, .my-status').forEach(item => {
+            item.addEventListener('click', function() {
+                alert('Status viewer - CodingX Indonet 💼📝💰');
+            });
+        });
+
+        // Call item click
+        document.querySelectorAll('.call-item').forEach(item => {
+            item.addEventListener('click', function() {
+                alert('Fitur panggilan - CodingX Indonet 💼📝💰');
+            });
+        });
+
+        // Camera and attachment buttons
+        document.querySelectorAll('.fa-camera, .fa-image, .fa-plus-circle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Fitur upload media - CodingX Indonet 💼📝💰');
+            });
+        });
+
+        // Video and phone buttons
+        document.querySelectorAll('.fa-video, .fa-phone').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Memulai panggilan - CodingX Indonet 💼📝💰');
+            });
+        });
+
+        // Header icons
+        document.querySelectorAll('.header-right i').forEach(icon => {
+            icon.addEventListener('click', function() {
+                alert('Menu settings - CodingX Indonet 💼📝💰');
+            });
+        });
+
+        console.log('WhatsApp Clone by CodingX Indonet siap digunakan! 💼📝💰');
+    </script>
+</body>
+</html>

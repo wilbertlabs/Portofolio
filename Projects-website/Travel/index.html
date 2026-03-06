@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel API - CodingX Indonet</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .weather-widget {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* Search Box */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 20px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            outline: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Autocomplete */
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            margin-top: 5px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 100;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .autocomplete-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: all 0.2s;
+        }
+
+        .autocomplete-item:hover {
+            background: #f5f5f5;
+            padding-left: 30px;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Destinations Grid */
+        .destinations-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s;
+        }
+
+        .destination-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .destination-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .destination-info {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .destination-price {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Weather Info */
+        .weather-info {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            color: white;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .weather-item {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .weather-item i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .weather-temp {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .search-btn {
+                position: static;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🌍 TravelGo</div>
+            <div class="weather-widget" id="weatherWidget">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <span>Loading weather...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Discover Your Next Adventure</h1>
+        <p>Explore amazing destinations around the world with real-time weather updates and travel information</p>
+        
+        <!-- Search Box -->
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search destinations...">
+            <button class="search-btn" id="searchBtn">
+                <i class="fa-solid fa-search"></i> Search
+            </button>
+            <div class="autocomplete-list" id="autocompleteList"></div>
+        </div>
+    </section>
+
+    <!-- Weather Info -->
+    <div class="weather-info" id="weatherInfo">
+        <h3 style="margin-bottom: 20px;">📍 Weather in Popular Destinations</h3>
+        <div class="weather-grid" id="weatherGrid">
+            <!-- Weather data will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Destinations Section -->
+    <section class="destinations-section">
+        <h2 class="section-title">✨ Popular Destinations</h2>
+        <div class="destinations-grid" id="destinationsGrid">
+            <!-- Destinations will be inserted here -->
+        </div>
+    </section>
+
+    <script>
+        // Sample destinations data
+        const destinations = [
+            {
+                name: "Bali, Indonesia",
+                description: "Island of Gods with stunning beaches and culture",
+                price: "$599",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1537996194471-e657df0a8e2a?w=400",
+                weather: "Sunny, 32°C"
+            },
+            {
+                name: "Paris, France",
+                description: "City of Love with iconic landmarks",
+                price: "$899",
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1502602898657-3ab5e00e4b5a?w=400",
+                weather: "Cloudy, 18°C"
+            },
+            {
+                name: "Tokyo, Japan",
+                description: "Modern metropolis meets traditional culture",
+                price: "$1299",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=400",
+                weather: "Clear, 22°C"
+            },
+            {
+                name: "Santorini, Greece",
+                description: "Stunning sunsets and white buildings",
+                price: "$799",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=400",
+                weather: "Sunny, 28°C"
+            },
+            {
+                name: "New York, USA",
+                description: "The city that never sleeps",
+                price: "$1099",
+                rating: 4.6,
+                image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400",
+                weather: "Windy, 15°C"
+            },
+            {
+                name: "Dubai, UAE",
+                description: "Luxury and futuristic architecture",
+                price: "$1499",
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400",
+                weather: "Hot, 38°C"
+            }
+        ];
+
+        // DOM Elements
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const autocompleteList = document.getElementById('autocompleteList');
+        const destinationsGrid = document.getElementById('destinationsGrid');
+        const weatherGrid = document.getElementById('weatherGrid');
+        const weatherWidget = document.getElementById('weatherWidget');
+
+        // Display destinations
+        function displayDestinations(filter = '') {
+            const filtered = destinations.filter(d => 
+                d.name.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            // Show loading skeleton
+            destinationsGrid.innerHTML = Array(6).fill(0).map(() => `
+                <div class="destination-card">
+                    <div class="card-image skeleton" style="height: 200px;"></div>
+                    <div class="card-content">
+                        <div class="skeleton" style="height: 24px; width: 70%; margin-bottom: 10px;"></div>
+                        <div class="skeleton" style="height: 16px; width: 90%;"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Simulate API delay
+            setTimeout(() => {
+                destinationsGrid.innerHTML = filtered.map(d => `
+                    <div class="destination-card" onclick="showDestinationDetail('${d.name}')">
+                        <div class="card-image">
+                            <img src="${d.image}" alt="${d.name}" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <div class="destination-name">${d.name}</div>
+                            <p style="color: #666; margin-bottom: 15px;">${d.description}</p>
+                            <div class="destination-info">
+                                <span>⭐ ${d.rating}</span>
+                                <span class="destination-price">${d.price}</span>
+                            </div>
+                            <div style="margin-top: 10px; color: #667eea; font-size: 0.9rem;">
+                                <i class="fa-solid fa-cloud-sun"></i> ${d.weather}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }, 1000);
+        }
+
+        // Display weather
+        function displayWeather() {
+            const weatherData = [
+                { city: "Bali", temp: "32°C", condition: "Sunny", icon: "fa-sun" },
+                { city: "Paris", temp: "18°C", condition: "Cloudy", icon: "fa-cloud" },
+                { city: "Tokyo", temp: "22°C", condition: "Clear", icon: "fa-sun" },
+                { city: "New York", temp: "15°C", condition: "Windy", icon: "fa-wind" },
+                { city: "Dubai", temp: "38°C", condition: "Hot", icon: "fa-temperature-high" },
+                { city: "London", temp: "12°C", condition: "Rain", icon: "fa-cloud-rain" }
+            ];
+
+            weatherGrid.innerHTML = weatherData.map(w => `
+                <div class="weather-item">
+                    <i class="fa-solid ${w.icon}"></i>
+                    <div class="weather-temp">${w.temp}</div>
+                    <div>${w.city}</div>
+                    <div style="opacity: 0.8;">${w.condition}</div>
+                </div>
+            `).join('');
+
+            // Update widget
+            const randomCity = weatherData[Math.floor(Math.random() * weatherData.length)];
+            weatherWidget.innerHTML = `
+                <i class="fa-solid ${randomCity.icon}"></i>
+                <span>${randomCity.city}: ${randomCity.temp}</span>
+            `;
+        }
+
+        // Autocomplete
+        function updateAutocomplete(query) {
+            if (!query) {
+                autocompleteList.innerHTML = '';
+                return;
+            }
+
+            const matches = destinations.filter(d => 
+                d.name.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 5);
+
+            if (matches.length === 0) {
+                autocompleteList.innerHTML = '';
+                return;
+            }
+
+            autocompleteList.innerHTML = matches.map(d => `
+                <div class="autocomplete-item" onclick="selectDestination('${d.name}')">
+                    <i class="fa-solid fa-location-dot" style="color: #667eea; margin-right: 10px;"></i>
+                    ${d.name}
+                </div>
+            `).join('');
+        }
+
+        // Select destination from autocomplete
+        window.selectDestination = function(destination) {
+            searchInput.value = destination;
+            autocompleteList.innerHTML = '';
+            displayDestinations(destination);
+        };
+
+        // Show destination detail
+        window.showDestinationDetail = function(name) {
+            alert(`📍 ${name}\n\nMore details will be available soon!\n\n- Check weather\n- View hotels\n- Book flights`);
+        };
+
+        // Search button click
+        searchBtn.addEventListener('click', () => {
+            displayDestinations(searchInput.value);
+            autocompleteList.innerHTML = '';
+        });
+
+        // Search input keyup for autocomplete
+        searchInput.addEventListener('input', (e) => {
+            updateAutocomplete(e.target.value);
+        });
+
+        // Enter key
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                displayDestinations(searchInput.value);
+                autocompleteList.innerHTML = '';
+            }
+        });
+
+        // Close autocomplete when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                autocompleteList.innerHTML = '';
+            }
+        });
+
+        // Simulate API fetch
+        async function fetchWeatherData() {
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                displayWeather();
+            } catch (error) {
+                console.error('Error fetching weather:', error);
+            }
+        }
+
+        // Initialize
+        displayDestinations();
+        fetchWeatherData();
+
+        // Refresh weather every 30 seconds
+        setInterval(fetchWeatherData, 30000);
+    </script>
+</body>
+</html>

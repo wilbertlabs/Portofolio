@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>AI Tool Interface - CodingX Indonet</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a463f5;
+            --accent-color: #00cec9;
+            --dark-color: #2d3436;
+            --light-color: #f5f6fa;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #d63031;
+            --gradient-1: linear-gradient(135deg, #6c5ce7 0%, #a463f5 100%);
+            --gradient-2: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            --gradient-3: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            --message-user: linear-gradient(135deg, #6c5ce7 0%, #a463f5 100%);
+            --message-ai: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e272e 0%, #2d3436 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ai-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-text span {
+            color: var(--accent-color);
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .history-item.active {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .history-item i {
+            width: 20px;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-plan {
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .settings-item {
+            padding: 10px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .settings-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            padding: 20px 30px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-info h2 {
+            color: white;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin-bottom: 5px;
+        }
+
+        .chat-info p {
+            color: #999;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-radius: 10px;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .action-btn:hover {
+            background: var(--gradient-1);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--gradient-3);
+        }
+
+        .message.ai .message-avatar {
+            background: var(--gradient-1);
+        }
+
+        .message-content {
+            background: var(--message-ai);
+            padding: 15px 20px;
+            border-radius: 20px;
+            color: white;
+            line-height: 1.6;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: var(--message-user);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px 20px;
+            background: var(--message-ai);
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: typing 1.5s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1e1e2f;
+            border-radius: 12px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .code-content {
+            padding: 15px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        .copy-code {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .copy-code:hover {
+            color: var(--accent-color);
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 20px 30px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 1rem;
+            resize: none;
+            max-height: 150px;
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .input-field::placeholder {
+            color: #666;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-action-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .input-action-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .input-action-btn.secondary:hover {
+            background: var(--gradient-2);
+        }
+
+        /* Suggestions */
+        .suggestions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-chip {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: #999;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--gradient-1);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .ai-thinking {
+            text-align: center;
+        }
+
+        .ai-thinking-animation {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .ai-thinking-animation::before,
+        .ai-thinking-animation::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .ai-thinking-animation::after {
+            border-top-color: var(--accent-color);
+            animation-duration: 1.5s;
+            animation-direction: reverse;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .ai-thinking-text {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .ai-thinking-subtext {
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                bottom: 0;
+                z-index: 100;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            .menu-toggle {
+                display: block !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ai-container {
+                height: 95vh;
+                border-radius: 20px;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .chat-header {
+                padding: 15px 20px;
+            }
+
+            .chat-messages {
+                padding: 20px;
+            }
+
+            .chat-input-container {
+                padding: 15px 20px;
+            }
+
+            .input-actions {
+                gap: 5px;
+            }
+
+            .input-action-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .suggestions {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chat-info p span {
+                display: none;
+            }
+
+            .message {
+                max-width: 100%;
+            }
+
+            .message-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+
+            .message-content {
+                padding: 12px 15px;
+            }
+
+            .code-content {
+                font-size: 0.8rem;
+            }
+
+            .suggestion-chip {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* Touch Device Optimization */
+        @media (hover: none) and (pointer: coarse) {
+            .history-item:hover,
+            .suggestion-chip:hover,
+            .action-btn:hover,
+            .input-action-btn:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <!-- <button class="menu-toggle" onclick="toggleSidebar()" style="position: fixed; top: 20px; left: 20px; z-index: 99;">
+        <i class="fas fa-bars"></i>
+    </button> -->
+
+    <div class="ai-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="logo-text">CodingX<span>AI</span></div>
+            </div>
+
+            <button class="new-chat-btn" onclick="newChat()">
+                <i class="fas fa-plus"></i> New Chat
+            </button>
+
+            <div class="chat-history" id="chatHistory">
+                <div class="history-item active" onclick="selectChat(1)">
+                    <i class="fas fa-message"></i>
+                    <span>Diskusi Koding</span>
+                </div>
+                <div class="history-item" onclick="selectChat(2)">
+                    <i class="fas fa-message"></i>
+                    <span>Review Kode</span>
+                </div>
+                <div class="history-item" onclick="selectChat(3)">
+                    <i class="fas fa-message"></i>
+                    <span>Debugging Help</span>
+                </div>
+                <div class="history-item" onclick="selectChat(4)">
+                    <i class="fas fa-message"></i>
+                    <span>Project Ideas</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">CI</div>
+                    <div class="user-details">
+                        <div class="user-name">CodingX Indonet</div>
+                        <div class="user-plan">Premium Member</div>
+                    </div>
+                </div>
+
+                <div class="settings-item" onclick="openSettings()">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+                <div class="settings-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-info">
+                    <h2>AI Assistant</h2>
+                    <p>
+                        <span class="status-dot"></span>
+                        <span>Online</span>
+                        <span>•</span>
+                        <span>CodingX Indonet AI</span>
+                    </p>
+                </div>
+                <div class="chat-actions">
+                    <button class="action-btn" onclick="clearChat()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="action-btn" onclick="exportChat()">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="action-btn" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Welcome Message -->
+                <div class="message ai">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        Halo! Saya CodingX Indonet AI Assistant. 👋
+                        <br><br>
+                        Saya siap membantu Anda dengan:
+                        <br>• Menulis dan debug kode
+                        <br>• Menjelaskan konsep programming
+                        <br>• Memberikan saran arsitektur
+                        <br>• Review kode Anda
+                        <br>• Dan banyak lagi!
+                        <br><br>
+                        Ada yang bisa saya bantu hari ini?
+                        <div class="message-time">10:00 AM</div>
+                    </div>
+                </div>
+
+                <!-- Sample Code Response -->
+                <div class="message ai">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        Berikut contoh kode JavaScript untuk membuat fungsi sederhana:
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>JavaScript</span>
+                                <button class="copy-code" onclick="copyCode(this)">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                // Fungsi untuk menghitung factorial
+                                function factorial(n) {
+                                    if (n === 0 || n === 1) {
+                                        return 1;
+                                    }
+                                    return n * factorial(n - 1);
+                                }
+                                
+                                // Contoh penggunaan
+                                console.log(factorial(5)); // Output: 120
+                            </div>
+                        </div>
+                        
+                        <div class="message-time">10:05 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea class="input-field" id="userInput" placeholder="Tanya apa saja tentang koding..." rows="1" oninput="autoResize(this)"></textarea>
+                    <div class="input-actions">
+                        <button class="input-action-btn secondary" onclick="attachFile()">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <button class="input-action-btn" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Suggestions -->
+                <div class="suggestions">
+                    <span class="suggestion-chip" onclick="useSuggestion('Buatkan fungsi untuk sorting array')">
+                        <i class="fas fa-code"></i> Sorting array
+                    </span>
+                    <span class="suggestion-chip" onclick="useSuggestion('Jelaskan tentang async/await')">
+                        <i class="fas fa-code"></i> Async/await
+                    </span>
+                    <span class="suggestion-chip" onclick="useSuggestion('Debug kode JavaScript saya')">
+                        <i class="fas fa-bug"></i> Debug kode
+                    </span>
+                    <span class="suggestion-chip" onclick="useSuggestion('Buatkan struktur API REST')">
+                        <i class="fas fa-project-diagram"></i> API design
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="ai-thinking">
+            <div class="ai-thinking-animation"></div>
+            <div class="ai-thinking-text">CodingX AI sedang berpikir...</div>
+            <div class="ai-thinking-subtext">Memproses permintaan bos-tuan besar / nona besar</div>
+        </div>
+    </div>
+
+    <script>
+        // Chat State
+        let messages = [];
+        let isTyping = false;
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth <= 968) {
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+
+        // New Chat
+        function newChat() {
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="message ai">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        Halo! Saya CodingX Indonet AI Assistant. 👋
+                        <br><br>
+                        Ada yang bisa saya bantu hari ini?
+                        <div class="message-time">${getCurrentTime()}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Update active chat
+            document.querySelectorAll('.history-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('.history-item').classList.add('active');
+        }
+
+        // Select Chat
+        function selectChat(chatId) {
+            document.querySelectorAll('.history-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 968) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+
+        // Send Message
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            autoResize(input);
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Show loading overlay
+            document.getElementById('loadingOverlay').classList.add('active');
+
+            // Simulate AI response
+            setTimeout(() => {
+                hideTypingIndicator();
+                document.getElementById('loadingOverlay').classList.remove('active');
+                
+                // Generate AI response based on user input
+                const response = generateAIResponse(message);
+                addMessage(response, 'ai');
+            }, 2000);
+        }
+
+        // Add Message to Chat
+        function addMessage(content, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = sender === 'user' ? 
+                '<i class="fas fa-user"></i>' : 
+                '<i class="fas fa-robot"></i>';
+            
+            // Check if content contains code
+            if (content.includes('```')) {
+                content = formatCodeBlocks(content);
+            }
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">
+                    ${content}
+                    <div class="message-time">${getCurrentTime()}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Show Typing Indicator
+        function showTypingIndicator() {
+            if (isTyping) return;
+            
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai typing-indicator-container';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            isTyping = true;
+        }
+
+        // Hide Typing Indicator
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+            isTyping = false;
+        }
+
+        // Generate AI Response (Simulated)
+        function generateAIResponse(userMessage) {
+            const responses = [
+                {
+                    keywords: ['function', 'fungsi', 'method'],
+                    response: `Berikut contoh fungsi yang bisa Anda gunakan:
+
+<div class="code-block">
+    <div class="code-header">
+        <span>JavaScript</span>
+        <button class="copy-code" onclick="copyCode(this)">
+            <i class="fas fa-copy"></i>
+        </button>
+    </div>
+    <div class="code-content">
+// Fungsi sesuai permintaan
+function contohFungsi(param1, param2) {
+    try {
+        // Validasi input
+        if (!param1 || !param2) {
+            throw new Error('Parameter harus diisi');
+        }
+        
+        // Logika fungsi
+        const result = param1 + param2;
+        
+        return {
+            success: true,
+            data: result,
+            message: 'Berhasil diproses'
+        };
+        
+    } catch (error) {
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+// Contoh penggunaan
+const hasil = contohFungsi(10, 20);
+console.log(hasil); // { success: true, data: 30, message: 'Berhasil diproses' }
+    </div>
+</div>
+
+Apakah ada yang ingin ditambahkan?`
+                },
+                {
+                    keywords: ['array', 'list', 'sort', 'urut'],
+                    response: `Untuk sorting array, berikut beberapa metode:
+
+<div class="code-block">
+    <div class="code-header">
+        <span>JavaScript</span>
+        <button class="copy-code" onclick="copyCode(this)">
+            <i class="fas fa-copy"></i>
+        </button>
+    </div>
+    <div class="code-content">
+// 1. Sorting angka ascending
+const numbers = [5, 2, 8, 1, 9];
+numbers.sort((a, b) => a - b);
+console.log(numbers); // [1, 2, 5, 8, 9]
+
+// 2. Sorting angka descending
+numbers.sort((a, b) => b - a);
+console.log(numbers); // [9, 8, 5, 2, 1]
+
+// 3. Sorting string
+const fruits = ['apel', 'jeruk', 'mangga', 'pisang'];
+fruits.sort();
+console.log(fruits); // ['apel', 'jeruk', 'mangga', 'pisang']
+
+// 4. Sorting object berdasarkan property
+const users = [
+    { name: 'John', age: 30 },
+    { name: 'Jane', age: 25 },
+    { name: 'Bob', age: 35 }
+];
+
+users.sort((a, b) => a.age - b.age);
+console.log(users); // [{ name: 'Jane', age: 25 }, { name: 'John', age: 30 }, { name: 'Bob', age: 35 }]
+    </div>
+</div>
+
+Ada yang ingin ditanyakan?`
+                },
+                {
+                    keywords: ['async', 'await', 'promise', 'asynchronous'],
+                    response: `Penjelasan tentang async/await:
+
+<div class="code-block">
+    <div class="code-header">
+        <span>JavaScript</span>
+        <button class="copy-code" onclick="copyCode(this)">
+            <i class="fas fa-copy"></i>
+        </button>
+    </div>
+    <div class="code-content">
+// Contoh async/await
+async function fetchData() {
+    try {
+        // Menampilkan loading
+        console.log('Mengambil data...');
+        
+        // Simulasi API call
+        const response = await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({ data: 'Data berhasil diambil', status: 200 });
+            }, 2000);
+        });
+        
+        console.log('Data diterima:', response);
+        return response;
+        
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+// Penggunaan
+async function main() {
+    const result = await fetchData();
+    console.log('Hasil:', result);
+}
+
+main();
+    </div>
+</div>
+
+Penjelasan:
+• async menandakan fungsi asynchronous
+• await menunggu Promise selesai
+• try/catch untuk menangani error
+• Kode lebih mudah dibaca daripada callback`
+                },
+                {
+                    keywords: ['debug', 'error', 'bug', 'troubleshoot'],
+                    response: `Tips debugging kode JavaScript:
+
+<div class="code-block">
+    <div class="code-header">
+        <span>JavaScript</span>
+        <button class="copy-code" onclick="copyCode(this)">
+            <i class="fas fa-copy"></i>
+        </button>
+    </div>
+    <div class="code-content">
+// 1. Gunakan console.log
+console.log('Value:', variable);
+console.table(array); // Untuk array/object
+
+// 2. Gunakan debugger
+function problemFunction() {
+    debugger; // Kode akan berhenti di sini
+    // ... kode yang di-debug
+}
+
+// 3. Try-catch untuk error handling
+try {
+    // Kode yang mungkin error
+    riskyOperation();
+} catch (error) {
+    console.error('Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+    });
+}
+
+// 4. Validasi input
+function safeFunction(param) {
+    if (!param) {
+        throw new Error('Parameter diperlukan');
+    }
+    // ... kode selanjutnya
+}
+    </div>
+</div>
+
+Silakan kirim kode yang ingin di-debug!`
+                },
+                {
+                    keywords: ['api', 'rest', 'endpoint', 'backend'],
+                    response: `Struktur API REST yang baik:
+
+<div class="code-block">
+    <div class="code-header">
+        <span>JavaScript (Express.js)</span>
+        <button class="copy-code" onclick="copyCode(this)">
+            <i class="fas fa-copy"></i>
+        </button>
+    </div>
+    <div class="code-content">
+// 1. Setup Express
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+// 2. Middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
+// 3. Routes
+// GET - Ambil semua data
+app.get('/api/users', async (req, res) => {
+    try {
+        const users = await db.users.findMany();
+        res.json({ success: true, data: users });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET by ID
+app.get('/api/users/:id', async (req, res) => {
+    try {
+        const user = await db.users.findUnique({
+            where: { id: req.params.id }
+        });
+        
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        
+        res.json({ success: true, data: user });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// POST - Buat data baru
+app.post('/api/users', async (req, res) => {
+    try {
+        const { name, email } = req.body;
+        
+        // Validasi
+        if (!name || !email) {
+            return res.status(400).json({ 
+                error: 'Name and email required' 
+            });
+        }
+        
+        const user = await db.users.create({
+            data: { name, email }
+        });
+        
+        res.status(201).json({ 
+            success: true, 
+            data: user 
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// PUT - Update data
+app.put('/api/users/:id', async (req, res) => {
+    try {
+        const user = await db.users.update({
+            where: { id: req.params.id },
+            data: req.body
+        });
+        
+        res.json({ success: true, data: user });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// DELETE - Hapus data
+app.delete('/api/users/:id', async (req, res) => {
+    try {
+        await db.users.delete({
+            where: { id: req.params.id }
+        });
+        
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// 4. Start server
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+    </div>
+</div>
+
+Praktik terbaik:
+• Gunakan HTTP methods sesuai fungsinya
+• Konsisten dengan response format
+• Validasi input
+• Handle error dengan baik
+• Dokumentasikan API`
+                }
+            ];
+
+            // Find matching response
+            for (const item of responses) {
+                if (item.keywords.some(keyword => 
+                    userMessage.toLowerCase().includes(keyword))) {
+                    return item.response;
+                }
+            }
+
+            // Default response
+            return `Terima kasih atas pertanyaannya! Saya akan membantu dengan yang terbaik.
+
+Sebagai AI CodingX Indonet, saya bisa membantu:
+• Menulis kode dalam berbagai bahasa
+• Menjelaskan konsep programming
+• Debugging kode
+• Review arsitektur
+• Best practices
+
+Bisa lebih spesifik tentang apa yang ingin Anda tanyakan? 😊`;
+        }
+
+        // Format Code Blocks
+        function formatCodeBlocks(content) {
+            return content.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                return `
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>${lang || 'Code'}</span>
+                            <button class="copy-code" onclick="copyCode(this)">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="code-content">${escapeHtml(code)}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Copy Code
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('.code-content').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+            });
+        }
+
+        // Use Suggestion
+        function useSuggestion(suggestion) {
+            document.getElementById('userInput').value = suggestion;
+            autoResize(document.getElementById('userInput'));
+            sendMessage();
+        }
+
+        // Auto Resize Textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+
+        // Get Current Time
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            return `${hours}:${minutes} ${ampm}`;
+        }
+
+        // Attach File
+        function attachFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.multiple = true;
+            input.accept = '.js,.py,.html,.css,.json,.txt';
+            
+            input.onchange = (e) => {
+                const files = Array.from(e.target.files);
+                const fileNames = files.map(f => f.name).join(', ');
+                addMessage(`Upload file: ${fileNames}`, 'user');
+                
+                // Show loading
+                document.getElementById('loadingOverlay').classList.add('active');
+                
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').classList.remove('active');
+                    addMessage(`File berhasil diupload! Saya akan menganalisis file tersebut.`, 'ai');
+                }, 1500);
+            };
+            
+            input.click();
+        }
+
+        // Clear Chat
+        function clearChat() {
+            if (confirm('Yakin ingin menghapus semua pesan?')) {
+                document.getElementById('chatMessages').innerHTML = `
+                    <div class="message ai">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            Chat telah dibersihkan. Ada yang bisa saya bantu?
+                            <div class="message-time">${getCurrentTime()}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Export Chat
+        function exportChat() {
+            const messages = document.querySelectorAll('.message');
+            let chatText = 'Chat Export - CodingX Indonet AI\n\n';
+            
+            messages.forEach(msg => {
+                const sender = msg.classList.contains('user') ? 'User' : 'AI';
+                const content = msg.querySelector('.message-content').textContent;
+                chatText += `[${sender}]: ${content}\n\n`;
+            });
+            
+            const blob = new Blob([chatText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `chat-export-${new Date().toISOString()}.txt`;
+            a.click();
+        }
+
+        // Toggle Theme
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const btn = event.currentTarget;
+            btn.innerHTML = document.body.classList.contains('light-theme') ? 
+                '<i class="fas fa-sun"></i>' : 
+                '<i class="fas fa-moon"></i>';
+        }
+
+        // Open Settings
+        function openSettings() {
+            alert('Settings akan segera tersedia!');
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Yakin ingin logout?')) {
+                alert('Terima kasih telah menggunakan CodingX Indonet AI!');
+            }
+        }
+
+        // Enter key to send (Shift+Enter for new line)
+        document.getElementById('userInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 968) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        });
+
+        // Initialize
+        console.log('CodingX Indonet AI Assistant ready! 💼📝💰');
+    </script>
+</body>
+</html>

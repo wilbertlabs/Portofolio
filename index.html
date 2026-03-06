@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Professional portfolio showcasing web development, UX design, and creative digital solutions by Wilbird">
+    <meta name="keywords" content="portfolio, web developer, UX designer, frontend developer, Indonesia">
+    <meta name="author" content="Wilbert">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Wilbert - Professional Portfolio">
+    <meta property="og:description" content="Explore my professional portfolio showcasing innovative web development and design projects">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    
+    <title>Wilbert - Professional Portfolio</title>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
+    
+    <!-- CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Critical CSS - Loading Animation */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0b1533, #0f1d4a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        body.light-mode .loading-container {
+            background: linear-gradient(135deg, #f8fafc, #eef2f6);
+        }
+
+        .loading-container.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .loading-spinner::before,
+        .loading-spinner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+        }
+
+        .loading-spinner::before {
+            border-top-color: #00bbff;
+            border-right-color: #00bbff;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-spinner::after {
+            border-bottom-color: #60f0c0;
+            border-left-color: #60f0c0;
+            animation: spin 1.5s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        body.light-mode .loading-text {
+            color: #1e293b;
+        }
+
+        .loading-percentage {
+            font-size: 48px;
+            font-weight: 700;
+            color: #00bbff;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 187, 255, 0.3);
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        body.light-mode .loading-bar {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #60f0c0, #00bbff);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .loading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            filter: blur(10px);
+            animation: shine 1.5s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(300px); }
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 30px;
+        }
+
+        .loading-dot {
+            width: 10px;
+            height: 10px;
+            background: #00bbff;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        .loading-brand {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        body.light-mode .loading-brand {
+            color: #1e293b;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body.loading main,
+        body.loading section,
+        body.loading nav,
+        body.loading #scroll-to-top {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.loading .loading-container {
+            display: flex;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #0a1628, #0f1d4a);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode .footer {
+            background: linear-gradient(135deg, #f8fafc, #eef2f6);
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        body.light-mode .footer-logo {
+            color: #1e293b;
+        }
+
+        .footer-about {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        body.light-mode .footer-about {
+            color: #4a5568;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body.light-mode .footer-title {
+            color: #1e293b;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: #00bbff;
+        }
+
+        body.light-mode .footer-links a {
+            color: #4a5568;
+        }
+
+        body.light-mode .footer-links a:hover {
+            color: #3b82f6;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        body.light-mode .footer-contact-item {
+            color: #4a5568;
+        }
+
+        .footer-contact-item i {
+            color: #00bbff;
+            width: 20px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        body.light-mode .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode loading">
+    <!-- Loading Animation -->
+    <div class="loading-container" id="loadingContainer">
+        <div class="loading-content">
+            <div class="loading-brand">Wilbert</div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Portfolio</div>
+            <div class="loading-percentage" id="loadingPercentage">0%</div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loadingProgress" style="width: 0%"></div>
+            </div>
+            <div class="loading-dots">
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12 w-full">
+            <div class="flex items-center justify-between h-[80px]">
+                <span class="venus-text">Wilbert</span>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center gap-6">
+                    <a href="#hero" class="text-white hover:text-[#38b6ff] text-sm transition">Home</a>
+                    <a href="#about" class="text-white hover:text-[#38b6ff] text-sm transition">About</a>
+                    <a href="#services" class="text-white hover:text-[#38b6ff] text-sm transition">Services</a>
+                    <a href="#portfolio" class="text-white hover:text-[#38b6ff] text-sm transition">Portfolio</a>
+                    <a href="#contact" class="text-white hover:text-[#38b6ff] text-sm transition">Contact</a>
+                    <a href="#documentation" class="text-white hover:text-[#38b6ff] text-sm transition">Documentation</a>
+                    
+                    <button id="theme-toggle-desktop" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white hover:bg-white/20 transition" aria-label="Toggle theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    
+                    <button onclick="window.location.href='signin/signin.html'" class="px-4 py-2 bg-white/10 text-white rounded-lg text-sm hover:bg-white/20 transition">Sign In</button>
+                    <button onclick="window.location.href='signup/signup.html'" class="px-4 py-2 bg-[#00bbff] text-white rounded-lg text-sm hover:bg-[#00ddff] transition">Sign Up</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center gap-2 lg:hidden">
+                    <button id="theme-toggle-mobile" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white" aria-label="Toggle theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    
+                    <button id="mobile-menu-button" class="text-white" aria-label="Toggle menu" aria-expanded="false">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu" class="hidden lg:hidden bg-[#061A36] rounded-lg mt-2 p-4" role="menu">
+                <div class="flex flex-col space-y-3">
+                    <a href="#hero" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Home</a>
+                    <a href="#about" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">About</a>
+                    <a href="#services" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Services</a>
+                    <a href="#portfolio" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Portfolio</a>
+                    <a href="#contact" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Contact</a>
+                    <a href="#documentation" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Documentation</a>
+                    
+                    <div class="flex items-center justify-between py-2 border-t border-white/10 mt-2 pt-2">
+                        <span class="text-white">Dark Mode</span>
+                        <button id="theme-toggle-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition" aria-label="Toggle theme">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2 pt-2">
+                        <button onclick="window.location.href='signin/signin.html'" class="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition">Sign In</button>
+                        <button onclick="window.location.href='signup/signup.html'" class="px-4 py-2 bg-[#00bbff] text-white rounded-lg hover:bg-[#00ddff] transition">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-screen flex items-center pt-0">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                <div class="w-full lg:w-1/2 space-y-5">
+                    <div class="flex items-center gap-2 scroll-animate fade-up">
+                        <span class="dot-green" aria-hidden="true"></span>
+                        <p class="text-white text-base lg:text-lg">Build everything</p>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-5xl text-white font-bold leading-tight scroll-animate fade-up delay-200">
+                        Unveiling My Professional Portfolio
+                    </h1>
+                    <p class="text-white/80 text-base lg:text-lg scroll-animate fade-up delay-300 max-w-xl">
+                        A brief introduction about myself and my professional objectives
+                    </p>
+                    <button class="px-6 py-3 bg-[#00bbff] text-white rounded-lg hover:bg-[#00ddff] transition scroll-animate fade-up delay-400" aria-label="Get started">
+                        Get Started
+                    </button>
+                    
+                    <div class="flex items-center gap-4 pt-4 scroll-animate fade-up delay-500">
+                        <div class="avatar-stack">
+                            <img src="avatar/avatar10.jpg" alt="Team member 1" loading="lazy" width="40" height="40" onerror="this.src='https://via.placeholder.com/40'">
+                            <img src="avatar/avatar9.jpg" alt="Team member 2" loading="lazy" width="40" height="40" onerror="this.src='https://via.placeholder.com/40'">
+                            <img src="avatar/avatar7.jpg" alt="Team member 3" loading="lazy" width="40" height="40" onerror="this.src='https://via.placeholder.com/40'">
+                        </div>
+                        <div>
+                            <p class="text-white text-sm">Need help? <span class="text-[#4da3ff]">Contact our experts</span></p>
+                            <p class="text-white/60 text-xs">Tell us about your project</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 flex justify-center scroll-animate fade-right delay-600">
+                    <div class="w-full max-w-lg">
+                        <img src="assets/Gemini_Generated_Image_o1ja0to1ja0to1ja.png" 
+                             alt="Hero illustration showcasing professional portfolio" 
+                             class="hero-image w-full h-auto max-h-[450px] object-cover rounded-2xl shadow-2xl"
+                             loading="eager"
+                             width="600"
+                             height="450"
+                             onerror="this.src='https://via.placeholder.com/600x400?text=Hero+Image'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="text-center scroll-animate scale-in delay-100">
+                    <div class="text-[#5da9ff] text-3xl mb-4" aria-hidden="true">⭐</div>
+                    <h2 class="text-4xl text-white font-bold mb-2">4.86</h2>
+                    <p class="text-white/60 text-sm max-w-xs mx-auto">Out of 5 stars from 3896 reviews</p>
+                </div>
+                <div class="text-center scroll-animate scale-in delay-300">
+                    <div class="text-[#5da9ff] text-3xl mb-4" aria-hidden="true">👤</div>
+                    <h2 class="text-4xl text-white font-bold mb-2">364</h2>
+                    <p class="text-white/60 text-sm max-w-xs mx-auto">Client testimonials in 2021</p>
+                </div>
+                <div class="text-center scroll-animate scale-in delay-500">
+                    <div class="text-[#5da9ff] text-3xl mb-4" aria-hidden="true">💼</div>
+                    <h2 class="text-4xl text-white font-bold mb-2">45M+</h2>
+                    <p class="text-white/60 text-sm max-w-xs mx-auto">Revenue generated</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="w-full lg:w-1/2 scroll-animate fade-left">
+                    <div class="rounded-2xl overflow-hidden">
+                        <img src="assets/about.png" alt="About Wilbird - Professional designer at work" class="w-full h-auto" loading="lazy" width="600" height="400" onerror="this.src='https://via.placeholder.com/600x400?text=About'">
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 space-y-6 scroll-animate fade-right delay-300">
+                    <div class="flex items-center gap-2">
+                        <span class="dot-green" aria-hidden="true"></span>
+                        <p class="text-white text-lg">Build everything</p>
+                    </div>
+                    <h2 class="text-3xl lg:text-4xl text-white font-bold">Build amazing websites with ease</h2>
+                    <p class="text-white/80">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia repellendus molestiae delectus omnis reiciendis.</p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-white mb-1">
+                                <span>UX Research</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" style="--target-width:95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-white mb-1">
+                                <span>Product Management</span>
+                                <span>84%</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" style="--target-width:84%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-white mb-1">
+                                <span>UI & Visual Design</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div class="progress-fill" style="--target-width:90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gradient-to-br from-[#0a1628] to-[#162647]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="text-center mb-12">
+                <div class="flex items-center justify-center gap-2 mb-4 scroll-animate fade-up">
+                    <span class="dot-green-small" aria-hidden="true"></span>
+                    <p class="text-[#00ff88] text-lg">our services</p>
+                </div>
+                <h2 class="text-3xl lg:text-4xl text-white font-bold max-w-3xl mx-auto scroll-animate fade-up delay-200">Services specifically designed to meet your business needs</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="service-card bg-white/5 backdrop-blur rounded-2xl p-8 text-center hover:scale-105 transition scroll-animate scale-in delay-100">
+                    <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-xl bg-white/10">
+                        <i class="fa-solid fa-circle text-4xl text-[#00bbff]" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">UX & Product Design</h3>
+                    <p class="text-white/70 mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <a href="#" class="text-[#00bbff] inline-flex items-center gap-2 hover:text-white transition">Get Started <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+                <div class="service-card bg-white/5 backdrop-blur rounded-2xl p-8 text-center hover:scale-105 transition scroll-animate scale-in delay-300">
+                    <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-xl bg-white/10">
+                        <i class="fa-solid fa-cubes text-4xl text-[#00bbff]" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Performance Optimization</h3>
+                    <p class="text-white/70 mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <a href="#" class="text-[#00bbff] inline-flex items-center gap-2 hover:text-white transition">Get Started <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+                <div class="service-card bg-white/5 backdrop-blur rounded-2xl p-8 text-center hover:scale-105 transition scroll-animate scale-in delay-500">
+                    <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-xl bg-white/10">
+                        <i class="fa-solid fa-cube text-4xl text-[#00bbff]" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">UX & Products Design</h3>
+                    <p class="text-white/70 mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <a href="#" class="text-[#00bbff] inline-flex items-center gap-2 hover:text-white transition">Get Started <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="text-center mb-12">
+                <div class="flex items-center justify-center gap-2 mb-4 scroll-animate fade-up">
+                    <span class="dot-green-small" aria-hidden="true"></span>
+                    <p class="text-[#00ff88] text-lg">Portfolio</p>
+                </div>
+                <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">Explore my portfolio showcase</h2>
+                <p class="text-white/70 text-lg max-w-2xl mx-auto scroll-animate fade-up delay-300">Dive into a curated collection of my finest work, showcasing expertise across various industries.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                <div class="group scroll-animate scale-in delay-100">
+                    <div class="space-y-3">
+                        <div class="rounded-xl overflow-hidden bg-white aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow">
+                            <a href="Youtube Clone/index.html" class="block w-full h-full">
+                                <img src="assets/youtube.png" alt="YouTube Clone project preview" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                                     loading="lazy"
+                                     width="300"
+                                     height="200"
+                                     onerror="this.src='https://via.placeholder.com/300x200?text=YouTube'">
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">YouTube Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">Website</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="group scroll-animate scale-in delay-200">
+                    <div class="space-y-3">
+                        <div class="rounded-xl overflow-hidden bg-white aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow">
+                            <a href="Netflix Clone/index.html" class="block w-full h-full">
+                                <img src="assets/netflix.png" alt="Netflix Clone project preview"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                                     loading="lazy"
+                                     width="300"
+                                     height="200"
+                                     onerror="this.src='https://via.placeholder.com/300x200?text=Netflix'">
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">Netflix Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">Website</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="group scroll-animate scale-in delay-300">
+                    <div class="space-y-3">
+                        <div class="rounded-xl overflow-hidden bg-white aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow">
+                            <a href="Whatsapp Clone/index.html" class="block w-full h-full">
+                                <img src="assets/whatsaap.png" alt="WhatsApp Clone project preview" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                                     loading="lazy"
+                                     width="300"
+                                     height="200"
+                                     onerror="this.src='https://via.placeholder.com/300x200?text=WhatsApp'">
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">WhatsApp Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">Website</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="group scroll-animate scale-in delay-400">
+                    <div class="space-y-3">
+                        <div class="rounded-xl overflow-hidden bg-white aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow">
+                            <a href="Spotify Clone/index.html" class="block w-full h-full">
+                                <img src="assets/spotify.png" alt="Spotify Clone project preview" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                                     loading="lazy"
+                                     width="300"
+                                     height="200"
+                                     onerror="this.src='https://via.placeholder.com/300x200?text=Spotify'">
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">Spotify Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">Website</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="group scroll-animate scale-in delay-500">
+                    <div class="space-y-3">
+                        <div class="rounded-xl overflow-hidden bg-white aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow">
+                            <a href="Instagram Clone/index.html" class="block w-full h-full">
+                                <img src="assets/instagram.png" alt="Instagram Clone project preview"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                                     loading="lazy"
+                                     width="300"
+                                     height="200"
+                                     onerror="this.src='https://via.placeholder.com/300x200?text=Instagram'">
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">Instagram Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">Website</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 scroll-animate fade-up">
+                <a href="project-gallery.html" target="_blank" rel="noopener noreferrer">
+                    <button class="px-8 py-3 bg-gradient-to-r from-[#00bbff] to-[#0066ff] text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 cursor-pointer" aria-label="See more projects">
+                        See More Projects <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gradient-to-br from-[#0a1628] to-[#162647]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="w-full lg:w-1/2 space-y-6 scroll-animate fade-left">
+                    <div class="flex items-center gap-2">
+                        <span class="dot-green" aria-hidden="true"></span>
+                        <h4 class="text-white text-lg">Build everything</h4>
+                    </div>
+                    <h3 class="text-white text-3xl lg:text-4xl font-bold">Let's discuss about your project and take it the next level.</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-white/60 text-sm">Phone</p>
+                            <p class="text-white text-xl">082282886789</p>
+                        </div>
+                        <div>
+                            <p class="text-white/60 text-sm">Email</p>
+                            <p class="text-white text-xl break-all">wilbert.lim08@gmail.com</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm">Location</p>
+                        <p class="text-white text-xl">Indonesia, Sumatera Selatan, Palembang</p>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm mb-3">Trusted by</p>
+                        <div class="trusted-container">
+                            <span class="trusted-item"><i class="fa-brands fa-google-pay" aria-hidden="true"></i> G Pay</span>
+                            <span class="trusted-item"><i class="fa-brands fa-google-pay" aria-hidden="true"></i> Google Pay</span>
+                            <span class="trusted-item"><i class="fa-brands fa-cc-paypal" aria-hidden="true"></i> P PayJunction</span>
+                            <span class="trusted-item"><i class="fa-brands fa-cc-stripe" aria-hidden="true"></i> stripe</span>
+                            <span class="trusted-item"><i class="fa-solid fa-wifi" aria-hidden="true"></i> wire</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 bg-gradient-to-br from-[#121a36] to-[#0f1d4a] rounded-2xl p-8 scroll-animate fade-right delay-300">
+                    <h3 class="text-white text-2xl font-semibold mb-6">Start the project</h3>
+                    <form class="space-y-4" id="contactForm" novalidate>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" placeholder="First name" class="form-input" id="firstName" required>
+                            <input type="text" placeholder="Last name" class="form-input" id="lastName" required>
+                        </div>
+                        <input type="email" placeholder="youremail@website.com" class="form-input" id="email" required>
+                        <input type="text" placeholder="Country" class="form-input" id="country" required>
+                        <textarea rows="4" placeholder="Let us know about your project" class="form-input1" id="message" required></textarea>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="terms" class="w-4 h-4 accent-[#00bbff]" required>
+                            <label for="terms" class="text-white text-sm">I have read and acknowledge the <a href="#" class="text-[#6173fb] hover:underline">Terms and Conditions</a></label>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-[#00bbff] text-white rounded-lg hover:bg-[#00ddff] transition cursor-pointer" id="submitBtn">
+                            Submit Inquiry
+                        </button>
+                        <div id="formMessage" class="text-center text-sm hidden"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="documentation" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="w-full scroll-animate fade-up">
+                    <h3 class="text-white text-2xl font-semibold mb-4">Wilbert</h3>
+                    <h4 class="text-white text-xl mb-4">Ready to get started?</h4>
+                    <button class="px-6 py-3 bg-[#00bbff] text-white rounded-xl hover:bg-[#00ddff] transition cursor-pointer">Get Started</button>
+                </div>
+
+                <div class="border border-white/30 p-6 w-full scroll-animate fade-up delay-200 rounded-xl">
+                    <h4 class="text-white text-xl font-semibold mb-4">Support</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-white text-lg">Phone</p>
+                            <p class="text-white/60 break-all">082282886789</p>
+                        </div>
+                        <div>
+                            <p class="text-white text-lg">Email</p>
+                            <p class="text-white/60 break-all">wilbert.lim08@gmail.com</p>
+                        </div>
+                        <div>
+                            <p class="text-white text-lg mb-3">Follow Us</p>
+                            <div class="social-icons">
+                                <a href="#" class="social-icon" title="Facebook" aria-label="Visit our Facebook page"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="#" class="social-icon" title="Instagram" aria-label="Visit our Instagram page"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#" class="social-icon" title="TikTok" aria-label="Visit our TikTok page"><i class="fa-brands fa-tiktok"></i></a>
+                                <a href="#" class="social-icon" title="YouTube" aria-label="Visit our YouTube channel"><i class="fa-brands fa-youtube"></i></a>
+                                <a href="#" class="social-icon" title="Dribbble" aria-label="Visit our Dribbble profile"><i class="fa-brands fa-dribbble"></i></a>
+                                <a href="#" class="social-icon" title="GitHub" aria-label="Visit our GitHub repository"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full scroll-animate fade-up delay-400">
+                    <h4 class="text-white text-xl font-semibold mb-2">Subscribe newsletter</h4>
+                    <p class="text-white/60 mb-4">To be updated with all latest trends and product</p>
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="email" placeholder="Email*" class="form-input flex-1" id="newsletterEmail" required>
+                        <button class="px-6 bg-[#00bbff] text-white rounded-lg hover:bg-[#00ddff] transition whitespace-nowrap h-[48px] flex items-center justify-center cursor-pointer" id="newsletterBtn" aria-label="Subscribe to newsletter">
+                            Subscribe
+                        </button>
+                    </div>
+                    <div id="newsletterMessage" class="text-white/60 text-sm mt-2 hidden"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">Wilbert</div>
+                    <p class="footer-about">Creating amazing digital experiences through innovative design and development solutions.</p>
+                    <div class="social-icons" style="margin-top: 20px;">
+                        <a href="#" class="social-icon" title="Facebook" aria-label="Visit our Facebook page"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram" aria-label="Visit our Instagram page"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="Twitter" aria-label="Visit our Twitter page"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn" aria-label="Visit our LinkedIn page"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">UX & Product Design</a></li>
+                        <li><a href="#">Performance Optimization</a></li>
+                        <li><a href="#">Web Development</a></li>
+                        <li><a href="#">Mobile Development</a></li>
+                        <li><a href="#">Consulting</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Contact Info</h4>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                        <span>082282886789</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        <span>wilbert.lim08@gmail.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                        <span>Palembang, Indonesia</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Wilbert. All rights reserved. | Designed with <i class="fa-solid fa-heart" style="color: #00bbff;" aria-hidden="true"></i> for creative excellence</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" class="cursor-pointer" aria-label="Scroll to top">
+        <i class="fa-solid fa-arrow-up text-xl" aria-hidden="true"></i>
+    </button>
+
+    <script>
+        // Loading Animation
+        window.addEventListener('load', function() {
+            const loadingContainer = document.getElementById('loadingContainer');
+            const body = document.body;
+            
+            let progress = 0;
+            const loadingPercentage = document.getElementById('loadingPercentage');
+            const loadingProgress = document.getElementById('loadingProgress');
+            
+            const interval = setInterval(function() {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                loadingPercentage.textContent = Math.round(progress) + '%';
+                loadingProgress.style.width = progress + '%';
+                
+                if (progress === 100) {
+                    clearInterval(interval);
+                    
+                    body.classList.remove('loading');
+                    
+                    setTimeout(() => {
+                        loadingContainer.classList.add('fade-out');
+                        
+                        setTimeout(() => {
+                            loadingContainer.style.display = 'none';
+                        }, 500);
+                    }, 500);
+                }
+            }, 100);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener("scroll", function() {
+            const navbar = document.getElementById("navbar");
+            if (window.scrollY > 50) navbar.classList.add("scrolled");
+            else navbar.classList.remove("scrolled");
+        });
+
+        // Mobile Menu
+        const mobileBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                mobileMenu.classList.toggle('hidden');
+                mobileBtn.setAttribute('aria-expanded', isHidden);
+            });
+        }
+
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Theme Toggle
+        const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        const themeToggleMobileMenu = document.getElementById('theme-toggle-mobile-menu');
+        const body = document.body;
+
+        const moonIcon = '<i class="fa-solid fa-moon"></i>';
+        const sunIcon = '<i class="fa-solid fa-sun"></i>';
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            updateThemeIcons('light');
+        } else {
+            body.classList.add('dark-mode');
+            body.classList.remove('light-mode');
+            updateThemeIcons('dark');
+        }
+
+        function updateThemeIcons(mode) {
+            const icon = mode === 'dark' ? moonIcon : sunIcon;
+            if (themeToggleDesktop) themeToggleDesktop.innerHTML = icon;
+            if (themeToggleMobile) themeToggleMobile.innerHTML = icon;
+            if (themeToggleMobileMenu) themeToggleMobileMenu.innerHTML = icon;
+        }
+
+        function toggleTheme() {
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+                updateThemeIcons('light');
+            } else {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                updateThemeIcons('dark');
+            }
+        }
+
+        if (themeToggleDesktop) themeToggleDesktop.addEventListener('click', toggleTheme);
+        if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+        if (themeToggleMobileMenu) themeToggleMobileMenu.addEventListener('click', toggleTheme);
+
+        // Scroll Animation
+        const animateElements = document.querySelectorAll('.scroll-animate');
+
+        function checkScroll() {
+            animateElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementBottom = element.getBoundingClientRect().bottom;
+                const windowHeight = window.innerHeight;
+
+                if (elementTop < windowHeight - 100 && elementBottom > 100) {
+                    element.classList.add('animated');
+                } else {
+                    element.classList.remove('animated');
+                }
+            });
+        }
+
+        setTimeout(checkScroll, 100);
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('resize', checkScroll);
+
+        // Scroll to Top
+        const scrollTopBtn = document.getElementById('scroll-to-top');
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                scrollTopBtn.style.opacity = '1';
+                scrollTopBtn.style.visibility = 'visible';
+            } else {
+                scrollTopBtn.style.opacity = '0';
+                scrollTopBtn.style.visibility = 'hidden';
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Form Validation
+        const contactForm = document.getElementById('contactForm');
+        const formMessage = document.getElementById('formMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const country = document.getElementById('country').value.trim();
+                const message = document.getElementById('message').value.trim();
+                const terms = document.getElementById('terms').checked;
+
+                if (!firstName || !lastName || !email || !country || !message || !terms) {
+                    formMessage.textContent = 'Please fill in all fields and accept terms';
+                    formMessage.classList.remove('hidden', 'text-green-400');
+                    formMessage.classList.add('text-red-400');
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    formMessage.textContent = 'Please enter a valid email address';
+                    formMessage.classList.remove('hidden', 'text-green-400');
+                    formMessage.classList.add('text-red-400');
+                    return;
+                }
+
+                // Simulate form submission
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+                
+                setTimeout(() => {
+                    formMessage.textContent = 'Thank you! Your inquiry has been sent.';
+                    formMessage.classList.remove('hidden', 'text-red-400');
+                    formMessage.classList.add('text-green-400');
+                    contactForm.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Inquiry';
+                }, 1500);
+            });
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Newsletter
+        const newsletterBtn = document.getElementById('newsletterBtn');
+        const newsletterEmail = document.getElementById('newsletterEmail');
+        const newsletterMessage = document.getElementById('newsletterMessage');
+
+        if (newsletterBtn) {
+            newsletterBtn.addEventListener('click', function() {
+                const email = newsletterEmail.value.trim();
+                
+                if (!email || !isValidEmail(email)) {
+                    newsletterMessage.textContent = 'Please enter a valid email address';
+                    newsletterMessage.classList.remove('hidden', 'text-green-400');
+                    newsletterMessage.classList.add('text-red-400');
+                    return;
+                }
+
+                newsletterBtn.disabled = true;
+                newsletterBtn.textContent = 'Subscribing...';
+                
+                setTimeout(() => {
+                    newsletterMessage.textContent = 'Thank you for subscribing!';
+                    newsletterMessage.classList.remove('hidden', 'text-red-400');
+                    newsletterMessage.classList.add('text-green-400');
+                    newsletterEmail.value = '';
+                    newsletterBtn.disabled = false;
+                    newsletterBtn.textContent = 'Subscribe';
+                }, 1000);
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Lazy loading for images
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.loading = 'lazy';
+            });
+        }
+    </script>
+</body>
+</html>

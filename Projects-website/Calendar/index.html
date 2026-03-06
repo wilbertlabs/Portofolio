@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Interaktif - CodingX Indonet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* Calendar Container */
+        .calendar-container {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Calendar Header */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .month-navigation {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+        }
+
+        #currentMonth {
+            font-size: 2em;
+            color: #333;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .today-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: transform 0.3s;
+        }
+
+        .today-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Calendar Weekdays */
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .weekday {
+            text-align: center;
+            font-weight: bold;
+            color: #666;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        /* Calendar Days */
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .calendar-day {
+            min-height: 120px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #2b5876;
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            color: white;
+        }
+
+        .calendar-day.today .day-number {
+            color: white;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.5;
+        }
+
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .day-events {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .event-item {
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-10px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .delete-event {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1em;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .delete-event:hover {
+            opacity: 1;
+        }
+
+        /* Add Event Form */
+        .add-event-form {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+
+        .form-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2b5876;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            transform: scale(1.02);
+        }
+
+        /* Stats */
+        .calendar-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            margin: 100px auto;
+            border-radius: 20px;
+            padding: 30px;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .event-list {
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .event-list-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .event-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .event-actions button {
+            background: none;
+            border: none;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-left: 10px;
+        }
+
+        /* ========== RESPONSIVE STYLES ========== */
+
+/* Large Devices (max-width: 1200px) */
+@media screen and (max-width: 1200px) {
+    .calendar-container {
+        padding: 25px;
+    }
+    
+    #currentMonth {
+        font-size: 1.8em;
+        min-width: 250px;
+    }
+    
+    .calendar-days {
+        gap: 8px;
+    }
+    
+    .calendar-day {
+        min-height: 100px;
+    }
+}
+
+/* Medium Devices (max-width: 992px) */
+@media screen and (max-width: 992px) {
+    body {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 2.5em;
+    }
+    
+    .calendar-container {
+        padding: 20px;
+    }
+    
+    .calendar-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .month-navigation {
+        justify-content: center;
+    }
+    
+    #currentMonth {
+        font-size: 1.6em;
+        min-width: auto;
+    }
+    
+    .today-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .calendar-weekdays .weekday {
+        padding: 12px 5px;
+        font-size: 0.9em;
+    }
+    
+    .calendar-day {
+        min-height: 90px;
+        padding: 8px;
+    }
+    
+    .day-number {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+    
+    .event-item {
+        font-size: 0.7em;
+        padding: 3px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .calendar-stats {
+        gap: 15px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+    }
+    
+    .stat-value {
+        font-size: 1.6em;
+    }
+}
+
+/* Tablet Devices (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    .subtitle {
+        font-size: 1em;
+    }
+    
+    .calendar-container {
+        padding: 15px;
+    }
+    
+    .month-navigation {
+        gap: 10px;
+    }
+    
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1em;
+    }
+    
+    #currentMonth {
+        font-size: 1.3em;
+    }
+    
+    .calendar-weekdays {
+        gap: 5px;
+    }
+    
+    .calendar-weekdays .weekday {
+        padding: 8px 3px;
+        font-size: 0.8em;
+    }
+    
+    .calendar-days {
+        gap: 5px;
+    }
+    
+    .calendar-day {
+        min-height: 80px;
+        padding: 5px;
+    }
+    
+    .day-number {
+        font-size: 0.8em;
+        margin-bottom: 3px;
+    }
+    
+    .day-events {
+        gap: 2px;
+    }
+    
+    .event-item {
+        font-size: 0.65em;
+        padding: 2px;
+    }
+    
+    .delete-event {
+        font-size: 0.9em;
+    }
+    
+    .add-event-form {
+        padding: 20px;
+    }
+    
+    .form-title {
+        font-size: 1.3em;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    
+    .btn-add {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+    
+    .calendar-stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-value {
+        font-size: 1.4em;
+    }
+    
+    /* Modal Responsive */
+    .modal-content {
+        width: 95%;
+        margin: 50px auto;
+        padding: 20px;
+    }
+    
+    .close {
+        top: 10px;
+        right: 20px;
+        font-size: 1.8em;
+    }
+    
+    .event-list-item {
+        padding: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .event-actions {
+        align-self: flex-end;
+    }
+    
+    .event-info h4 {
+        font-size: 1em;
+    }
+    
+    .event-info p {
+        font-size: 0.85em;
+    }
+}
+
+/* Mobile Landscape (max-width: 640px) */
+@media screen and (max-width: 640px) and (orientation: landscape) {
+    .calendar-container {
+        padding: 15px;
+    }
+    
+    .calendar-day {
+        min-height: 70px;
+    }
+    
+    .day-events {
+        display: none; /* Hide events in landscape for better visibility */
+    }
+    
+    .calendar-day:hover .day-events {
+        display: flex; /* Show on hover/tap */
+    }
+    
+    .add-event-form {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+}
+
+/* Mobile Devices (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+    
+    .subtitle {
+        font-size: 0.9em;
+    }
+    
+    .calendar-container {
+        padding: 12px;
+        border-radius: 20px;
+    }
+    
+    .month-navigation {
+        gap: 8px;
+    }
+    
+    .nav-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+    
+    #currentMonth {
+        font-size: 1.1em;
+    }
+    
+    .today-btn {
+        padding: 10px 15px;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+    
+    .calendar-weekdays .weekday {
+        padding: 6px 2px;
+        font-size: 0.7em;
+        border-radius: 5px;
+    }
+    
+    .calendar-days {
+        gap: 3px;
+    }
+    
+    .calendar-day {
+        min-height: 60px;
+        padding: 3px;
+        border-radius: 8px;
+    }
+    
+    .day-number {
+        font-size: 0.7em;
+        margin-bottom: 2px;
+    }
+    
+    .event-item {
+        font-size: 0.6em;
+        padding: 2px;
+        border-radius: 3px;
+    }
+    
+    .add-event-form {
+        padding: 15px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+    
+    .form-title {
+        font-size: 1.1em;
+        margin-bottom: 15px;
+    }
+    
+    .form-group {
+        margin-bottom: 12px;
+    }
+    
+    .form-group label {
+        font-size: 0.85em;
+        margin-bottom: 5px;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 8px;
+        font-size: 0.85em;
+        border-radius: 8px;
+    }
+    
+    .form-row {
+        gap: 10px;
+    }
+    
+    .btn-add {
+        padding: 10px 15px;
+        font-size: 0.9em;
+        border-radius: 8px;
+    }
+    
+    .stat-card {
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .stat-value {
+        font-size: 1.2em;
+    }
+    
+    .stat-label {
+        font-size: 0.8em;
+    }
+    
+    /* Modal for mobile */
+    .modal-content {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    .close {
+        top: 8px;
+        right: 15px;
+        font-size: 1.5em;
+    }
+    
+    #modalDate {
+        font-size: 1.2em;
+        padding-right: 30px;
+    }
+    
+    .event-list-item {
+        padding: 10px;
+    }
+    
+    .event-info h4 {
+        font-size: 0.9em;
+    }
+    
+    .event-info p {
+        font-size: 0.8em;
+    }
+    
+    .event-actions button {
+        font-size: 1em;
+    }
+}
+
+/* Small Mobile (max-width: 360px) */
+@media screen and (max-width: 360px) {
+    h1 {
+        font-size: 1.4em;
+    }
+    
+    .calendar-day {
+        min-height: 50px;
+    }
+    
+    .day-number {
+        font-size: 0.65em;
+    }
+    
+    .event-item {
+        font-size: 0.55em;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 6px;
+        font-size: 0.8em;
+    }
+    
+    .stat-value {
+        font-size: 1.1em;
+    }
+}
+
+/* Touch Device Optimization */
+@media (hover: none) and (pointer: coarse) {
+    .calendar-day:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .calendar-day:active {
+        transform: scale(0.98);
+        border-color: #2b5876;
+    }
+    
+    .nav-btn:hover,
+    .today-btn:hover,
+    .btn-add:hover {
+        transform: none;
+    }
+    
+    .nav-btn:active,
+    .today-btn:active,
+    .btn-add:active {
+        transform: scale(0.95);
+    }
+    
+    .delete-event {
+        padding: 5px; /* Larger touch target */
+    }
+}
+
+/* High-DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .calendar-container {
+        box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .calendar-container {
+        box-shadow: none;
+        padding: 20px;
+    }
+    
+    .add-event-form,
+    .today-btn,
+    .nav-btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .calendar-day {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #1a2634 0%, #2c3e50 100%);
+    }
+    
+    .calendar-container {
+        background: #2d3436;
+    }
+    
+    #currentMonth {
+        color: #f5f6fa;
+    }
+    
+    .weekday {
+        background: #3d3d3d;
+        color: #f5f6fa;
+    }
+    
+    .calendar-day {
+        background: #3d3d3d;
+    }
+    
+    .calendar-day:not(.today) .day-number {
+        color: #f5f6fa;
+    }
+    
+    .add-event-form {
+        background: #3d3d3d;
+    }
+    
+    .form-title {
+        color: #f5f6fa;
+    }
+    
+    .form-group label {
+        color: #b2bec3;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        background: #2d3436;
+        border-color: #4a4a4a;
+        color: #f5f6fa;
+    }
+    
+    .modal-content {
+        background: #2d3436;
+    }
+    
+    #modalDate {
+        color: #f5f6fa;
+    }
+    
+    .event-list-item {
+        background: #3d3d3d;
+    }
+    
+    .event-info h4 {
+        color: #f5f6fa;
+    }
+    
+    .event-info p {
+        color: #b2bec3;
+    }
+}
+
+/* Landscape Mode Warning for very small heights */
+@media (max-height: 500px) and (orientation: landscape) {
+    .calendar-container {
+        padding: 10px;
+    }
+    
+    .calendar-header {
+        margin-bottom: 10px;
+    }
+    
+    .calendar-weekdays {
+        margin-bottom: 10px;
+    }
+    
+    .calendar-days {
+        margin-bottom: 10px;
+    }
+    
+    .calendar-day {
+        min-height: 50px;
+    }
+    
+    .add-event-form {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .calendar-stats {
+        display: none; /* Hide stats to save space */
+    }
+}
+
+/* Loading States */
+.calendar-day.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.calendar-day.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .calendar-day:hover {
+        transform: none;
+    }
+}
+
+/* RTL Support */
+[dir="rtl"] .month-navigation {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .event-item {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .delete-event {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Focus States for Accessibility */
+.nav-btn:focus,
+.today-btn:focus,
+.btn-add:focus,
+.delete-event:focus,
+.close:focus {
+    outline: 3px solid #4e4376;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .calendar-day.today {
+        background: #000;
+        border: 2px solid #fff;
+    }
+    
+    .event-item {
+        background: #000;
+        border: 1px solid #fff;
+    }
+    
+    .nav-btn,
+    .today-btn,
+    .btn-add {
+        background: #000;
+        border: 2px solid #fff;
+    }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Better Touch Targets for Mobile */
+@media (max-width: 768px) {
+    .nav-btn,
+    .today-btn,
+    .btn-add,
+    .delete-event,
+    .close,
+    .event-actions button {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .event-item {
+        padding: 8px;
+    }
+    
+    .event-item span {
+        flex: 1;
+    }
+}
+
+/* Fix for iOS zoom on input focus */
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+    select,
+    textarea,
+    input {
+        font-size: 16px !important; /* Prevents zoom on focus in iOS */
+    }
+}
+
+/* Prevent text overflow */
+.event-item span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+}
+
+@media (max-width: 768px) {
+    .event-item span {
+        max-width: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .event-item span {
+        max-width: 40px;
+    }
+}
+
+/* Smooth transitions for responsive changes */
+.calendar-container,
+.calendar-day,
+.nav-btn,
+.today-btn,
+.btn-add,
+.modal-content {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Fix modal scrolling on mobile */
+.modal {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.modal-content {
+    margin: 20px auto;
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 10px auto;
+    }
+}
+
+/* Better grid alignment on small screens */
+@media (max-width: 480px) {
+    .calendar-days {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    
+    .calendar-day {
+        aspect-ratio: 1 / 1;
+        min-height: auto;
+        height: auto;
+    }
+}
+
+/* Fix for notch phones */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+    
+    .modal-content {
+        margin-left: max(20px, env(safe-area-inset-left));
+        margin-right: max(20px, env(safe-area-inset-right));
+    }
+}
+    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📅 Kalender Interaktif</h1>
+            <p class="subtitle">Atur jadwal dan acara Anda dengan mudah!</p>
+        </header>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div class="month-navigation">
+                    <button class="nav-btn" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <h2 id="currentMonth"></h2>
+                    <button class="nav-btn" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <button class="today-btn" onclick="goToToday()"><i class="fas fa-calendar-day"></i> Hari Ini</button>
+            </div>
+
+            <div class="calendar-weekdays" id="weekdays"></div>
+            <div class="calendar-days" id="calendarDays"></div>
+
+            <div class="add-event-form">
+                <h3 class="form-title"><i class="fas fa-plus-circle"></i> Tambah Acara Baru</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select id="eventCategory">
+                            <option value="personal">Personal</option>
+                            <option value="work">Pekerjaan</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="holiday">Liburan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Judul Acara</label>
+                    <input type="text" id="eventTitle" placeholder="Masukkan judul acara..." required>
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi</label>
+                    <textarea id="eventDesc" rows="3" placeholder="Deskripsi acara..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Waktu Mulai</label>
+                        <input type="time" id="eventStart" value="09:00">
+                    </div>
+                    <div class="form-group">
+                        <label>Waktu Selesai</label>
+                        <input type="time" id="eventEnd" value="10:00">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addEvent()"><i class="fas fa-save"></i> Simpan Acara</button>
+            </div>
+
+            <div class="calendar-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalEvents">0</div>
+                    <div class="stat-label">Total Acara</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todayEvents">0</div>
+                    <div class="stat-label">Acara Hari Ini</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="monthEvents">0</div>
+                    <div class="stat-label">Bulan Ini</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail Hari -->
+    <div id="dayModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalDate"></h2>
+            <div id="modalEvents" class="event-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        let events = JSON.parse(localStorage.getItem('calendarEvents')) || {};
+
+        // Initialize
+        function init() {
+            renderCalendar();
+            updateStats();
+            document.getElementById('eventDate').valueAsDate = new Date();
+        }
+
+        // Render Calendar
+        function renderCalendar() {
+            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+            // Weekdays
+            const weekdays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            document.getElementById('weekdays').innerHTML = weekdays.map(day => `<div class="weekday">${day}</div>`).join('');
+
+            // First day of month
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+            let calendarHTML = '';
+            const today = new Date();
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                const dateStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                calendarHTML += createDayCell(day, true, dateStr);
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                const isToday = today.getDate() === day && 
+                               today.getMonth() === currentMonth && 
+                               today.getFullYear() === currentYear;
+                calendarHTML += createDayCell(day, false, dateStr, isToday);
+            }
+
+            // Next month days
+            const totalCells = 42;
+            const remainingCells = totalCells - (firstDay + daysInMonth);
+            for (let day = 1; day <= remainingCells; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 2).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                calendarHTML += createDayCell(day, true, dateStr);
+            }
+
+            document.getElementById('calendarDays').innerHTML = calendarHTML;
+        }
+
+        // Create day cell
+        function createDayCell(day, isOtherMonth, dateStr, isToday = false) {
+            const dayEvents = events[dateStr] || [];
+            const eventsHTML = dayEvents.slice(0, 2).map(event => `
+                <div class="event-item" style="background: ${getCategoryColor(event.category)}">
+                    <span>${event.title}</span>
+                    <button class="delete-event" onclick="deleteEvent('${dateStr}', '${event.id}'); event.stopPropagation();">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            const moreEvents = dayEvents.length > 2 ? `<div class="event-item">+${dayEvents.length - 2} lagi</div>` : '';
+
+            return `
+                <div class="calendar-day ${isOtherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}" onclick="showDayEvents('${dateStr}')">
+                    <div class="day-number">${day}</div>
+                    <div class="day-events">
+                        ${eventsHTML}
+                        ${moreEvents}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get category color
+        function getCategoryColor(category) {
+            const colors = {
+                'personal': '#2b5876',
+                'work': '#4e4376',
+                'meeting': '#764ba2',
+                'holiday': '#667eea'
+            };
+            return colors[category] || '#2b5876';
+        }
+
+        // Change month
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+            updateStats();
+        }
+
+        // Go to today
+        function goToToday() {
+            const today = new Date();
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            renderCalendar();
+            updateStats();
+        }
+
+        // Add event
+        function addEvent() {
+            const date = document.getElementById('eventDate').value;
+            const title = document.getElementById('eventTitle').value;
+            const desc = document.getElementById('eventDesc').value;
+            const category = document.getElementById('eventCategory').value;
+            const start = document.getElementById('eventStart').value;
+            const end = document.getElementById('eventEnd').value;
+
+            if (!date || !title) {
+                alert('Tanggal dan judul harus diisi!');
+                return;
+            }
+
+            if (!events[date]) {
+                events[date] = [];
+            }
+
+            const newEvent = {
+                id: Date.now().toString(),
+                title,
+                desc,
+                category,
+                start,
+                end
+            };
+
+            events[date].push(newEvent);
+            saveEvents();
+            
+            // Clear form
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDesc').value = '';
+            
+            renderCalendar();
+            updateStats();
+        }
+
+        // Delete event
+        function deleteEvent(date, eventId) {
+            if (events[date]) {
+                events[date] = events[date].filter(e => e.id !== eventId);
+                if (events[date].length === 0) {
+                    delete events[date];
+                }
+                saveEvents();
+                renderCalendar();
+                updateStats();
+                closeModal();
+            }
+        }
+
+        // Show day events
+        function showDayEvents(dateStr) {
+            const modal = document.getElementById('dayModal');
+            const modalDate = document.getElementById('modalDate');
+            const modalEvents = document.getElementById('modalEvents');
+            
+            const date = new Date(dateStr);
+            modalDate.textContent = date.toLocaleDateString('id-ID', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            const dayEvents = events[dateStr] || [];
+            if (dayEvents.length === 0) {
+                modalEvents.innerHTML = '<p style="text-align: center; color: #666;">Tidak ada acara</p>';
+            } else {
+                modalEvents.innerHTML = dayEvents.map(event => `
+                    <div class="event-list-item" style="border-left: 5px solid ${getCategoryColor(event.category)}">
+                        <div class="event-info">
+                            <h4>${event.title}</h4>
+                            <p>${event.desc || 'Tidak ada deskripsi'}</p>
+                            <small>${event.start || '00:00'} - ${event.end || '00:00'}</small>
+                        </div>
+                        <div class="event-actions">
+                            <button onclick="deleteEvent('${dateStr}', '${event.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            modal.style.display = 'block';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('dayModal').style.display = 'none';
+        }
+
+        // Save events to localStorage
+        function saveEvents() {
+            localStorage.setItem('calendarEvents', JSON.stringify(events));
+        }
+
+        // Update stats
+        function updateStats() {
+            const totalEvents = Object.values(events).flat().length;
+            document.getElementById('totalEvents').textContent = totalEvents;
+
+            const today = new Date().toISOString().split('T')[0];
+            const todayEvents = (events[today] || []).length;
+            document.getElementById('todayEvents').textContent = todayEvents;
+
+            const monthEvents = Object.keys(events).filter(date => {
+                const [year, month] = date.split('-');
+                return parseInt(year) === currentYear && parseInt(month) === currentMonth + 1;
+            }).reduce((total, date) => total + events[date].length, 0);
+            document.getElementById('monthEvents').textContent = monthEvents;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('dayModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

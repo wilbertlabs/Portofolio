@@ -1,0 +1,2396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Analitik - CodingX Indonet</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 30px;
+        }
+
+        /* Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-title p {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #334155;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: #e2e8f0;
+            transform: rotate(15deg);
+        }
+
+        .export-btn {
+            padding: 12px 24px;
+            background: linear-gradient(145deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px #2563eb80;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 24px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px #00000020;
+            border-color: #2563eb;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon.blue { background: #dbeafe; color: #2563eb; }
+        .stat-icon.green { background: #dcfce7; color: #16a34a; }
+        .stat-icon.purple { background: #f3e8ff; color: #9333ea; }
+        .stat-icon.orange { background: #fff3cd; color: #f97316; }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .stat-change {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .stat-change.positive {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .stat-change.negative {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+.chart-card {
+    background: #f8fafc;
+    border-radius: 24px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+
+/* Chart Header yang rapi */
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.chart-header h3 {
+    color: #0f172a;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-header h3 i {
+    color: #2563eb;
+    font-size: 1.2rem;
+}
+
+/* Chart Filters yang elegan */
+.chart-filters {
+    display: flex;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 30px;
+}
+
+.filter-btn {
+    padding: 6px 16px;
+    border-radius: 30px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.filter-btn.active {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+.filter-btn:hover:not(.active) {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+/* Chart Container Utama */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-top: 10px;
+}
+
+/* Canvas Styling */
+.chart-container canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+}
+
+
+        /* Recent Activities */
+        .activities-section {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h3 {
+            color: #0f172a;
+        }
+
+        .view-all {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .activities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px -5px #00000020;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .activity-icon.blue { background: #dbeafe; color: #2563eb; }
+        .activity-icon.green { background: #dcfce7; color: #16a34a; }
+        .activity-icon.purple { background: #f3e8ff; color: #9333ea; }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        .activity-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .activity-status.completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .activity-status.pending {
+            background: #fff3cd;
+            color: #f97316;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: #0f172a;
+        }
+
+        body.dark-mode .dashboard-container {
+            background: #1e293b;
+        }
+
+        body.dark-mode .stat-card,
+        body.dark-mode .chart-card,
+        body.dark-mode .activities-section {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        body.dark-mode .stat-value,
+        body.dark-mode .chart-header h3,
+        body.dark-mode .section-header h3,
+        body.dark-mode .activity-title {
+            color: white;
+        }
+
+        body.dark-mode .stat-label,
+        body.dark-mode .activity-time {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .filter-btn {
+            background: #1e293b;
+            border-color: #475569;
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .activity-item {
+            background: #1e293b;
+        }
+
+        body.dark-mode .theme-toggle {
+            background: #334155;
+            color: white;
+        }
+
+        @media screen and (min-width: 1600px) {
+    .chart-card {
+        padding: 30px;
+    }
+    
+    .chart-container {
+        height: 350px;
+    }
+    
+    .chart-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .filter-btn {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ------------------------------------- */
+/* RESPONSIVE CHART - DESKTOP             */
+/* ------------------------------------- */
+
+@media screen and (max-width: 1399px) and (min-width: 1200px) {
+    .chart-container {
+        height: 280px;
+    }
+}
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+    .chart-container {
+        height: 260px;
+    }
+}
+
+/* ------------------------------------- */
+/* RESPONSIVE CHART - TABLET LANDSCAPE   */
+/* ------------------------------------- */
+
+@media screen and (max-width: 991px) and (min-width: 768px) {
+    .chart-card {
+        padding: 20px;
+    }
+    
+    .chart-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .chart-header h3 {
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+    
+    .chart-filters {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    
+    .filter-btn {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .chart-container {
+        height: 240px;
+    }
+}
+
+/* ------------------------------------- */
+/* RESPONSIVE CHART - TABLET PORTRAIT    */
+/* ------------------------------------- */
+
+@media screen and (max-width: 767px) and (min-width: 576px) {
+    .chart-card {
+        padding: 18px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .chart-header h3 {
+        font-size: 1rem;
+        width: 100%;
+    }
+    
+    .chart-filters {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        background: transparent;
+        padding: 0;
+    }
+    
+    .filter-btn {
+        padding: 8px 5px;
+        font-size: 0.75rem;
+        text-align: center;
+        background: #f1f5f9;
+        border-radius: 8px;
+    }
+    
+    .filter-btn.active {
+        background: #2563eb;
+    }
+    
+    .chart-container {
+        height: 220px;
+    }
+}
+
+/* ------------------------------------- */
+/* RESPONSIVE CHART - MOBILE LARGE       */
+/* ------------------------------------- */
+
+@media screen and (max-width: 575px) and (min-width: 426px) {
+    .chart-card {
+        padding: 15px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .chart-header h3 {
+        font-size: 0.95rem;
+    }
+    
+    .chart-header h3 i {
+        font-size: 1rem;
+    }
+    
+    .chart-filters {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        background: transparent;
+        padding: 0;
+    }
+    
+    .filter-btn {
+        padding: 8px 0;
+        font-size: 0.7rem;
+        background: #f1f5f9;
+        border-radius: 8px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .chart-container {
+        height: 200px;
+    }
+}
+
+/* ------------------------------------- */
+/* RESPONSIVE CHART - MOBILE MEDIUM      */
+/* ------------------------------------- */
+
+@media screen and (max-width: 425px) {
+    .chart-card {
+        padding: 12px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    
+    .chart-header h3 {
+        font-size: 0.9rem;
+    }
+    
+    .chart-header h3 i {
+        font-size: 0.95rem;
+    }
+    
+    .chart-filters {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        background: transparent;
+        padding: 0;
+    }
+    
+    .filter-btn {
+        padding: 6px 0;
+        font-size: 0.65rem;
+        background: #f1f5f9;
+        border-radius: 6px;
+    }
+    
+    .chart-container {
+        height: 180px;
+    }
+}
+
+/* ------------------------------------- */
+/* RESPONSIVE CHART - MOBILE SMALL       */
+/* ------------------------------------- */
+
+@media screen and (max-width: 374px) {
+    .chart-card {
+        padding: 10px;
+    }
+    
+    .chart-header h3 {
+        font-size: 0.85rem;
+    }
+    
+    .filter-btn {
+        padding: 5px 0;
+        font-size: 0.6rem;
+    }
+    
+    .chart-container {
+        height: 160px;
+    }
+}
+
+/* ------------------------------------- */
+/* CHART TYPES SPECIFIC STYLES           */
+/* ------------------------------------- */
+
+/* Line Chart */
+.chart-container.line-chart canvas {
+    stroke-width: 2;
+}
+
+/* Doughnut Chart */
+.chart-container.doughnut-chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Chart Legend Responsive */
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+}
+
+@media screen and (max-width: 768px) {
+    .chart-legend {
+        gap: 10px;
+    }
+    
+    .legend-item {
+        font-size: 0.75rem;
+    }
+    
+    .legend-color {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .chart-legend {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+}
+
+/* ------------------------------------- */
+/* CHART TOOLTIPS CUSTOM                  */
+/* ------------------------------------- */
+
+.chartjs-tooltip {
+    background: rgba(15, 23, 42, 0.9) !important;
+    backdrop-filter: blur(4px);
+    color: white !important;
+    border-radius: 12px !important;
+    padding: 10px 14px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3) !important;
+    pointer-events: none !important;
+    transition: all 0.2s !important;
+}
+
+@media screen and (max-width: 768px) {
+    .chartjs-tooltip {
+        padding: 8px 12px !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ------------------------------------- */
+/* DARK MODE CHART STYLES                 */
+/* ------------------------------------- */
+
+body.dark-mode .chart-card {
+    background: #334155;
+    border-color: #475569;
+}
+
+body.dark-mode .chart-header h3 {
+    color: white;
+}
+
+body.dark-mode .chart-header h3 i {
+    color: #60a5fa;
+}
+
+body.dark-mode .chart-filters {
+    background: #1e293b;
+}
+
+body.dark-mode .filter-btn {
+    color: #94a3b8;
+}
+
+body.dark-mode .filter-btn:hover:not(.active) {
+    background: #475569;
+    color: white;
+}
+
+body.dark-mode .chart-legend {
+    border-top-color: #475569;
+}
+
+body.dark-mode .legend-item {
+    color: #cbd5e1;
+}
+
+/* ------------------------------------- */
+/* CHART GRID LAYOUT                      */
+/* ------------------------------------- */
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Responsive grid untuk chart */
+@media screen and (max-width: 992px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .charts-grid {
+        gap: 12px;
+    }
+}
+
+/* Chart dengan lebar penuh */
+.chart-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.chart-card.half-width {
+    grid-column: span 1;
+}
+
+@media screen and (max-width: 768px) {
+    .chart-card.half-width {
+        grid-column: 1 / -1;
+    }
+}
+
+/* ------------------------------------- */
+/* CHART LOADING STATE                    */
+/* ------------------------------------- */
+
+.chart-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    z-index: 5;
+}
+
+.chart-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+body.dark-mode .chart-loading {
+    background: rgba(30, 41, 59, 0.8);
+}
+
+body.dark-mode .chart-loading-spinner {
+    border-color: #475569;
+    border-top-color: #60a5fa;
+}
+
+@media screen and (max-width: 768px) {
+    .chart-loading-spinner {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* ------------------------------------- */
+/* CHART ERROR STATE                      */
+/* ------------------------------------- */
+
+.chart-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ef4444;
+    font-size: 0.9rem;
+    width: 100%;
+    padding: 20px;
+}
+
+.chart-error i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* ------------------------------------- */
+/* CHART ANIMATIONS                       */
+/* ------------------------------------- */
+
+@keyframes chartFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chart-card {
+    animation: chartFadeIn 0.5s ease;
+}
+
+/* Chart hover effect */
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -15px rgba(37, 99, 235, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chart-card,
+    .chart-card:hover {
+        animation: none;
+        transform: none;
+    }
+}
+
+/* ------------------------------------- */
+/* CHART RESPONSIVE TYPOGRAPHY            */
+/* ------------------------------------- */
+
+.chart-title {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+.chart-value {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+}
+
+.chart-label {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+}
+
+/* ------------------------------------- */
+/* CHART CUSTOM TOOLTIP MOBILE            */
+/* ------------------------------------- */
+
+@media (max-width: 768px) {
+    /* Sembunyikan tooltip default di mobile */
+    .chartjs-tooltip {
+        display: none !important;
+    }
+    
+    /* Tampilkan data di element lain */
+    .chart-mobile-data {
+        display: block;
+        margin-top: 15px;
+        padding: 10px;
+        background: #f8fafc;
+        border-radius: 12px;
+    }
+    
+    body.dark-mode .chart-mobile-data {
+        background: #1e293b;
+    }
+}
+
+/* ------------------------------------- */
+/* CHART AXIS LABELS RESPONSIVE           */
+/* ------------------------------------- */
+
+/* Sembunyikan beberapa label di mobile */
+@media screen and (max-width: 576px) {
+    .chart-container canvas {
+        /* Axis labels akan diatur oleh Chart.js options */
+    }
+}
+
+/* ------------------------------------- */
+/* PRINT CHART STYLES                     */
+/* ------------------------------------- */
+
+@media print {
+    .chart-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        background: white;
+    }
+    
+    .chart-container {
+        height: 250px !important;
+    }
+    
+    .filter-btn,
+    .chart-filters {
+        display: none !important;
+    }
+}
+
+/* ------------------------------------- */
+/* END OF CHART RESPONSIVE STYLES         */
+/* ------------------------------------- */
+/* Dibuat oleh CodingX Indonet 💼📝💰   */
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 20px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .export-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ========== RESPONSIVE STYLES - DASHBOARD ANALITIK ========== */
+/* Dibuat oleh CodingX Indonet dengan styling rapi dan profesional */
+
+/* ------------------------------------- */
+/* BREAKPOINT SYSTEM YANG TERSTRUKTUR   */
+/* ------------------------------------- */
+
+/* 2K & 4K Displays (1600px - 2560px) */
+@media screen and (min-width: 1600px) {
+    .dashboard-container {
+        max-width: 1600px;
+        padding: 35px;
+    }
+    
+    .stats-grid {
+        gap: 25px;
+    }
+    
+    .charts-grid {
+        gap: 25px;
+    }
+    
+    .stat-value {
+        font-size: 2.2rem;
+    }
+    
+    .chart-container {
+        height: 350px;
+    }
+}
+
+/* Desktop Large (1400px - 1599px) */
+@media screen and (max-width: 1599px) and (min-width: 1400px) {
+    .dashboard-container {
+        max-width: 1400px;
+        padding: 30px;
+    }
+    
+    .stats-grid {
+        gap: 20px;
+    }
+    
+    .charts-grid {
+        gap: 20px;
+    }
+}
+
+/* Desktop Medium (1200px - 1399px) */
+@media screen and (max-width: 1399px) and (min-width: 1200px) {
+    .dashboard-container {
+        max-width: 1200px;
+        padding: 25px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+    
+    .stat-value {
+        font-size: 1.8rem;
+    }
+    
+    .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+/* Desktop Small / Laptop Large (992px - 1199px) */
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+    .dashboard-container {
+        padding: 20px;
+    }
+    
+    .header-title h1 {
+        font-size: 1.8rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .stat-card {
+        padding: 20px;
+    }
+    
+    .stat-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+    }
+    
+    .stat-value {
+        font-size: 1.6rem;
+    }
+    
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .chart-container {
+        height: 280px;
+    }
+}
+
+/* Laptop / Tablet Landscape (768px - 991px) */
+@media screen and (max-width: 991px) and (min-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .dashboard-container {
+        padding: 20px;
+        border-radius: 24px;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .header-title h1 {
+        font-size: 1.6rem;
+    }
+    
+    .header-title p {
+        font-size: 0.95rem;
+    }
+    
+    .header-actions {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    
+    .theme-toggle {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+    }
+    
+    .export-btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .stat-card {
+        padding: 18px;
+    }
+    
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+    
+    .stat-value {
+        font-size: 1.4rem;
+    }
+    
+    .stat-label {
+        font-size: 0.85rem;
+    }
+    
+    .stat-change {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+    
+    .chart-card {
+        padding: 18px;
+    }
+    
+    .chart-header h3 {
+        font-size: 1rem;
+    }
+    
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    .activities-section {
+        padding: 18px;
+    }
+    
+    .section-header h3 {
+        font-size: 1rem;
+    }
+    
+    .view-all {
+        font-size: 0.9rem;
+    }
+    
+    .activity-item {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .activity-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .activity-title {
+        font-size: 0.9rem;
+    }
+    
+    .activity-time {
+        font-size: 0.75rem;
+    }
+    
+    .activity-status {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+    }
+}
+
+/* Tablet Portrait (576px - 767px) */
+@media screen and (max-width: 767px) and (min-width: 576px) {
+    body {
+        padding: 12px;
+    }
+    
+    .dashboard-container {
+        padding: 18px;
+        border-radius: 20px;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .header-title h1 {
+        font-size: 1.5rem;
+    }
+    
+    .header-title p {
+        font-size: 0.9rem;
+    }
+    
+    .header-actions {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    
+    .theme-toggle {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+    
+    .export-btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+    }
+    
+    .stat-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+    
+    .stat-value {
+        font-size: 1.3rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    .stat-change {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+    
+    .charts-grid {
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .chart-card {
+        padding: 15px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .chart-header h3 {
+        font-size: 1rem;
+    }
+    
+    .chart-filters {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+    }
+    
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        flex: 1;
+    }
+    
+    .chart-container {
+        height: 220px;
+    }
+    
+    .activities-section {
+        padding: 15px;
+    }
+    
+    .section-header {
+        margin-bottom: 15px;
+    }
+    
+    .section-header h3 {
+        font-size: 1rem;
+    }
+    
+    .view-all {
+        font-size: 0.85rem;
+    }
+    
+    .activities-list {
+        gap: 10px;
+    }
+    
+    .activity-item {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .activity-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 0.95rem;
+    }
+    
+    .activity-title {
+        font-size: 0.85rem;
+    }
+    
+    .activity-time {
+        font-size: 0.7rem;
+    }
+    
+    .activity-status {
+        padding: 4px 8px;
+        font-size: 0.65rem;
+    }
+}
+
+/* Mobile Large (425px - 575px) */
+@media screen and (max-width: 575px) and (min-width: 426px) {
+    body {
+        padding: 10px;
+    }
+    
+    .dashboard-container {
+        padding: 15px;
+        border-radius: 16px;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .header-title h1 {
+        font-size: 1.4rem;
+    }
+    
+    .header-title p {
+        font-size: 0.85rem;
+    }
+    
+    .header-actions {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+    }
+    
+    .theme-toggle {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .export-btn {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .export-btn i {
+        font-size: 0.9rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    
+    .stat-info {
+        flex: 1;
+    }
+    
+    .stat-value {
+        font-size: 1.2rem;
+        margin-bottom: 2px;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    .stat-change {
+        margin-top: 0;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+    
+    .charts-grid {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .chart-card {
+        padding: 12px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    
+    .chart-header h3 {
+        font-size: 0.95rem;
+    }
+    
+    .chart-filters {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+    }
+    
+    .filter-btn {
+        padding: 6px 0;
+        font-size: 0.7rem;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .chart-container {
+        height: 200px;
+    }
+    
+    .activities-section {
+        padding: 12px;
+    }
+    
+    .section-header {
+        margin-bottom: 12px;
+    }
+    
+    .section-header h3 {
+        font-size: 0.95rem;
+    }
+    
+    .view-all {
+        font-size: 0.8rem;
+    }
+    
+    .activity-item {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .activity-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+    
+    .activity-details {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .activity-title {
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .activity-time {
+        font-size: 0.65rem;
+    }
+    
+    .activity-status {
+        padding: 3px 8px;
+        font-size: 0.6rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+/* Mobile Medium (375px - 424px) */
+@media screen and (max-width: 424px) and (min-width: 376px) {
+    body {
+        padding: 8px;
+    }
+    
+    .dashboard-container {
+        padding: 12px;
+        border-radius: 14px;
+    }
+    
+    .header-title h1 {
+        font-size: 1.3rem;
+    }
+    
+    .header-title p {
+        font-size: 0.8rem;
+    }
+    
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 0.95rem;
+    }
+    
+    .export-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .stat-card {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .stat-value {
+        font-size: 1.1rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    .stat-change {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+    }
+    
+    .chart-header h3 {
+        font-size: 0.9rem;
+    }
+    
+    .filter-btn {
+        font-size: 0.65rem;
+        padding: 5px 0;
+    }
+    
+    .chart-container {
+        height: 180px;
+    }
+    
+    .activity-item {
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .activity-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    
+    .activity-title {
+        font-size: 0.75rem;
+    }
+    
+    .activity-time {
+        font-size: 0.6rem;
+    }
+    
+    .activity-status {
+        padding: 2px 6px;
+        font-size: 0.55rem;
+    }
+}
+
+/* Mobile Small (320px - 374px) */
+@media screen and (max-width: 374px) {
+    body {
+        padding: 5px;
+    }
+    
+    .dashboard-container {
+        padding: 10px;
+        border-radius: 12px;
+    }
+    
+    .header-title h1 {
+        font-size: 1.2rem;
+    }
+    
+    .header-title p {
+        font-size: 0.75rem;
+    }
+    
+    .header-actions {
+        flex-wrap: wrap;
+    }
+    
+    .theme-toggle {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+    
+    .export-btn {
+        padding: 8px 10px;
+        font-size: 0.75rem;
+        flex: 1;
+    }
+    
+    .stat-card {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .stat-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+    
+    .stat-value {
+        font-size: 1rem;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+    }
+    
+    .stat-change {
+        padding: 2px 4px;
+        font-size: 0.6rem;
+    }
+    
+    .chart-header h3 {
+        font-size: 0.85rem;
+    }
+    
+    .filter-btn {
+        font-size: 0.6rem;
+        padding: 4px 0;
+    }
+    
+    .chart-container {
+        height: 160px;
+    }
+    
+    .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .activity-icon {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 0;
+    }
+    
+    .activity-details {
+        width: 100%;
+    }
+    
+    .activity-title {
+        font-size: 0.8rem;
+        white-space: normal;
+    }
+    
+    .activity-status {
+        align-self: flex-end;
+        margin-top: 5px;
+    }
+}
+
+/* ------------------------------------- */
+/* ORIENTASI KHUSUS                     */
+/* ------------------------------------- */
+
+/* Landscape Mode untuk Mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .dashboard-container {
+        max-height: 100vh;
+        overflow-y: auto;
+        padding: 15px;
+    }
+    
+    .stats-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .stats-grid::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .stats-grid::-webkit-scrollbar-thumb {
+        background: #2563eb;
+        border-radius: 2px;
+    }
+    
+    .stat-card {
+        min-width: 220px;
+        flex-shrink: 0;
+    }
+    
+    .chart-container {
+        height: 150px;
+    }
+    
+    .activities-list {
+        max-height: 150px;
+        overflow-y: auto;
+    }
+}
+
+/* Tablet Landscape */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+}
+
+/* ------------------------------------- */
+/* TOUCH DEVICE OPTIMIZATION             */
+/* ------------------------------------- */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Hapus hover effects */
+    .stat-card:hover,
+    .activity-item:hover,
+    .filter-btn:hover,
+    .export-btn:hover,
+    .theme-toggle:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    /* Active states untuk touch */
+    .stat-card:active,
+    .activity-item:active {
+        transform: translateY(-2px);
+        transition: transform 0.1s;
+    }
+    
+    .filter-btn:active,
+    .export-btn:active,
+    .theme-toggle:active {
+        transform: scale(0.95);
+        transition: transform 0.1s;
+    }
+    
+    /* Touch targets minimal 44px */
+    .filter-btn,
+    .export-btn,
+    .theme-toggle,
+    .view-all,
+    .activity-status {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* ------------------------------------- */
+/* DARK MODE - RESPONSIF                 */
+/* ------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+    body:not(.dark-mode) {
+        background: #0f172a;
+    }
+    
+    body:not(.dark-mode) .dashboard-container {
+        background: #1e293b;
+    }
+    
+    body:not(.dark-mode) .stat-card,
+    body:not(.dark-mode) .chart-card,
+    body:not(.dark-mode) .activities-section {
+        background: #334155;
+        border-color: #475569;
+    }
+}
+
+/* ------------------------------------- */
+/* AKSESIBILITAS                          */
+/* ------------------------------------- */
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .stat-card,
+    .chart-card,
+    .activities-section {
+        border: 2px solid #000;
+    }
+    
+    .stat-change.positive {
+        border: 1px solid #16a34a;
+    }
+    
+    .stat-change.negative {
+        border: 1px solid #dc2626;
+    }
+    
+    .filter-btn.active {
+        border: 2px solid #fff;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .stat-card:hover,
+    .activity-item:hover {
+        transform: none;
+    }
+}
+
+/* Focus States untuk Keyboard Navigation */
+.filter-btn:focus-visible,
+.export-btn:focus-visible,
+.theme-toggle:focus-visible,
+.view-all:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+    position: relative;
+    z-index: 10;
+}
+
+/* ------------------------------------- */
+/* PRINT STYLES                          */
+/* ------------------------------------- */
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .dashboard-container {
+        box-shadow: none;
+        padding: 20px;
+        max-width: 100%;
+    }
+    
+    .header-actions,
+    .chart-filters,
+    .view-all,
+    .theme-toggle,
+    .export-btn {
+        display: none !important;
+    }
+    
+    .stat-card,
+    .chart-card,
+    .activities-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        background: white;
+        color: black;
+    }
+    
+    .stat-value,
+    .stat-label,
+    .chart-header h3,
+    .section-header h3,
+    .activity-title {
+        color: black;
+    }
+}
+
+/* ------------------------------------- */
+/* UTILITIES RESPONSIF                    */
+/* ------------------------------------- */
+
+/* Hide/Show elements berdasarkan screen */
+@media screen and (max-width: 480px) {
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 481px) {
+    .mobile-only {
+        display: none !important;
+    }
+}
+
+/* Responsive typography dengan clamp */
+.responsive-text {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.responsive-heading {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+}
+
+/* Grid gap responsif */
+.responsive-gap {
+    gap: clamp(10px, 2vw, 20px);
+}
+
+/* ------------------------------------- */
+/* NOTCH & SAFE AREA SUPPORT              */
+/* ------------------------------------- */
+
+@supports (padding: max(0px)) {
+    .dashboard-container {
+        padding-left: max(30px, env(safe-area-inset-left));
+        padding-right: max(30px, env(safe-area-inset-right));
+    }
+    
+    @media screen and (max-width: 480px) {
+        .dashboard-container {
+            padding-left: max(15px, env(safe-area-inset-left));
+            padding-right: max(15px, env(safe-area-inset-right));
+        }
+    }
+}
+
+/* ------------------------------------- */
+/* RTL SUPPORT                            */
+/* ------------------------------------- */
+
+[dir="rtl"] .stat-change {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+[dir="rtl"] .activity-item {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .activity-status {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+[dir="rtl"] .chart-filters {
+    flex-direction: row-reverse;
+}
+
+/* ------------------------------------- */
+/* IOS SPECIFIC FIXES                     */
+/* ------------------------------------- */
+
+@supports (-webkit-touch-callout: none) {
+    .dashboard-container {
+        /* Fix untuk iOS border radius */
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+    }
+    
+    input, select, textarea {
+        font-size: 16px !important; /* Prevent zoom on focus */
+    }
+    
+    .filter-btn,
+    .export-btn,
+    .theme-toggle {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* ------------------------------------- */
+/* SCROLLBAR STYLING                      */
+/* ------------------------------------- */
+
+@media (min-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+    }
+    
+    /* Dark mode scrollbar */
+    body.dark-mode ::-webkit-scrollbar-track {
+        background: #334155;
+    }
+    
+    body.dark-mode ::-webkit-scrollbar-thumb {
+        background: #64748b;
+    }
+    
+    body.dark-mode ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+}
+
+/* ------------------------------------- */
+/* ANIMATIONS RESPONSIF                   */
+/* ------------------------------------- */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-container {
+    animation: fadeIn 0.5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-container {
+        animation: none;
+    }
+}
+
+/* ------------------------------------- */
+/* END OF RESPONSIVE STYLES               */
+/* ------------------------------------- */
+/* Dibuat oleh CodingX Indonet 💼📝💰   */
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-title">
+                <h1>📊 Dashboard Analitik</h1>
+                <p>Selamat datang kembali, Bos-Tuan Besar! 👋</p>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="export-btn" id="exportBtn">
+                    <i class="fa-solid fa-download"></i> Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                </div>
+                <div class="stat-value" id="revenue">$124,563</div>
+                <div class="stat-label">Total Revenue</div>
+                <span class="stat-change positive">↑ 12.5%</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="stat-value" id="users">45,789</div>
+                <div class="stat-label">Active Users</div>
+                <span class="stat-change positive">↑ 8.2%</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="stat-value" id="orders">2,456</div>
+                <div class="stat-label">Total Orders</div>
+                <span class="stat-change positive">↑ 5.7%</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-value" id="conversion">23.8%</div>
+                <div class="stat-label">Conversion Rate</div>
+                <span class="stat-change negative">↓ 2.1%</span>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Revenue Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Revenue Overview</h3>
+                    <div class="chart-filters">
+                        <button class="filter-btn active" data-filter="week">Week</button>
+                        <button class="filter-btn" data-filter="month">Month</button>
+                        <button class="filter-btn" data-filter="year">Year</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Traffic Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Traffic Sources</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="trafficChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="activities-section">
+            <div class="section-header">
+                <h3>Recent Activities</h3>
+                <a href="#" class="view-all">View All →</a>
+            </div>
+            <div class="activities-list" id="activitiesList">
+                <!-- Akan diisi JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data activities
+        const activities = [
+            { icon: 'fa-solid fa-cart-plus', color: 'blue', title: 'New order #2345', time: '2 minutes ago', status: 'completed' },
+            { icon: 'fa-solid fa-user-plus', color: 'green', title: 'New user registration', time: '15 minutes ago', status: 'completed' },
+            { icon: 'fa-solid fa-arrow-trend-up', color: 'purple', title: 'Revenue target achieved', time: '1 hour ago', status: 'pending' },
+            { icon: 'fa-solid fa-download', color: 'blue', title: 'Report exported', time: '3 hours ago', status: 'completed' },
+            { icon: 'fa-solid fa-gear', color: 'orange', title: 'System update', time: '5 hours ago', status: 'pending' }
+        ];
+
+        // Load activities
+        function loadActivities() {
+            const container = document.getElementById('activitiesList');
+            let html = '';
+            
+            activities.forEach(activity => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-icon ${activity.color}">
+                            <i class="${activity.icon}"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">${activity.title}</div>
+                            <div class="activity-time">${activity.time}</div>
+                        </div>
+                        <div class="activity-status ${activity.status}">
+                            ${activity.status === 'completed' ? 'Completed' : 'Pending'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Initialize Charts
+        function initCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000],
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Traffic Chart
+            const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+            new Chart(trafficCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Direct', 'Social', 'Email', 'Organic', 'Referral'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            '#2563eb',
+                            '#16a34a',
+                            '#9333ea',
+                            '#f97316',
+                            '#64748b'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Filter buttons
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Simulate data change
+                alert(`Filter: ${this.textContent} - Data updated!`);
+            });
+        });
+
+        // Export button
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            alert('📥 Exporting data to CSV...');
+            
+            // Simulate export
+            setTimeout(() => {
+                alert('✅ Data exported successfully!');
+            }, 1500);
+        });
+
+        // Real-time data simulation
+        function updateRealtimeData() {
+            const revenue = document.getElementById('revenue');
+            const users = document.getElementById('users');
+            const orders = document.getElementById('orders');
+            
+            // Simulate random updates
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const newRevenue = Math.floor(Math.random() * 1000) + 124000;
+                    revenue.textContent = '$' + newRevenue.toLocaleString();
+                    
+                    const newUsers = Math.floor(Math.random() * 100) + 45700;
+                    users.textContent = newUsers.toLocaleString();
+                    
+                    const newOrders = Math.floor(Math.random() * 10) + 2450;
+                    orders.textContent = newOrders.toLocaleString();
+                }
+            }, 5000);
+        }
+
+        // Initialize
+        loadActivities();
+        initCharts();
+        updateRealtimeData();
+
+        console.log('Dashboard Analitik siap! 💼📝💰');
+    </script>
+</body>
+</html>

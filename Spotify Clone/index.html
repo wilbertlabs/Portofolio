@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Clone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --green: #1DB954;
+            --green-h: #1ed760;
+            --black: #000000;
+            --dark: #121212;
+            --card: #181818;
+            --card-h: #282828;
+            --gray: #b3b3b3;
+            --white: #ffffff;
+            --player: 90px;
+            --sidebar: 280px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--black); color: var(--white); font-family: 'Figtree', sans-serif; height: 100vh; overflow: hidden; font-size: 14px; }
+
+        .layout {
+            display: grid;
+            grid-template-columns: var(--sidebar) 1fr;
+            grid-template-rows: 1fr var(--player);
+            height: 100vh;
+            gap: 8px;
+            padding: 8px;
+            padding-bottom: 0;
+        }
+
+        /* SIDEBAR */
+        .sidebar { grid-row: 1; background: var(--black); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+        .sidebar-top { background: #121212; border-radius: 8px; padding: 16px 12px; }
+        .logo { display: flex; align-items: center; gap: 10px; padding: 8px 12px 16px; color: white; text-decoration: none; }
+        .logo svg { width: 36px; height: 36px; fill: white; }
+        .logo span { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .nav-item { display: flex; align-items: center; gap: 16px; padding: 10px 16px; color: var(--gray); text-decoration: none; font-weight: 600; font-size: 14px; border-radius: 4px; cursor: pointer; transition: color 0.2s; }
+        .nav-item i { font-size: 22px; width: 24px; }
+        .nav-item:hover, .nav-item.active { color: white; }
+
+        .sidebar-lib { flex: 1; background: #121212; border-radius: 8px; margin-top: 8px; display: flex; flex-direction: column; overflow: hidden; }
+        .lib-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 8px; }
+        .lib-header-l { display: flex; align-items: center; gap: 12px; color: var(--gray); font-weight: 700; font-size: 14px; cursor: pointer; }
+        .lib-header-l:hover { color: white; }
+        .lib-header-l i { font-size: 22px; }
+        .lib-add { width: 32px; height: 32px; background: none; border: none; color: var(--gray); cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s; }
+        .lib-add:hover { color: white; background: rgba(255,255,255,0.1); }
+        .lib-filters { display: flex; gap: 8px; padding: 0 16px 12px; }
+        .pill { background: var(--card-h); border: none; color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .pill:hover { background: #3e3e3e; }
+        .pill.active { background: white; color: black; }
+        .plist { flex: 1; overflow-y: auto; padding: 0 8px; }
+        .plist::-webkit-scrollbar { width: 4px; }
+        .plist::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+        .pitem { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .pitem:hover { background: rgba(255,255,255,0.07); }
+        .pitem.active { background: var(--card-h); }
+        .pitem img { width: 48px; height: 48px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+        .pitem-info h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+        .pitem-info p { font-size: 12px; color: var(--gray); }
+
+        /* MAIN VIEW */
+        .main-view { grid-row: 1; background: var(--dark); border-radius: 8px; overflow-y: auto; overflow-x: hidden; position: relative; }
+        .main-view::-webkit-scrollbar { width: 6px; }
+        .main-view::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+        .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: rgba(18,18,18,0.95); backdrop-filter: blur(20px); }
+        .topbar-l { display: flex; gap: 8px; }
+        .nav-arr { width: 32px; height: 32px; background: rgba(0,0,0,0.7); border: none; color: white; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .nav-arr:hover { background: rgba(255,255,255,0.1); }
+        .topbar-r { display: flex; align-items: center; gap: 10px; }
+        .tb-btn { background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 7px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .tb-btn:hover { background: rgba(255,255,255,0.1); }
+        .tb-btn.solid { background: white; color: black; border-color: white; }
+        .tb-btn.solid:hover { background: #ddd; }
+        .user-pill { display: flex; align-items: center; gap: 8px; background: #3d3d3d; border: none; border-radius: 30px; padding: 4px 12px 4px 4px; cursor: pointer; color: white; font-weight: 700; font-size: 13px; transition: background 0.2s; }
+        .user-pill:hover { background: #4d4d4d; }
+        .u-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: black; }
+
+        .content { padding: 24px; }
+
+        /* HERO */
+        .hero { background: linear-gradient(135deg, #1a4a1a 0%, #0d4f2c 50%, #121212 100%); border-radius: 8px; padding: 32px; margin-bottom: 32px; display: flex; align-items: center; gap: 24px; position: relative; overflow: hidden; }
+        .hero-icon { width: 80px; height: 80px; background: linear-gradient(135deg, var(--green), #0a7f32); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 36px; color: white; flex-shrink: 0; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+        .hero-text h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+        .hero-text p { color: var(--gray); font-size: 14px; }
+
+        /* SECTIONS */
+        .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .sec-title { font-size: 22px; font-weight: 800; }
+        .see-all { color: var(--gray); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; text-decoration: none; }
+        .see-all:hover { color: white; text-decoration: underline; }
+
+        /* QUICK GRID */
+        .quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 40px; }
+        .qitem { display: flex; align-items: center; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; cursor: pointer; transition: background 0.2s; position: relative; height: 56px; }
+        .qitem:hover { background: rgba(255,255,255,0.12); }
+        .qitem.active { background: rgba(29,185,84,0.15); }
+        .qitem img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
+        .qitem span { padding: 0 14px; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .q-play { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: var(--green); border: none; color: black; font-size: 15px; cursor: pointer; opacity: 0; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        .qitem:hover .q-play { opacity: 1; }
+
+        /* SONG GRID */
+        .song-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .scard { background: var(--card); border-radius: 8px; padding: 16px; cursor: pointer; transition: background 0.3s; position: relative; }
+        .scard:hover { background: var(--card-h); }
+        .scard.playing { background: var(--card-h); }
+        .scard.playing h4 { color: var(--green); }
+        .scard-img { position: relative; margin-bottom: 16px; }
+        .scard-img img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        .cplay { position: absolute; bottom: 8px; right: 8px; width: 48px; height: 48px; border-radius: 50%; background: var(--green); border: none; color: black; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(8px); transition: all 0.3s; box-shadow: 0 8px 16px rgba(0,0,0,0.5); }
+        .scard:hover .cplay { opacity: 1; transform: translateY(0); }
+        .cplay:hover { background: var(--green-h); transform: translateY(0) scale(1.04) !important; }
+        .scard h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .scard p { font-size: 13px; color: var(--gray); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+        /* TABLE */
+        .stab { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+        .stab thead th { text-align: left; padding: 8px 12px; color: var(--gray); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .stab tbody tr { cursor: pointer; transition: background 0.2s; }
+        .stab tbody tr:hover { background: rgba(255,255,255,0.07); }
+        .stab tbody tr.arow { background: rgba(29,185,84,0.1); }
+        .stab tbody td { padding: 10px 12px; vertical-align: middle; }
+        .tnum { color: var(--gray); font-size: 14px; width: 40px; text-align: center; }
+        .arow .tnum { color: var(--green); }
+        .tsong { display: flex; align-items: center; gap: 12px; }
+        .tsong img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
+        .tsong-t h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+        .arow .tsong-t h4 { color: var(--green); }
+        .tsong-t p { font-size: 12px; color: var(--gray); }
+        .tdur { color: var(--gray); font-size: 14px; }
+        .pbars { display: none; align-items: flex-end; gap: 2px; height: 16px; }
+        .pbars span { display: block; width: 3px; background: var(--green); border-radius: 2px; animation: pb 1s ease-in-out infinite; }
+        .pbars span:nth-child(1) { height: 6px; animation-delay: 0s; }
+        .pbars span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+        .pbars span:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+        @keyframes pb { 0%,100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+        .arow .pbars { display: flex; }
+        .arow .tnum-v { display: none; }
+
+        /* PLAYER */
+        .player { grid-column: 1 / -1; background: #181818; border-top: 1px solid #3d3d3d; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: var(--player); }
+        .player-l { display: flex; align-items: center; gap: 14px; width: 30%; min-width: 180px; }
+        .player-l img { width: 56px; height: 56px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+        .psong h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+        .psong p { font-size: 12px; color: var(--gray); cursor: pointer; }
+        .psong p:hover { text-decoration: underline; color: white; }
+        .pacts { display: flex; gap: 8px; align-items: center; }
+        .ibtn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 16px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: color 0.2s; }
+        .ibtn:hover { color: white; }
+        .ibtn.active { color: var(--green); }
+
+        .player-c { width: 40%; display: flex; flex-direction: column; align-items: center; }
+        .ctrl-btns { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+        .cbtn { background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 16px; transition: color 0.2s; }
+        .cbtn:hover { color: white; }
+        .cbtn.active { color: var(--green); }
+        .pp-btn { width: 36px; height: 36px; border-radius: 50%; background: white; border: none; color: black; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .pp-btn:hover { transform: scale(1.06); }
+        .prog-row { width: 100%; display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--gray); }
+        .prog-track { flex: 1; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; cursor: pointer; position: relative; transition: height 0.1s; }
+        .prog-track:hover { height: 6px; }
+        .prog-fill { height: 100%; background: white; border-radius: 2px; position: relative; pointer-events: none; }
+        .prog-track:hover .prog-fill { background: var(--green); }
+        .prog-thumb { position: absolute; right: -6px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; background: white; border-radius: 50%; opacity: 0; pointer-events: none; }
+        .prog-track:hover .prog-thumb { opacity: 1; }
+
+        .player-r { width: 30%; display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+        .lyr-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 16px; padding: 6px; border-radius: 4px; transition: color 0.2s; }
+        .lyr-btn:hover { color: white; }
+        .lyr-btn.active { color: var(--green); }
+        .vol-row { display: flex; align-items: center; gap: 8px; }
+        .vol-track { width: 90px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; cursor: pointer; position: relative; }
+        .vol-fill { height: 100%; background: white; border-radius: 2px; width: 70%; }
+        .vol-track:hover .vol-fill { background: var(--green); }
+
+        /* LYRICS PANEL */
+        .lyr-panel { position: fixed; right: -420px; top: 8px; width: 400px; height: calc(100vh - var(--player) - 16px); background: #121212; border-radius: 12px; z-index: 50; display: flex; flex-direction: column; overflow: hidden; transition: right 0.4s cubic-bezier(0.4,0,0.2,1); border: 1px solid rgba(255,255,255,0.08); }
+        .lyr-panel.open { right: 8px; }
+        .lyr-ph { padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
+        .lyr-ph h3 { font-size: 16px; font-weight: 700; }
+        .lyr-close { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 20px; transition: color 0.2s; }
+        .lyr-close:hover { color: white; }
+        .lyr-si { padding: 16px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .lyr-si img { width: 48px; height: 48px; border-radius: 4px; }
+        .lyr-si h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+        .lyr-si p { font-size: 12px; color: var(--gray); }
+        .lyr-body { flex: 1; overflow-y: auto; padding: 24px; }
+        .lyr-body::-webkit-scrollbar { width: 4px; }
+        .lyr-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+        .lyr-body pre { font-family: 'Figtree', sans-serif; white-space: pre-wrap; line-height: 2; font-size: 15px; color: #ddd; }
+        .lyr-src { padding: 12px 24px; font-size: 11px; color: var(--gray); border-top: 1px solid rgba(255,255,255,0.08); }
+
+        /* RESPONSIVE */
+        /* ============================================================
+   RESPONSIVE FIX — Spotify Clone
+   Breakpoints:
+   - Desktop  : > 1024px
+   - Tablet   : 768px – 1024px
+   - Mobile L : 480px – 767px
+   - Mobile S : < 480px (termasuk 667px landscape)
+   ============================================================ */
+
+/* ====== RESET DASAR AGAR AMAN DI SEMUA DEVICE ====== */
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* ====== DESKTOP BESAR (> 1280px) ====== */
+@media screen and (min-width: 1280px) {
+    :root { --sidebar: 300px; }
+    .song-grid, #sgrid {
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    }
+}
+
+/* ====== TABLET (768px – 1024px) ====== */
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+    :root {
+        --sidebar: 220px;
+        --player: 80px;
+    }
+
+    .layout {
+        grid-template-columns: var(--sidebar) 1fr;
+        gap: 6px;
+        padding: 6px;
+        padding-bottom: 0;
+    }
+
+    .logo span { font-size: 18px; }
+    .nav-item { font-size: 13px; gap: 12px; padding: 9px 12px; }
+    .pitem-info h4 { max-width: 120px; }
+
+    .song-grid, #sgrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 14px;
+    }
+
+    .quick-grid, #qgrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero { padding: 24px; }
+    .hero-text h1 { font-size: 22px; }
+    .hero-icon { width: 64px; height: 64px; font-size: 28px; }
+
+    .sec-title { font-size: 18px; }
+    .content { padding: 16px 20px; }
+
+    /* Player tablet */
+    .player { padding: 0 12px; }
+    .player-l img { width: 48px; height: 48px; }
+    .psong h4 { max-width: 110px; font-size: 13px; }
+    .ctrl-btns { gap: 12px; }
+    .vol-track { width: 70px; }
+}
+
+/* ====== MOBILE (< 768px) ====== */
+@media screen and (max-width: 767px) {
+    :root {
+        --player: 64px;
+        --bottom-nav: 56px;
+    }
+
+    /* Layout: single column, main + player */
+    .layout {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        gap: 0;
+        padding: 0;
+    }
+
+    /* Sembunyikan sidebar */
+    .sidebar { display: none !important; }
+
+    /* Main view mengisi sisa ruang */
+    .main-view {
+        flex: 1;
+        border-radius: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: calc(var(--bottom-nav) + 8px);
+    }
+
+    /* Konten */
+    .content { padding: 12px 14px; }
+    .topbar { padding: 12px 14px; }
+
+    /* Sembunyikan nav arrows di mobile */
+    .topbar-l { display: none; }
+
+    .topbar-r .tb-btn:first-child { display: none; } /* Tombol Daftar */
+    .tb-btn { padding: 6px 12px; font-size: 13px; }
+    .user-pill span { display: none; }
+    .user-pill { padding: 4px 8px 4px 4px; }
+
+    /* Hero */
+    .hero {
+        padding: 16px;
+        gap: 14px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+    .hero-icon { width: 52px; height: 52px; font-size: 22px; border-radius: 8px; }
+    .hero-text h1 { font-size: 17px; margin-bottom: 4px; }
+    .hero-text p { font-size: 12px; }
+
+    /* Section */
+    .sec-header { margin-bottom: 12px; }
+    .sec-title { font-size: 17px; }
+    .see-all { font-size: 11px; }
+
+    /* Quick grid: 1 kolom di portrait, 2 kolom di landscape */
+    .quick-grid, #qgrid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        margin-bottom: 24px;
+    }
+
+    .qitem { height: 52px; border-radius: 5px; }
+    .qitem img { width: 52px; height: 52px; }
+    .qitem span { font-size: 13px; padding: 0 12px; }
+    .q-play { width: 36px; height: 36px; font-size: 13px; right: 8px; opacity: 1; }
+
+    /* Song grid: 2 kolom */
+    .song-grid, #sgrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .scard { padding: 10px; border-radius: 6px; }
+    .scard h4 { font-size: 13px; margin-bottom: 4px; }
+    .scard p { font-size: 11px; }
+    .cplay { width: 38px; height: 38px; font-size: 15px; bottom: 6px; right: 6px; opacity: 1; transform: none !important; }
+
+    /* Table: sembunyikan kolom album */
+    .stab thead th:nth-child(3),
+    .stab tbody td:nth-child(3) { display: none; }
+    .stab tbody td { padding: 8px 8px; }
+    .tsong img { width: 36px; height: 36px; }
+    .tsong-t h4 { font-size: 13px; }
+    .tsong-t p { font-size: 11px; }
+    .tdur { font-size: 12px; }
+
+    /* Player bar */
+    .player {
+        height: var(--player);
+        padding: 0 10px;
+        flex-shrink: 0;
+    }
+
+    .player-l {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+        gap: 10px;
+    }
+
+    .player-l > img { width: 44px; height: 44px; }
+    .psong h4 { font-size: 12px; max-width: 100px; margin-bottom: 2px; }
+    .psong p { display: none; }
+    .pacts { display: none; }
+
+    /* Player center compact */
+    .player-c {
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .ctrl-btns { gap: 8px; margin-bottom: 0; }
+
+    /* Sembunyikan shuffle & repeat di mobile */
+    #shuf-btn, #rep-btn { display: none; }
+
+    .pp-btn { width: 34px; height: 34px; font-size: 13px; }
+
+    /* Progress bar di mobile: sembunyikan (simpel) */
+    .prog-row { display: none; }
+
+    /* Player right: sembunyikan di mobile */
+    .player-r { display: none; }
+
+    /* Lyrics panel full screen */
+    .lyr-panel {
+        width: 100%;
+        right: -100vw;
+        top: 0;
+        height: calc(100vh - var(--player));
+        border-radius: 0;
+        border: none;
+    }
+    .lyr-panel.open { right: 0; }
+    .lyr-body pre { font-size: 14px; line-height: 1.9; }
+}
+
+/* ====== MOBILE LANDSCAPE / 667px ====== */
+@media screen and (max-width: 667px) and (orientation: landscape) {
+    :root { --player: 56px; }
+
+    .main-view { padding-bottom: 8px; }
+
+    .hero { flex-direction: row; padding: 12px 16px; margin-bottom: 14px; }
+    .hero-icon { width: 44px; height: 44px; font-size: 18px; }
+    .hero-text h1 { font-size: 15px; }
+    .hero-text p { display: none; }
+
+    /* 2 kolom quick, 3 kolom song */
+    .quick-grid, #qgrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+    .song-grid, #sgrid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .content { padding: 8px 12px; }
+    .topbar { padding: 8px 12px; }
+    .sec-title { font-size: 15px; }
+    .sec-header { margin-bottom: 8px; }
+
+    .player { height: var(--player); }
+    .player-l > img { width: 38px; height: 38px; }
+    .psong h4 { font-size: 11px; max-width: 80px; }
+    .pp-btn { width: 30px; height: 30px; font-size: 12px; }
+}
+
+/* ====== MOBILE KECIL (< 375px) ====== */
+@media screen and (max-width: 374px) {
+    .hero { display: none; } /* Sembunyikan hero di layar sangat kecil */
+
+    .song-grid, #sgrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .scard { padding: 8px; }
+    .scard h4 { font-size: 12px; }
+
+    .quick-grid, #qgrid {
+        grid-template-columns: 1fr;
+    }
+
+    .psong h4 { max-width: 80px; font-size: 11px; }
+    .content { padding: 10px; }
+}
+
+/* ====== SAFE AREA (iPhone notch/home bar) ====== */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .player {
+        padding-bottom: env(safe-area-inset-bottom);
+        height: calc(var(--player) + env(safe-area-inset-bottom));
+    }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <a class="logo" href="#">
+                <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                <span>Spotify</span>
+            </a>
+            <a class="nav-item active"><i class="fas fa-home"></i> Beranda</a>
+            <a class="nav-item"><i class="fas fa-search"></i> Cari</a>
+        </div>
+        <div class="sidebar-lib">
+            <div class="lib-header">
+                <div class="lib-header-l"><i class="fas fa-book-open"></i><span>Perpustakaan</span></div>
+                <button class="lib-add"><i class="fas fa-plus"></i></button>
+            </div>
+            <div class="lib-filters">
+                <button class="pill active">Playlist</button>
+                <button class="pill">Album</button>
+                <button class="pill">Artis</button>
+            </div>
+            <div class="plist" id="plist"></div>
+        </div>
+    </div>
+
+    <!-- MAIN VIEW -->
+    <div class="main-view">
+        <div class="topbar">
+            <div class="topbar-l">
+                <button class="nav-arr"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-arr"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="topbar-r">
+                <button class="tb-btn">Daftar</button>
+                <button class="tb-btn solid">Masuk</button>
+                <button class="user-pill"><div class="u-avatar">S</div><span>Sobat</span></button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="hero">
+                <div class="hero-icon"><i class="fas fa-music"></i></div>
+                <div class="hero-text">
+                    <h1>🎵 Playlist Terbaik Untukmu</h1>
+                    <p>Koleksi lagu pilihan — pop internasional hingga indie lokal favorit</p>
+                </div>
+            </div>
+
+            <div class="sec-header"><h2 class="sec-title">Pilihan Cepat</h2><a class="see-all">Lihat semua</a></div>
+            <div class="quick-grid" id="qgrid"></div>
+
+            <div class="sec-header"><h2 class="sec-title">Semua Lagu</h2><a class="see-all">Lihat semua</a></div>
+            <div class="song-grid" id="sgrid"></div>
+
+            <div class="sec-header"><h2 class="sec-title">Daftar Putar</h2></div>
+            <table class="stab">
+                <thead><tr><th>#</th><th>JUDUL</th><th>ALBUM</th><th><i class="fas fa-clock"></i></th></tr></thead>
+                <tbody id="stbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PLAYER -->
+    <div class="player">
+        <div class="player-l">
+            <img id="pimg" src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=100" alt="">
+            <div class="psong">
+                <h4 id="ptitle">Pilih Lagu</h4>
+                <p id="partist">—</p>
+            </div>
+            <div class="pacts">
+                <button class="ibtn" id="like-btn"><i class="far fa-heart"></i></button>
+            </div>
+        </div>
+        <div class="player-c">
+            <div class="ctrl-btns">
+                <button class="cbtn" id="shuf-btn" title="Acak"><i class="fas fa-shuffle"></i></button>
+                <button class="cbtn" id="prev-btn"><i class="fas fa-backward-step"></i></button>
+                <button class="pp-btn" id="pp-btn"><i class="fas fa-play" id="pp-ico"></i></button>
+                <button class="cbtn" id="next-btn"><i class="fas fa-forward-step"></i></button>
+                <button class="cbtn" id="rep-btn" title="Ulangi"><i class="fas fa-repeat"></i></button>
+            </div>
+            <div class="prog-row">
+                <span id="ctime">0:00</span>
+                <div class="prog-track" id="ptrak">
+                    <div class="prog-fill" id="pfill" style="width:0%"><div class="prog-thumb"></div></div>
+                </div>
+                <span id="ttime">0:00</span>
+            </div>
+        </div>
+        <div class="player-r">
+            <button class="lyr-btn" id="lyr-btn" title="Lirik"><i class="fas fa-microphone-lines"></i></button>
+            <button class="ibtn"><i class="fas fa-list"></i></button>
+            <div class="vol-row">
+                <button class="ibtn" id="vol-btn"><i class="fas fa-volume-high"></i></button>
+                <div class="vol-track" id="vtrak"><div class="vol-fill" id="vfill"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LYRICS PANEL -->
+<div class="lyr-panel" id="lyr-panel">
+    <div class="lyr-ph">
+        <h3>Lirik</h3>
+        <button class="lyr-close" id="lyr-cls"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="lyr-si">
+        <img id="lyr-img" src="" alt="">
+        <div><h4 id="lyr-title">Pilih lagu</h4><p id="lyr-artist">—</p></div>
+    </div>
+    <div class="lyr-body"><pre id="lyr-text">Pilih lagu untuk melihat lirik.</pre></div>
+    <div class="lyr-src">Koleksi Pribadi • Spotify Clone</div>
+</div>
+
+<script>
+const songs = [
+    { title:"Heal the World", artist:"Michael Jackson", album:"Dangerous", dur:"6:24",
+      img:"Images/Healtheworld-1024x576.webp",
+      src:"Musics/Michael Jackson- Heal the World(Lyrics) - RVibes.mp3",
+      lyrics:`Heal the World
+Michael Jackson
+
+There's a place in your heart
+And I know that it is love
+And this place could be much
+Brighter than tomorrow.
+And if you really try
+You'll find there's no need to cry
+In this place you'll feel
+There's no hurt or sorrow.
+There are ways to get there
+If you care enough for the living
+Make a little space, make a better place.
+
+[Chorus]
+Heal the world
+Make it a better place
+For you and for me and the entire human race
+There are people dying
+If you care enough for the living
+Make a better place for
+You and for me.
+
+If you want to know why
+There's a love that cannot lie
+Love is strong
+It only cares for joyful giving.
+If we try we shall see
+In this bliss we cannot feel
+Fear or dread
+We stop existing and start living
+Then it feels that always
+Love's enough for us growing
+Make a better world, make a better world.
+
+[Bridge]
+And the dream we would conceived in
+Will reveal a joyful face
+And the world we once believed in
+Will shine again in grace
+Then why do we keep strangling life
+Wound this earth, crucify its soul
+Though it's plain to see, this world is heavenly
+Be God's glow.
+
+We could fly so high
+Let our spirits never die
+In my heart I feel
+You are all my brothers
+Create a world with no fear
+Together we'll cry happy tears
+See the nations turn
+Their swords into plowshares
+
+Heal the world
+Make it a better place
+For you and for me and the entire human race
+You and for me / Heal the world we live in
+You and for me / Save it for our children`},
+
+    { title:"I Want It That Way", artist:"Backstreet Boys", album:"Millennium", dur:"3:33",
+      img:"Images/BSB_iwantitthatway.jpg",
+      src:"Musics/Backstreet Boys - I Want It That Way (Lyrics) - 7clouds.mp3",
+      lyrics:`I Want It That Way
+Backstreet Boys
+
+You are my fire
+The one desire
+Believe when I say
+I want it that way
+
+When we are two worlds apart
+Can't reach to your heart
+When you say that I want it that way
+
+[Chorus]
+Tell me why
+Ain't nothing but a heartache
+Tell me why
+Ain't nothing but a mistake
+Tell me why
+I never wanna hear you say
+I want it that way
+
+Am I your fire
+Your one desire
+Yes I know it's too late
+But I want it that way
+
+Now I can see that we're falling apart
+From the way that it used to be, yeah
+No matter the distance I want you to know
+That deep down inside of me
+
+You are my fire, the one desire
+You are (You are)
+
+Tell me why
+Ain't nothing but a heartache
+Tell me why
+Ain't nothing but a mistake
+Tell me why
+I never wanna hear you say
+I want it that way
+
+Cause I want it that way..`},
+
+    { title:"Blue", artist:"Yung Kai", album:"Singles", dur:"3:15",
+      img:"Images/blue.jpg",
+      src:"Musics/Blue - Yung Kai (Lirik Lagu Terjemahan) - DeLirik.mp3",
+      lyrics:`Blue
+Yung Kai
+
+Your morning eyes, I could stare like watching stars
+I could walk you by, and I'll tell without a thought
+You'd be mine, would you mind if I took your hand tonight?
+Know you're all that I want this life
+
+I'll imagine we fell in love
+I'll nap under moonlight skies with you
+I think I'll picture us, you with the waves
+The ocean's colors on your face
+I'll leave my heart with your air
+So let me fly with you
+
+Will you be forever with me?
+My love will always stay by you
+I'll keep it safe, so don't you worry a thing
+I'll tell you I love you more
+
+It's stuck with you forever
+So promise you won't let it go
+I'll trust the universe will always bring me to you
+
+I'll imagine we fell in love
+I'll nap under moonlight skies with you
+The ocean's colors on your face
+I'll leave my heart with your air
+So let me fly with you
+
+Will you be forever with me?`},
+
+    { title:"Tampar", artist:"Juicy Luicy", album:"Tampar", dur:"3:41",
+      img:"Images/Tampar.webp",
+      src:"Musics/Juicy Luicy - Tampar (Official Lyric Video) - Emotion Entertainment.mp3",
+      lyrics:`Tampar
+Juicy Luicy
+
+Entah sudah Selasa yang ke berapa
+Masih saja kau ada, lekat di kepala
+Hari ini janji esok mesti lupa
+Tetapi hati tak tepati
+
+Tampar aku di pipi
+Biar sadar dan ku mengerti
+
+Hujan samarkan derasnya
+Tutup air mata
+Temani kecewaku yang telah lama
+Berdosa kah ku berdoa
+Minta kau terluka
+Dan tinggalkan dirinya
+
+Hari ini janji esok mesti lupa
+Tetapi hati tak tepati
+
+Tampar aku di pipi
+Biar sadar dan ku mengerti
+
+Hujan samarkan derasnya
+Tutup air mata
+Temani kecewaku yang telah lama
+Berdosa kah ku berdoa
+Minta kau terluka
+Dan tinggalkan dirinya
+
+Bukan ku tak berupaya
+Berusaha
+
+Tiga tahun tak terasa
+Masih kau yang ada
+Bodoh yang sebenarnya
+
+Tampar aku di pipi
+Sadarkan kau aku takkan terjadi`},
+
+    { title:"Lantas", artist:"Juicy Luicy", album:"Lantas", dur:"4:02",
+      img:"Images/Lantas.jpg",
+      src:"Musics/Juicy Luicy - Lantas (Official Lyric Video) - Emotion Entertainment.mp3",
+      lyrics:`Lantas
+Juicy Luicy
+
+Lima hari sudah kurindu
+Tak bisa ku menghubungimu
+Kau sedang dengan dirinya
+Sedang kita rahasia
+
+Kapankah kau ada waktu
+Sembunyi untuk bertemu?
+Baru kau sapa kutersipu
+Kau puji lupa amarahku
+
+Karena kau paling tahu
+Cara lemahkan hatiku
+Walau tak ada yang pasti
+Yang kau beri hanya mimpi
+
+Lantas mengapa ku masih menaruh hati?
+Padahal kutahu kau t'lah terikat janji
+Keliru ataukah bukan? Tak tahu
+Lupakanmu tapi aku tak mau
+
+Pantaskah aku menyimpan rasa cemburu?
+Padahal bukan aku yang memilikimu
+Sanggup sampai kapankah? Ku tak tahu
+Akankah akal sehat menyadarkanku?
+
+Lantas mengapa ku masih menaruh hati?
+Padahal kutahu kau t'lah terikat janji
+Keliru ataukah bukan? Tak tahu
+Lupakanmu tapi aku tak mau`},
+
+    { title:"Lampu Kuning", artist:"Juicy Luicy", album:"Lampu Kuning", dur:"3:57",
+      img:"Images/lampukuning.jpg",
+      src:"Musics/Juicy Luicy - Lampu Kuning (Official Lyric Video) - Emotion Entertainment.mp3",
+      lyrics:`Lampu Kuning
+Juicy Luicy
+
+Barangkali hujan lebat susah sinyalmu lagi
+Ku buat sepuluh kemungkinan
+Tak sampaikah pesan lelah ketiduran
+Atau memang sengaja kau abaikan
+
+Tapi sepertinya ku melihatmu tadi
+Dengan kemeja hitam andalan
+
+Mengapa ku tancap gas dan melaju
+Padahal lampu kuning telah peringatkanku
+Bahaya di depanku
+Hati-hati kecewa kan menunggu
+Lagu lama yang aku tahu
+
+Acuh sebelum jatuh
+Tak jera dari dulu
+Gelisah makananku
+Iya ku tahu itu
+
+Sudah tahu hanya sepihak rindu
+Masih coba lempar dadu peruntunganku
+Gegabah nomor satu
+Paling-paling menangis seperti dulu
+Lagu lama yang aku tahu
+Lupa buta atau ku batu`},
+
+    { title:"Where We Are", artist:"One Direction", album:"Midnight Memories", dur:"3:58",
+      img:"Images/onedirection.jpg",
+      src:"Musics/Where We Are - One Direction ( Lyrics ) - Music Bird.mp3",
+      lyrics:`Where We Are
+One Direction
+
+Remember when we would stay out too late
+We were young, havin' fun, made mistakes
+Did we ever know? Did we ever know?
+
+All the things we'd just think up and say
+Never wrong, always right, not afraid
+
+Is it all inside of my head?
+Maybe you still think I don't care
+But all I need is you
+Yeah, you know it's true
+
+[Chorus]
+Forget about where we are and let go
+We're so close
+If you don't know where to start
+Just hold on and don't run, no
+We're looking back, we messed around
+But that was then and this is now
+All we need is enough love to hold us
+Where we are
+
+[Bridge]
+With closed eyes and open mind
+We can be there, we can be there
+But this time, let's cross the line
+Can you see it? Can you see it?
+
+Forget about where we are and let go
+We're so close
+All we need is enough love to hold us
+Where we are`},
+
+    { title:"Asing", artist:"Juicy Luicy", album:"Asing", dur:"3:48",
+      img:"Images/asing.png",
+      src:"Musics/Juicy Luicy - Asing (Official Lyric Video) - Emotion Entertainment.mp3",
+      lyrics:`Asing
+Juicy Luicy
+
+Masihkah ungu muda
+Warna langit yang paling engkau suka
+Masihkah sering lupa
+Dimana letaknya kau simpan kacamata
+
+Tanpa niat kuhafal semua masih saja aku mengingatnya
+
+Dahulu ku mengenalmu paling
+Semua tentangmu tertawa denganmu
+Mengapa kini berubah asing
+Tak saling menyapa lupa ku pernah disana
+
+Masihkah kau yang sama
+Gunakan tertawa buat tutupi luka
+
+Lagu yang kau putar tiap hari
+Sekarang kunikmati sendiri
+
+Kadang kau hadir lagi tapi di mimpi
+Sedikit mengobati hati terbangun pagi kau nya tak di sini
+
+Dahulu aku yang paling mengenalmu
+Semua kegemaranmu
+
+Mengapa kini berubah asing
+Tak saling menyapa
+Lupa ku pernah disana
+
+Lupakah kau sebenarnya`},
+
+    { title:"Somebody Pleasure", artist:"Aziz Hedra", album:"Singles", dur:"3:22",
+      img:"Images/somebody.jpg",
+      src:"Musics/Aziz Hedra - Somebody's Pleasure (Lyrics) - Dan Music.mp3",
+      lyrics:`Somebody Pleasure
+Aziz Hedra
+
+I've been so busy, ignoring, and hiding
+About what my heart actually say
+Stay awake while I'm drowning on my thoughts
+Sometimes a happiness is just a happiness
+
+I've never been enjoyin' my serenity
+Even if I've got a lot of company
+That makes me happy
+
+Soul try to figure it out
+From where I've been escapin'
+Running to end all the sin
+Get away from the pressure
+
+Wondering to get a love that is so pure
+Gotta have to always make sure
+That I'm not just somebody's pleasure
+
+I always pretending and lying
+Like I'm used to feel empty
+'Cause all I got is unhappy
+Happiness, can't I get happiness?
+
+It was in a blink of an eye
+Find a way how to say goodbye
+
+I've got to take me away from all sadness
+Stitch all my wounds, confess all the sins
+And took all my insecure
+
+When will I got the love that is so pure?
+Gotta have to always make sure
+That I'm not just somebody's pleasure`},
+
+    { title:"You Are Not Alone", artist:"Michael Jackson", album:"HIStory", dur:"5:39",
+      img:"Images/youarenotalone.jpg",
+      src:"Musics/You Are Not Alone - Michael Jackson (Lyrics) 🎵 - Pillow.mp3",
+      lyrics:`You Are Not Alone
+Michael Jackson
+
+Another day has gone
+I'm still all alone
+How could this be
+You're not here with me
+You never said goodbye
+Someone tell me why
+Did you have to go
+And leave my world so cold
+
+Everyday I sit and ask myself
+How did love slip away
+Something whispers in my ear and says
+That you are not alone
+For I am here with you
+Though you're far away
+I am here to stay
+
+[Chorus]
+You are not alone
+I am here with you
+Though we're far apart
+You're always in my heart
+You are not alone
+
+Just the other night
+I thought I heard you cry
+Asking me to come
+And hold you in my arms
+I can hear your prayers
+Your burdens I will bear
+But first I need your hand
+Then forever can begin
+
+Whisper three words and I'll come runnin'
+And girl you know that I'll be there
+I'll be there
+
+You are not alone
+I am here with you
+Though you're far away
+I am here to stay
+
+For you are not alone
+For I am here with you
+Though you're far away
+I am here to stay
+For you are not alone`}
+];
+
+// STATE
+const audio = new Audio();
+let cur = 0, playing = false, shuffle = false, repeat = 0, lyrOpen = false;
+
+// ELEMENTS
+const pimg = document.getElementById('pimg');
+const ptitle = document.getElementById('ptitle');
+const partist = document.getElementById('partist');
+const ppico = document.getElementById('pp-ico');
+const pfill = document.getElementById('pfill');
+const ptrak = document.getElementById('ptrak');
+const ctime = document.getElementById('ctime');
+const ttime = document.getElementById('ttime');
+const lyrPanel = document.getElementById('lyr-panel');
+const lyrBtn = document.getElementById('lyr-btn');
+
+function fmt(s) { if(isNaN(s)||!s) return '0:00'; return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`; }
+
+function load(idx, go=false) {
+    cur = idx;
+    const s = songs[idx];
+    pimg.src = s.img;
+    ptitle.textContent = s.title;
+    partist.textContent = s.artist;
+    document.getElementById('lyr-img').src = s.img;
+    document.getElementById('lyr-title').textContent = s.title;
+    document.getElementById('lyr-artist').textContent = s.artist;
+    document.getElementById('lyr-text').textContent = s.lyrics;
+    audio.src = s.src;
+    if(go) audio.play().catch(()=>{});
+    updateActive();
+}
+
+function updateActive() {
+    document.querySelectorAll('.scard').forEach((c,i)=>{c.classList.toggle('playing',i===cur);});
+    document.querySelectorAll('.qitem').forEach((c,i)=>{c.classList.toggle('active',i===cur);});
+    document.querySelectorAll('#stbody tr').forEach((r,i)=>{r.classList.toggle('arow',i===cur);});
+    document.querySelectorAll('#plist .pitem').forEach((c,i)=>{c.classList.toggle('active',i===cur);});
+}
+
+function next() { load(shuffle ? Math.floor(Math.random()*songs.length) : (cur+1)%songs.length, playing); }
+function prev() { if(audio.currentTime>3){audio.currentTime=0;return;} load((cur-1+songs.length)%songs.length, playing); }
+function togglePlay() { if(playing) audio.pause(); else audio.play().catch(()=>{}); }
+function toggleLyr() { lyrOpen=!lyrOpen; lyrPanel.classList.toggle('open',lyrOpen); lyrBtn.classList.toggle('active',lyrOpen); }
+
+audio.addEventListener('play', ()=>{ playing=true; ppico.className='fas fa-pause'; });
+audio.addEventListener('pause', ()=>{ playing=false; ppico.className='fas fa-play'; });
+audio.addEventListener('ended', ()=>{ if(repeat===2){audio.currentTime=0;audio.play();} else next(); });
+audio.addEventListener('timeupdate', ()=>{
+    const p = audio.duration ? (audio.currentTime/audio.duration)*100 : 0;
+    pfill.style.width = p+'%';
+    ctime.textContent = fmt(audio.currentTime);
+    ttime.textContent = fmt(audio.duration);
+});
+
+ptrak.addEventListener('click', e=>{
+    const r = ptrak.getBoundingClientRect();
+    audio.currentTime = ((e.clientX-r.left)/r.width) * audio.duration;
+});
+
+document.getElementById('pp-btn').addEventListener('click', ()=>{
+    if(!audio.src || audio.src===location.href) load(0,true);
+    else togglePlay();
+});
+document.getElementById('next-btn').addEventListener('click', next);
+document.getElementById('prev-btn').addEventListener('click', prev);
+document.getElementById('shuf-btn').addEventListener('click', function(){ shuffle=!shuffle; this.classList.toggle('active',shuffle); });
+document.getElementById('rep-btn').addEventListener('click', function(){
+    repeat=(repeat+1)%3;
+    this.classList.toggle('active',repeat>0);
+    this.innerHTML = repeat===2 ? '<i class="fas fa-1" style="font-size:10px;color:var(--green)"></i><i class="fas fa-repeat" style="color:var(--green)"></i>' : '<i class="fas fa-repeat"></i>';
+});
+lyrBtn.addEventListener('click', toggleLyr);
+document.getElementById('lyr-cls').addEventListener('click', toggleLyr);
+document.getElementById('like-btn').addEventListener('click', function(){
+    this.classList.toggle('active');
+    this.querySelector('i').className = this.classList.contains('active') ? 'fas fa-heart' : 'far fa-heart';
+});
+
+// Volume
+audio.volume = 0.7;
+const vtrak = document.getElementById('vtrak');
+const vfill = document.getElementById('vfill');
+vtrak.addEventListener('click', e=>{
+    const r = vtrak.getBoundingClientRect();
+    const p = Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+    audio.volume = p; vfill.style.width=(p*100)+'%';
+});
+document.getElementById('vol-btn').addEventListener('click', function(){
+    if(audio.volume>0){ audio._v=audio.volume; audio.volume=0; vfill.style.width='0%'; this.innerHTML='<i class="fas fa-volume-xmark"></i>'; }
+    else { audio.volume=audio._v||0.7; vfill.style.width=(audio.volume*100)+'%'; this.innerHTML='<i class="fas fa-volume-high"></i>'; }
+});
+
+document.addEventListener('keydown', e=>{
+    if(e.target.tagName==='INPUT') return;
+    if(e.code==='Space'){e.preventDefault();togglePlay();}
+    if(e.code==='ArrowRight') next();
+    if(e.code==='ArrowLeft') prev();
+});
+
+// RENDER
+function renderPlist() {
+    const c = document.getElementById('plist');
+    songs.forEach((s,i)=>{
+        const d = document.createElement('div'); d.className='pitem';
+        d.innerHTML=`<img src="${s.img}" alt="" loading="lazy"><div class="pitem-info"><h4>${s.title}</h4><p>${s.artist}</p></div>`;
+        d.addEventListener('click',()=>load(i,true)); c.appendChild(d);
+    });
+}
+function renderQgrid() {
+    const c = document.getElementById('qgrid');
+    songs.slice(0,6).forEach((s,i)=>{
+        const d = document.createElement('div'); d.className='qitem';
+        d.innerHTML=`<img src="${s.img}" alt="" loading="lazy"><span>${s.title}</span><button class="q-play"><i class="fas fa-play"></i></button>`;
+        d.addEventListener('click',()=>load(i,true)); c.appendChild(d);
+    });
+}
+function renderSgrid() {
+    const c = document.getElementById('sgrid');
+    songs.forEach((s,i)=>{
+        const d = document.createElement('div'); d.className='scard';
+        d.innerHTML=`<div class="scard-img"><img src="${s.img}" alt="" loading="lazy"><button class="cplay"><i class="fas fa-play"></i></button></div><h4>${s.title}</h4><p>${s.artist}</p>`;
+        d.querySelector('.cplay').addEventListener('click',e=>{e.stopPropagation(); if(cur===i&&playing)audio.pause(); else load(i,true);});
+        d.addEventListener('click',()=>load(i,true)); c.appendChild(d);
+    });
+}
+function renderTable() {
+    const c = document.getElementById('stbody');
+    songs.forEach((s,i)=>{
+        const r = document.createElement('tr');
+        r.innerHTML=`<td class="tnum"><div class="pbars"><span></span><span></span><span></span></div><span class="tnum-v">${i+1}</span></td><td><div class="tsong"><img src="${s.img}" alt="" loading="lazy"><div class="tsong-t"><h4>${s.title}</h4><p>${s.artist}</p></div></div></td><td style="color:var(--gray);font-size:14px">${s.album}</td><td class="tdur">${s.dur}</td>`;
+        r.addEventListener('click',()=>load(i,true)); c.appendChild(r);
+    });
+}
+
+renderPlist(); renderQgrid(); renderSgrid(); renderTable();
+load(0, false);
+</script>
+</body>
+</html>

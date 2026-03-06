@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Landing Page - CodingX Indonet</title>
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a463f5;
+            --accent-color: #00d2ff;
+            --dark-color: #2d3436;
+            --light-color: #f5f6fa;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #d63031;
+        }
+
+        body {
+            overflow-x: hidden;
+            color: var(--dark-color);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            padding: 15px 50px;
+            background: white;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-nav {
+            padding: 10px 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white !important;
+            border-radius: 50px;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 50px 50px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary-color);
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 4em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 15px 40px;
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        .hero-image {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 50px;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary-color);
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .section-description {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            padding: 40px 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(108, 92, 231, 0.2);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(0, 210, 255, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: var(--primary-color);
+        }
+
+        .feature-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 50px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .toggle-label {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .toggle-label.active {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 80px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.monthly .toggle-slider {
+            transform: translateX(0);
+        }
+
+        .toggle-switch.yearly .toggle-slider {
+            transform: translateX(40px);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.popular {
+            transform: scale(1.05);
+            border: 2px solid var(--primary-color);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 8px 40px;
+            transform: rotate(45deg);
+            font-size: 0.9em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(108, 92, 231, 0.2);
+        }
+
+        .pricing-card.popular:hover {
+            transform: translateY(-10px) scale(1.07);
+        }
+
+        .pricing-name {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .pricing-price {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .pricing-period {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-features i {
+            color: var(--success-color);
+        }
+
+        .btn-pricing {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-pricing:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 50px;
+            background: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-rating {
+            color: var(--warning-color);
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .cta-description {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn-cta-primary {
+            padding: 15px 40px;
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn-cta-secondary {
+            padding: 15px 40px;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-cta-secondary:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 50px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .footer-description {
+            color: #999;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-title {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 50px;
+            color: #999;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .navbar {
+                padding: 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 100px 20px 50px;
+            }
+
+            .hero-title {
+                font-size: 2.5em;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+
+            .pricing-card.popular:hover {
+                transform: translateY(-10px) scale(1.02);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-cta-primary, .btn-cta-secondary {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Animations */
+        [data-aos] {
+            pointer-events: none;
+        }
+
+        [data-aos].aos-animate {
+            pointer-events: auto;
+        }
+
+        /* ========================= */
+/* PERFECT RESPONSIVE FIX */
+/* ========================= */
+
+/* GLOBAL RESET */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* CONTAINER */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+    padding: 15px;
+}
+
+/* HEADER */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* SUMMARY CARDS AUTO GRID */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+/* FORM AUTO RESPONSIVE */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+/* CHART GRID AUTO */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+/* CHART HEIGHT FIX */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* TABLE FIX */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* FILTER FIX */
+.filters {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* BUTTON FULL WIDTH */
+.btn-add {
+    width: 100%;
+}
+
+/* INPUT FULL WIDTH */
+input, select, textarea {
+    width: 100%;
+}
+
+/* TEXT WRAP FIX */
+h1, h2, h3, p, .subtitle {
+    word-break: break-word;
+}
+
+
+/* ========================= */
+/* PERFECT CENTER ALIGN FIX */
+/* ========================= */
+
+/* Pastikan semua section center */
+/* =============================== */
+/* TRUE PERFECT CENTER FIX */
+/* =============================== */
+
+/* Hilangkan padding aneh */
+body {
+    margin: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Bungkus semua section agar center absolut */
+.container,
+.section,
+.pricing-section,
+.features-section {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Pastikan card tidak punya width aneh */
+.summary-card,
+.feature-card,
+.pricing-card,
+.chart-container {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Kalau parent pakai flex */
+.features-grid,
+.pricing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* INI KUNCI */
+}
+
+/* Kalau parent pakai grid */
+.features-grid,
+.pricing-grid {
+    display: grid;
+    justify-items: center; /* INI KUNCI GRID */
+}
+
+/* Mobile benar-benar 1 kolom tengah */
+@media (max-width: 768px) {
+
+    .features-grid,
+    .pricing-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .pricing-card,
+    .feature-card {
+        max-width: 500px;
+    }
+
+}
+
+
+/* Fix khusus mobile agar benar-benar center */
+@media (max-width: 768px) {
+
+    .summary-cards,
+    .form-grid,
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-card,
+    .chart-container,
+    .form-section,
+    .table-container {
+        max-width: 100%;
+    }
+
+}
+
+/* Jika ada box flex yang tidak center */
+.flex-center-fix {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ========================= */
+/* TABLET OPTIMIZATION */
+/* ========================= */
+@media (max-width: 1024px) {
+
+    .chart-container {
+        height: 300px;
+    }
+
+}
+
+/* ========================= */
+/* MOBILE OPTIMIZATION */
+/* ========================= */
+@media (max-width: 768px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .summary-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .card-icon {
+        align-self: flex-end;
+    }
+
+    .chart-container {
+        height: 260px;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    
+
+}
+
+/* ========================= */
+/* ULTRA SMALL DEVICE */
+/* ========================= */
+@media (max-width: 480px) {
+
+    .chart-container {
+        height: 220px;
+    }
+
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="logo">SaaSify</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#features">Fitur</a>
+            <a href="#pricing">Harga</a>
+            <a href="#testimonials">Testimoni</a>
+            <a href="#contact">Kontak</a>
+            <a href="#login" class="btn-nav">Login</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+            <span class="hero-badge">✨ Solusi Digital Terpercaya</span>
+            <h1 class="hero-title">
+                Tingkatkan Bisnis Anda dengan <span>SaaS Platform</span> Terbaik
+            </h1>
+            <p class="hero-description">
+                Kelola bisnis Anda lebih efisien dengan platform all-in-one kami. 
+                Dapatkan fitur lengkap untuk mengembangkan usaha Anda.
+            </p>
+            <div class="hero-buttons">
+                <a href="#start" class="btn-primary">Mulai Gratis →</a>
+                <a href="#demo" class="btn-secondary">Demo Produk</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Pengguna Aktif</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Perusahaan</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Kepuasan</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image" data-aos="fade-left" data-aos-duration="1000">
+            <img src="https://via.placeholder.com/600x400/6c5ce7/ffffff?text=Dashboard+Preview" alt="Hero Image">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">✨ Fitur Unggulan</span>
+            <h2 class="section-title">Mengapa Memilih Platform Kami?</h2>
+            <p class="section-description">
+                Dapatkan berbagai fitur canggih yang akan membantu mengembangkan bisnis Anda
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Analitik Real-time</h3>
+                <p class="feature-description">
+                    Pantau perkembangan bisnis Anda dengan data analitik yang akurat dan real-time.
+                </p>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Manajemen Tim</h3>
+                <p class="feature-description">
+                    Kelola tim Anda dengan mudah, atur tugas, dan pantau produktivitas.
+                </p>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">Keamanan Terjamin</h3>
+                <p class="feature-description">
+                    Data Anda aman dengan enkripsi end-to-end dan sistem keamanan berlapis.
+                </p>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-icon">
+                    <i class="fas fa-cloud"></i>
+                </div>
+                <h3 class="feature-title">Cloud Storage</h3>
+                <p class="feature-description">
+                    Akses data Anda kapan saja, di mana saja dengan penyimpanan cloud.
+                </p>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="feature-title">Mobile Friendly</h3>
+                <p class="feature-description">
+                    Platform yang responsif dan dapat diakses dari berbagai perangkat.
+                </p>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3 class="feature-title">Support 24/7</h3>
+                <p class="feature-description">
+                    Tim support kami siap membantu Anda kapan saja, 24 jam sehari.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">💰 Harga Spesial</span>
+            <h2 class="section-title">Pilih Paket yang Tepat</h2>
+            <p class="section-description">
+                Dapatkan penawaran terbaik untuk kebutuhan bisnis Anda
+            </p>
+        </div>
+
+        <div class="pricing-toggle" data-aos="fade-up">
+            <span class="toggle-label" id="monthlyLabel">Bulanan</span>
+            <div class="toggle-switch monthly" id="pricingToggle" onclick="togglePricing()">
+                <div class="toggle-slider"></div>
+            </div>
+            <span class="toggle-label" id="yearlyLabel">Tahunan</span>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="pricing-name">Pemula</h3>
+                <div class="pricing-price" id="basicPrice">Rp 150K</div>
+                <div class="pricing-period" id="basicPeriod">/bulan</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> 5 Users</li>
+                    <li><i class="fas fa-check"></i> 10GB Storage</li>
+                    <li><i class="fas fa-check"></i> Basic Analytics</li>
+                    <li><i class="fas fa-check"></i> Email Support</li>
+                    <li><i class="fas fa-times" style="color: var(--danger-color);"></i> Advanced Features</li>
+                </ul>
+                <button class="btn-pricing">Pilih Paket</button>
+            </div>
+
+            <div class="pricing-card popular" data-aos="fade-up" data-aos-delay="200">
+                <div class="popular-badge">Populer</div>
+                <h3 class="pricing-name">Bisnis</h3>
+                <div class="pricing-price" id="businessPrice">Rp 350K</div>
+                <div class="pricing-period" id="businessPeriod">/bulan</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> 20 Users</li>
+                    <li><i class="fas fa-check"></i> 50GB Storage</li>
+                    <li><i class="fas fa-check"></i> Advanced Analytics</li>
+                    <li><i class="fas fa-check"></i> Priority Support</li>
+                    <li><i class="fas fa-check"></i> API Access</li>
+                </ul>
+                <button class="btn-pricing">Pilih Paket</button>
+            </div>
+
+            <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
+                <h3 class="pricing-name">Enterprise</h3>
+                <div class="pricing-price" id="enterprisePrice">Rp 750K</div>
+                <div class="pricing-period" id="enterprisePeriod">/bulan</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Unlimited Users</li>
+                    <li><i class="fas fa-check"></i> 200GB Storage</li>
+                    <li><i class="fas fa-check"></i> Custom Analytics</li>
+                    <li><i class="fas fa-check"></i> 24/7 Support</li>
+                    <li><i class="fas fa-check"></i> Custom Integration</li>
+                </ul>
+                <button class="btn-pricing">Pilih Paket</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">⭐ Testimoni</span>
+            <h2 class="section-title">Apa Kata Klien Kami</h2>
+            <p class="section-description">
+                Ribuan bisnis telah berkembang bersama kami
+            </p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "Platform ini benar-benar mengubah cara kami menjalankan bisnis. 
+                    Fitur analitiknya sangat membantu dalam pengambilan keputusan."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JD</div>
+                    <div class="author-info">
+                        <h4>John Doe</h4>
+                        <p>CEO, Tech Startup</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "Sangat puas dengan layanan dan fiturnya. Tim support sangat responsif 
+                    dan membantu kami dalam setiap kendala."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JS</div>
+                    <div class="author-info">
+                        <h4>Jane Smith</h4>
+                        <p>Marketing Manager</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "Harga yang terjangkau dengan fitur yang lengkap. Sangat recommended 
+                    untuk bisnis skala kecil hingga menengah."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">BW</div>
+                    <div class="author-info">
+                        <h4>Bob Wilson</h4>
+                        <p>Small Business Owner</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" data-aos="fade-up">
+        <h2 class="cta-title">Siap Memulai?</h2>
+        <p class="cta-description">
+            Bergabunglah dengan ribuan bisnis yang telah sukses bersama kami. 
+            Dapatkan free trial 14 hari!
+        </p>
+        <div class="cta-buttons">
+            <a href="#start" class="btn-cta-primary">Mulai Sekarang</a>
+            <a href="#contact" class="btn-cta-secondary">Hubungi Sales</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">SaaSify</div>
+                <p class="footer-description">
+                    Platform all-in-one untuk mengembangkan bisnis Anda dengan teknologi terkini.
+                </p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="footer-title">Produk</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Fitur</a></li>
+                    <li><a href="#">Harga</a></li>
+                    <li><a href="#">Integrasi</a></li>
+                    <li><a href="#">API</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="footer-title">Perusahaan</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Tentang Kami</a></li>
+                    <li><a href="#">Karir</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="footer-title">Dukungan</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Dokumentasi</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Kontak</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 SaaSify. All rights reserved. | CodingX Indonet 💼📝💰</p>
+        </div>
+    </footer>
+
+    <!-- AOS Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Pricing toggle
+        let isMonthly = true;
+        const pricingToggle = document.getElementById('pricingToggle');
+        const monthlyLabel = document.getElementById('monthlyLabel');
+        const yearlyLabel = document.getElementById('yearlyLabel');
+        
+        const basicPrice = document.getElementById('basicPrice');
+        const businessPrice = document.getElementById('businessPrice');
+        const enterprisePrice = document.getElementById('enterprisePrice');
+        const basicPeriod = document.getElementById('basicPeriod');
+        const businessPeriod = document.getElementById('businessPeriod');
+        const enterprisePeriod = document.getElementById('enterprisePeriod');
+
+        function togglePricing() {
+            isMonthly = !isMonthly;
+            
+            if (isMonthly) {
+                pricingToggle.className = 'toggle-switch monthly';
+                monthlyLabel.classList.add('active');
+                yearlyLabel.classList.remove('active');
+                
+                basicPrice.textContent = 'Rp 150K';
+                businessPrice.textContent = 'Rp 350K';
+                enterprisePrice.textContent = 'Rp 750K';
+                
+                basicPeriod.textContent = '/bulan';
+                businessPeriod.textContent = '/bulan';
+                enterprisePeriod.textContent = '/bulan';
+            } else {
+                pricingToggle.className = 'toggle-switch yearly';
+                yearlyLabel.classList.add('active');
+                monthlyLabel.classList.remove('active');
+                
+                basicPrice.textContent = 'Rp 1.5Jt';
+                businessPrice.textContent = 'Rp 3.5Jt';
+                enterprisePrice.textContent = 'Rp 7.5Jt';
+                
+                basicPeriod.textContent = '/tahun';
+                businessPeriod.textContent = '/tahun';
+                enterprisePeriod.textContent = '/tahun';
+            }
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .pricing-card, .testimonial-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+            }
+        });
+
+        // Dynamic year in footer
+        document.querySelector('.footer-bottom p').innerHTML = 
+            `&copy; ${new Date().getFullYear()} SaaSify. All rights reserved. | CodingX Indonet 💼📝💰`;
+    </script>
+</body>
+</html>
