@@ -440,7 +440,9 @@ body.light-mode #scroll-to-top:hover {
 /* Hero Image */
 .hero-image {
     width: 100%;
-    height: 500px;
+    height: 55vh; /* Menggunakan viewport height agar menyesuaikan layar */
+    min-height: 400px; /* Minimal tinggi */
+    max-height: 800px; /* Maksimal tinggi */
     object-fit: cover;
     border-radius: 1rem;
 }
@@ -678,22 +680,25 @@ body.light-mode #scroll-to-top:hover {
             margin-left: 12px;
         }
 
-        /* animasi scroll (sama, tapi timing disesuaikan) */
-        .scroll-animate {
-            opacity: 0;
-            animation: fadeUp 0.9s ease forwards;
-        }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-400 { animation-delay: 0.4s; }
-        .delay-500 { animation-delay: 0.5s; }
+/* kondisi awal sebelum muncul */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+    transition: all 0.8s ease;
+}
 
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+/* saat muncul di layar */
+.scroll-animate.animated {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
 
+/* delay animasi */
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+.delay-400 { transition-delay: 0.4s; }
+.delay-500 { transition-delay: 0.5s; }
         .scale-in {
             opacity: 0;
             animation: scaleIn 0.6s ease forwards;
