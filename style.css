@@ -796,6 +796,81 @@ body.light-mode #scroll-to-top:hover {
     min-height: 90vh;
 }
 
+/* ============================================ */
+/* STYLE UNTUK KOLOM PENCARIAN PORTFOLIO */
+/* ============================================ */
+
+#search-container {
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#search-input {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 20px rgba(0, 187, 255, 0.1);
+}
+
+#search-input:focus {
+    box-shadow: 0 8px 25px rgba(0, 187, 255, 0.3);
+}
+
+#clear-search {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#clear-search:hover {
+    transform: scale(1.05);
+}
+
+body.light-mode #search-input {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #e2e8f0;
+    color: #1e293b;
+    placeholder-color: #94a3b8;
+}
+
+body.light-mode #search-input::placeholder {
+    color: #94a3b8;
+}
+
+body.light-mode #search-result-count {
+    color: #64748b;
+}
+
+/* Animasi untuk project yang sedang difilter */
+.group {
+    transition: all 0.3s ease;
+}
+
+.group[style*="display: none"] {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+/* Responsive untuk mobile */
+@media (max-width: 640px) {
+    #search-input {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    #search-result-count {
+        font-size: 0.8rem;
+    }
+}
+
 /* Media Queries - Grouped by breakpoint */
 @media (max-width: 1024px) {
     .venus-text {

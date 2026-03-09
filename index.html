@@ -636,7 +636,6 @@
         </div>
     </section>
 
-    <!-- Portfolio Section -->
 <section id="portfolio" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
     <div class="container mx-auto px-4 md:px-8 lg:px-12">
         <div class="text-center mb-12">
@@ -646,7 +645,32 @@
             </div>
             <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">Explore my portfolio showcase</h2>
             <p class="text-white/70 text-lg max-w-2xl mx-auto scroll-animate fade-up delay-300">Dive into a curated collection of my finest work, showcasing expertise across various industries.</p>
+            
+            <!-- ============================================ -->
+            <!-- KOLOM PENCARIAN - TAMBAHKAN DISINI -->
+            <!-- ============================================ -->
+            <div class="max-w-xl mx-auto mt-8 mb-12 scroll-animate fade-up delay-400" id="search-container">
+                <div class="relative">
+                    <input type="text" 
+                           id="search-input" 
+                           placeholder="Cari project" 
+                           class="w-full px-6 py-4 pr-12 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-[#00bbff] focus:ring-2 focus:ring-[#00bbff]/50 transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 transform -translate-y-1/2 text-white/50 text-xl"></i>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-sm">
+                    <button id="clear-search" class="text-[#00bbff] hover:text-white transition hidden">
+                        <i class="fa-solid fa-times mr-1"></i> Hapus pencarian
+                    </button>
+                </div>
+                <div id="no-results-message" class="text-center py-6 hidden">
+                    <i class="fa-solid fa-search text-4xl text-white/20 mb-3"></i>
+                    <p class="text-white/60">Tidak ada project yang cocok dengan pencarian "<span id="search-term-display" class="text-[#00bbff]"></span>"</p>
+                </div>
+            </div>
+            <!-- ============================================ -->
+            
         </div>
+
 
         <!-- Main Projects Grid (6 projects selalu terlihat) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6" id="main-projects">
@@ -682,7 +706,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="Youtube Clone/index.html" class="absolute inset-0 z-10">
+                        <a href="Youtube Clone/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View YouTube Clone</span>
                         </a>
                     </div>
@@ -718,14 +742,14 @@
                                 <div class="h-full w-2/3 bg-[#e50914] rounded-full"></div>
                             </div>
                         </div>
-                        <a href="Netflix Clone/index.html" class="absolute inset-0 z-10">
+                        <a href="Netflix Clone/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Netflix Clone</span>
                         </a>
                     </div>
                     <div class="pt-2">
                         <h3 class="text-white font-semibold text-lg">Netflix Clone</h3>
                         <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
-                            <i class="fa-brands fa-netflix text-xs"></i> Streaming Platform
+                            Streaming Platform
                         </p>
                     </div>
                 </div>
@@ -772,7 +796,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="Whatsapp Clone/index.html" class="absolute inset-0 z-10">
+                        <a href="Whatsapp Clone/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View WhatsApp Clone</span>
                         </a>
                     </div>
@@ -818,7 +842,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="Spotify Clone/index.html" class="absolute inset-0 z-10">
+                        <a href="Spotify Clone/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Spotify Clone</span>
                         </a>
                     </div>
@@ -864,7 +888,7 @@
                                 <i class="fa-regular fa-paper-plane text-white text-[10px]"></i>
                             </div>
                         </div>
-                        <a href="Instagram Clone/index.html" class="absolute inset-0 z-10">
+                        <a href="Instagram Clone/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Instagram Clone</span>
                         </a>
                     </div>
@@ -937,7 +961,7 @@
                             <i class="fa-solid fa-cash-register text-white text-[10px]"></i>
                         </div>
                         
-                        <a href="kasir/index.html" class="absolute inset-0 z-10">
+                        <a href="Program Kasir Sederhana/index.html" target="_blank"" class="absolute inset-0 z-10">
                             <span class="sr-only">View Aplikasi Kasir</span>
                         </a>
                     </div>
@@ -987,7 +1011,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-chart-line text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Dashboard-Panel/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Dashboard-Panel/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Dashboard Analitik</span>
                         </a>
                     </div>
@@ -1029,7 +1053,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-cart-shopping text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Eccomerce/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Eccomerce/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View E-Commerce</span>
                         </a>
                     </div>
@@ -1065,7 +1089,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-list-check text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Trello/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Trello/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Mini Trello</span>
                         </a>
                     </div>
@@ -1095,7 +1119,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-plane text-white text-[10px]"></i>
                         </div>
-                        <a href="projects-website/Travel/index.html" class="absolute inset-0 z-10">
+                        <a href="projects-website/Travel/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Travel API</span>
                         </a>
                     </div>
@@ -1134,7 +1158,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-comment text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Chat Ui/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Chat Ui/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Chat UI</span>
                         </a>
                     </div>
@@ -1168,7 +1192,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-chart-simple text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Crypto Tracker/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Crypto Tracker/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Crypto Tracker</span>
                         </a>
                     </div>
@@ -1202,7 +1226,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-question text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Quiz App/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Quiz App/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Quiz App</span>
                         </a>
                     </div>
@@ -1232,7 +1256,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-film text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Movie Search App/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Movie Search App/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Movie Search</span>
                         </a>
                     </div>
@@ -1271,7 +1295,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-calendar text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Calendar/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Calendar/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Kalender</span>
                         </a>
                     </div>
@@ -1307,7 +1331,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-coins text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Finance Tracker/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Finance Tracker/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Finance Tracker</span>
                         </a>
                     </div>
@@ -1337,7 +1361,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-rocket text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Landing page/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Landing page/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Landing Page</span>
                         </a>
                     </div>
@@ -1373,7 +1397,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-gamepad text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Tic Tac Toe/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Tic Tac Toe/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Mini Game</span>
                         </a>
                     </div>
@@ -1408,7 +1432,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-folder text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/File Organizer/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/File Organizer/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View File Organizer</span>
                         </a>
                     </div>
@@ -1440,7 +1464,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-utensils text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/Restaurant/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/Restaurant/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Restaurant</span>
                         </a>
                     </div>
@@ -1467,7 +1491,7 @@
                         <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
                             <i class="fa-solid fa-robot text-white text-[10px]"></i>
                         </div>
-                        <a href="Projects-website/AI Tool Interferance/index.html" class="absolute inset-0 z-10">
+                        <a href="Projects-website/AI Tool Interferance/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View AI Tool</span>
                         </a>
                     </div>

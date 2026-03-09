@@ -103,16 +103,13 @@ if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
 if (themeToggleMobileMenu) themeToggleMobileMenu.addEventListener('click', toggleTheme);
 
 document.addEventListener("DOMContentLoaded", function () {
-
     const elements = document.querySelectorAll(".scroll-animate");
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-
             if (entry.isIntersecting) {
                 entry.target.classList.add("animated");
             }
-
         });
     }, {
         threshold: 0.2
@@ -121,8 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
     elements.forEach((el) => {
         observer.observe(el);
     });
-
 });
+
 // Scroll to Top
 const scrollTopBtn = document.getElementById('scroll-to-top');
 
@@ -303,4 +300,133 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+});
+
+// ============================================
+// FUNGSI PENCARIAN PORTFOLIO - VERSI FIX DENGAN PESAN TIDAK ADA HASIL
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const clearButton = document.getElementById('clear-search');
+    const resultCount = document.getElementById('search-result-count');
+    const noResultsMsg = document.getElementById('no-results-message');
+    const searchTermDisplay = document.getElementById('search-term-display');
+    
+    // Gabungkan semua project dari main-projects dan hidden-projects
+    const mainProjects = document.getElementById('main-projects');
+    const hiddenProjects = document.getElementById('hidden-projects');
+    
+    if (!searchInput || !mainProjects) return;
+    
+    // Fungsi untuk mendapatkan semua project card
+    function getAllProjectCards() {
+        const mainCards = mainProjects ? Array.from(mainProjects.querySelectorAll('.group')) : [];
+        const hiddenCards = hiddenProjects ? Array.from(hiddenProjects.querySelectorAll('.group')) : [];
+        return [...mainCards, ...hiddenCards];
+    }
+    
+    // Fungsi untuk mendapatkan teks dari project (judul + kategori)
+    function getProjectText(projectCard) {
+        const title = projectCard.querySelector('h3')?.textContent || '';
+        const category = projectCard.querySelector('.text-white\\/60')?.textContent || '';
+        return (title + ' ' + category).toLowerCase();
+    }
+    
+    // Fungsi untuk melakukan pencarian
+    function performSearch() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        const allProjects = getAllProjectCards();
+        
+        if (searchTerm === '') {
+            // Tampilkan semua project
+            allProjects.forEach(project => {
+                project.style.display = 'block';
+            });
+            
+            if (resultCount) {
+                resultCount.textContent = `Menampilkan semua project (${allProjects.length} project)`;
+            }
+            
+            if (clearButton) clearButton.classList.add('hidden');
+            if (noResultsMsg) noResultsMsg.classList.add('hidden');
+            
+        } else {
+            // Filter berdasarkan search term
+            let visibleCount = 0;
+            
+            allProjects.forEach(project => {
+                const text = getProjectText(project);
+                if (text.includes(searchTerm)) {
+                    project.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    project.style.display = 'none';
+                }
+            });
+            
+            if (resultCount) {
+                resultCount.textContent = `Menampilkan ${visibleCount} project dari ${allProjects.length} project`;
+            }
+            
+            // TAMPILKAN PESAN JIKA TIDAK ADA HASIL
+            if (visibleCount === 0) {
+                if (noResultsMsg) {
+                    noResultsMsg.classList.remove('hidden');
+                    if (searchTermDisplay) {
+                        searchTermDisplay.textContent = searchTerm;
+                    }
+                }
+            } else {
+                if (noResultsMsg) {
+                    noResultsMsg.classList.add('hidden');
+                }
+            }
+            
+            if (clearButton) clearButton.classList.remove('hidden');
+        }
+    }
+    
+    // Event listener untuk input search
+    searchInput.addEventListener('input', performSearch);
+    
+    // Clear search
+    if (clearButton) {
+        clearButton.addEventListener('click', function() {
+            searchInput.value = '';
+            performSearch();
+            searchInput.focus();
+        });
+    }
+    
+    // Update result count saat show more/less
+    function updateSearchAfterToggle() {
+        if (searchInput.value.trim() !== '') {
+            performSearch();
+        }
+    }
+    
+    // Observasi perubahan pada hidden projects (saat show more/less)
+    if (hiddenProjects) {
+        const observer = new MutationObserver(updateSearchAfterToggle);
+        observer.observe(hiddenProjects, { 
+            attributes: true, 
+            attributeFilter: ['class'] 
+        });
+    }
+    
+    // Tambahkan event listener untuk show more/less buttons
+    const showMoreBtn = document.querySelector('#portfolio-button-container button:first-child');
+    const showLessBtn = document.querySelector('#portfolio-button-container button:last-child');
+    
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', function() {
+            setTimeout(updateSearchAfterToggle, 100);
+        });
+    }
+    
+    if (showLessBtn) {
+        showLessBtn.addEventListener('click', function() {
+            setTimeout(updateSearchAfterToggle, 100);
+        });
+    }
 });
