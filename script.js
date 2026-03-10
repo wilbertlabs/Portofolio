@@ -235,198 +235,249 @@ if ('loading' in HTMLImageElement.prototype) {
     });
 }
 
-// Show More / Show Less functionality for Portfolio
-document.addEventListener('DOMContentLoaded', function() {
-    const hiddenProjects = document.getElementById('hidden-projects');
+// ============================================
+// PORTFOLIO: Show More/Less + Filter + Search
+// ============================================
+document.addEventListener('DOMContentLoaded', function () {
+    const grid = document.getElementById('all-projects');
     const showMoreContainer = document.getElementById('portfolio-button-container');
-    
-    if (!hiddenProjects || !showMoreContainer) return;
-    
-    // Clear container
-    showMoreContainer.innerHTML = '';
-    
-    // Create Show More button
-    const showMoreBtn = document.createElement('button');
-    showMoreBtn.className = 'px-8 py-3 bg-gradient-to-r from-[#00bbff] to-[#0066ff] text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 cursor-pointer';
-    showMoreBtn.innerHTML = 'Show More <i class="fa-solid fa-arrow-down ml-2" aria-hidden="true"></i>';
-    
-    // Create Show Less button
-    const showLessBtn = document.createElement('button');
-    showLessBtn.className = 'px-8 py-3 bg-gradient-to-r from-[#00bbff] to-[#0066ff] text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 cursor-pointer hidden';
-    showLessBtn.innerHTML = 'Show Less <i class="fa-solid fa-arrow-up ml-2" aria-hidden="true"></i>';
-    
-    // Add buttons to container
-    showMoreContainer.appendChild(showMoreBtn);
-    showMoreContainer.appendChild(showLessBtn);
-    
-    // Toggle functionality
-    showMoreBtn.addEventListener('click', function() {
-        hiddenProjects.classList.remove('hidden');
-        showMoreBtn.classList.add('hidden');
-        showLessBtn.classList.remove('hidden');
-        
-        // Trigger scroll animation for new elements
-        setTimeout(() => {
-            const newElements = hiddenProjects.querySelectorAll('.scroll-animate');
-            newElements.forEach(el => {
-                const elementTop = el.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                if (elementTop < windowHeight - 100) {
-                    el.classList.add('animated');
-                }
-            });
-        }, 100);
-    });
-    
-    showLessBtn.addEventListener('click', function() {
-        hiddenProjects.classList.add('hidden');
-        showLessBtn.classList.add('hidden');
-        showMoreBtn.classList.remove('hidden');
-        
-        // Scroll back to portfolio section smoothly
-        document.querySelector('#portfolio').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    
-    // Make sure the scroll animation works for new elements
-    window.addEventListener('scroll', function checkNewElements() {
-        if (!hiddenProjects.classList.contains('hidden')) {
-            const newElements = hiddenProjects.querySelectorAll('.scroll-animate:not(.animated)');
-            newElements.forEach(el => {
-                const elementTop = el.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                if (elementTop < windowHeight - 100) {
-                    el.classList.add('animated');
-                }
-            });
-        }
-    });
-});
-
-// ============================================
-// FUNGSI PENCARIAN PORTFOLIO - VERSI FIX DENGAN PESAN TIDAK ADA HASIL
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     const clearButton = document.getElementById('clear-search');
-    const resultCount = document.getElementById('search-result-count');
     const noResultsMsg = document.getElementById('no-results-message');
     const searchTermDisplay = document.getElementById('search-term-display');
-    
-    // Gabungkan semua project dari main-projects dan hidden-projects
-    const mainProjects = document.getElementById('main-projects');
-    const hiddenProjects = document.getElementById('hidden-projects');
-    
-    if (!searchInput || !mainProjects) return;
-    
-    // Fungsi untuk mendapatkan semua project card
-    function getAllProjectCards() {
-        const mainCards = mainProjects ? Array.from(mainProjects.querySelectorAll('.group')) : [];
-        const hiddenCards = hiddenProjects ? Array.from(hiddenProjects.querySelectorAll('.group')) : [];
-        return [...mainCards, ...hiddenCards];
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    if (!grid) return;
+
+    const ITEMS_PER_PAGE = 6;
+    let currentFilter = 'all';
+    let currentSearch = '';
+    let showAll = false;
+
+    const allCards = Array.from(grid.querySelectorAll('.project-card'));
+
+    // Create Show More / Show Less buttons
+    let showMoreBtn, showLessBtn;
+    if (showMoreContainer) {
+        showMoreContainer.innerHTML = '';
+
+        showMoreBtn = document.createElement('button');
+        showMoreBtn.id = 'show-more-btn';
+        showMoreBtn.className = 'px-8 py-3 bg-gradient-to-r from-[#00bbff] to-[#0066ff] text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 cursor-pointer';
+        showMoreBtn.innerHTML = 'Show More <i class="fa-solid fa-arrow-down ml-2"></i>';
+
+        showLessBtn = document.createElement('button');
+        showLessBtn.id = 'show-less-btn';
+        showLessBtn.className = 'px-8 py-3 bg-gradient-to-r from-[#00bbff] to-[#0066ff] text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 cursor-pointer hidden';
+        showLessBtn.innerHTML = 'Show Less <i class="fa-solid fa-arrow-up ml-2"></i>';
+
+        showMoreContainer.appendChild(showMoreBtn);
+        showMoreContainer.appendChild(showLessBtn);
+
+        showMoreBtn.addEventListener('click', function () {
+            showAll = true;
+            renderCards();
+        });
+
+        showLessBtn.addEventListener('click', function () {
+            showAll = false;
+            renderCards();
+            document.querySelector('#portfolio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
     }
-    
-    // Fungsi untuk mendapatkan teks dari project (judul + kategori)
-    function getProjectText(projectCard) {
-        const title = projectCard.querySelector('h3')?.textContent || '';
-        const category = projectCard.querySelector('.text-white\\/60')?.textContent || '';
-        return (title + ' ' + category).toLowerCase();
-    }
-    
-    // Fungsi untuk melakukan pencarian
-    function performSearch() {
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        const allProjects = getAllProjectCards();
-        
-        if (searchTerm === '') {
-            // Tampilkan semua project
-            allProjects.forEach(project => {
-                project.style.display = 'block';
-            });
-            
-            if (resultCount) {
-                resultCount.textContent = `Menampilkan semua project (${allProjects.length} project)`;
-            }
-            
-            if (clearButton) clearButton.classList.add('hidden');
-            if (noResultsMsg) noResultsMsg.classList.add('hidden');
-            
-        } else {
-            // Filter berdasarkan search term
-            let visibleCount = 0;
-            
-            allProjects.forEach(project => {
-                const text = getProjectText(project);
-                if (text.includes(searchTerm)) {
-                    project.style.display = 'block';
-                    visibleCount++;
+
+    function renderCards() {
+        let matchCount = 0;
+        let shown = 0;
+
+        allCards.forEach(card => {
+            const category = card.getAttribute('data-category');
+            const titleEl = card.querySelector('h3');
+            const catEl = card.querySelector('p');
+            const text = ((titleEl ? titleEl.textContent : '') + ' ' + (catEl ? catEl.textContent : '')).toLowerCase();
+
+            const matchFilter = currentFilter === 'all' || category === currentFilter;
+            const matchSearch = currentSearch === '' || text.includes(currentSearch);
+
+            if (matchFilter && matchSearch) {
+                matchCount++;
+                // Jika filter bukan 'all', tampilkan semua tanpa batasan
+                const limitApplied = currentFilter === 'all';
+                if (!limitApplied || showAll || shown < ITEMS_PER_PAGE) {
+                    card.style.display = 'block';
+                    shown++;
+                    setTimeout(() => card.classList.add('animated'), 50);
                 } else {
-                    project.style.display = 'none';
-                }
-            });
-            
-            if (resultCount) {
-                resultCount.textContent = `Menampilkan ${visibleCount} project dari ${allProjects.length} project`;
-            }
-            
-            // TAMPILKAN PESAN JIKA TIDAK ADA HASIL
-            if (visibleCount === 0) {
-                if (noResultsMsg) {
-                    noResultsMsg.classList.remove('hidden');
-                    if (searchTermDisplay) {
-                        searchTermDisplay.textContent = searchTerm;
-                    }
+                    card.style.display = 'none';
                 }
             } else {
-                if (noResultsMsg) {
-                    noResultsMsg.classList.add('hidden');
+                card.style.display = 'none';
+            }
+        });
+
+        // Kelola tombol Show More / Show Less
+        if (showMoreBtn && showLessBtn) {
+            if (currentFilter !== 'all') {
+                // Filter spesifik: sembunyikan kedua tombol
+                showMoreBtn.classList.add('hidden');
+                showLessBtn.classList.add('hidden');
+            } else {
+                // Filter 'all': tampilkan tombol sesuai kondisi
+                if (matchCount > ITEMS_PER_PAGE) {
+                    if (showAll) {
+                        showMoreBtn.classList.add('hidden');
+                        showLessBtn.classList.remove('hidden');
+                    } else {
+                        showMoreBtn.classList.remove('hidden');
+                        showLessBtn.classList.add('hidden');
+                    }
+                } else {
+                    showMoreBtn.classList.add('hidden');
+                    showLessBtn.classList.add('hidden');
                 }
             }
-            
-            if (clearButton) clearButton.classList.remove('hidden');
+        }
+
+        // Pesan tidak ada hasil
+        if (noResultsMsg) {
+            if (matchCount === 0 && currentSearch !== '') {
+                noResultsMsg.classList.remove('hidden');
+                if (searchTermDisplay) searchTermDisplay.textContent = currentSearch;
+            } else {
+                noResultsMsg.classList.add('hidden');
+            }
         }
     }
-    
-    // Event listener untuk input search
-    searchInput.addEventListener('input', performSearch);
-    
-    // Clear search
+
+    // Filter buttons
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.getAttribute('data-filter');
+            showAll = false;
+            renderCards();
+        });
+    });
+
+    // Search
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            currentSearch = this.value.trim().toLowerCase();
+            showAll = false;
+            renderCards();
+            if (clearButton) {
+                clearButton.classList.toggle('hidden', currentSearch === '');
+            }
+        });
+    }
+
     if (clearButton) {
-        clearButton.addEventListener('click', function() {
+        clearButton.addEventListener('click', function () {
             searchInput.value = '';
-            performSearch();
+            currentSearch = '';
+            renderCards();
+            clearButton.classList.add('hidden');
             searchInput.focus();
         });
     }
-    
-    // Update result count saat show more/less
-    function updateSearchAfterToggle() {
-        if (searchInput.value.trim() !== '') {
-            performSearch();
-        }
-    }
-    
-    // Observasi perubahan pada hidden projects (saat show more/less)
-    if (hiddenProjects) {
-        const observer = new MutationObserver(updateSearchAfterToggle);
-        observer.observe(hiddenProjects, { 
-            attributes: true, 
-            attributeFilter: ['class'] 
+
+    // Initial render
+    renderCards();
+});
+// ============================================
+// MORE DROPDOWN - Navbar
+// ============================================
+(function () {
+    const btn     = document.getElementById('more-dropdown-btn');
+    const menu    = document.getElementById('more-dropdown-menu');
+    const chevron = document.getElementById('more-chevron');
+    const wrap    = document.getElementById('more-dropdown-wrap');
+
+    if (!btn || !menu) return;
+
+    function openMenu() {
+        menu.classList.remove('hidden');
+        // Trigger reflow so transition plays
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => menu.classList.add('open'));
         });
+        chevron.classList.add('rotated');
+        btn.setAttribute('aria-expanded', 'true');
     }
-    
-    // Tambahkan event listener untuk show more/less buttons
-    const showMoreBtn = document.querySelector('#portfolio-button-container button:first-child');
-    const showLessBtn = document.querySelector('#portfolio-button-container button:last-child');
-    
-    if (showMoreBtn) {
-        showMoreBtn.addEventListener('click', function() {
-            setTimeout(updateSearchAfterToggle, 100);
+
+    function closeMenu() {
+        menu.classList.remove('open');
+        chevron.classList.remove('rotated');
+        btn.setAttribute('aria-expanded', 'false');
+        // Hide after transition
+        setTimeout(() => {
+            if (!menu.classList.contains('open')) {
+                menu.classList.add('hidden');
+            }
+        }, 250);
+    }
+
+    btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        menu.classList.contains('open') ? closeMenu() : openMenu();
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target)) closeMenu();
+    });
+
+    // Close when a link inside is clicked
+    menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+    });
+})();
+// ============================================
+// TECH STACK - Tab Filter + Scroll Animation
+// ============================================
+document.addEventListener('DOMContentLoaded', function () {
+    const tabBtns = document.querySelectorAll('.ts-tab-btn');
+    const tsCards = document.querySelectorAll('.ts-card');
+    if (!tabBtns.length || !tsCards.length) return;
+
+    const tsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('animated'); });
+    }, { threshold: 0.15 });
+    tsCards.forEach(card => tsObserver.observe(card));
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.getAttribute('data-ts');
+            let i = 0;
+            tsCards.forEach(card => {
+                const match = filter === 'all' || card.getAttribute('data-ts') === filter;
+                if (match) {
+                    card.classList.remove('ts-hidden');
+                    const delay = i++ * 50;
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(16px) scale(0.95)';
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0) scale(1)';
+                        card.classList.remove('animated');
+                        setTimeout(() => card.classList.add('animated'), 50);
+                    }, delay);
+                } else {
+                    card.classList.add('ts-hidden');
+                    card.style.opacity = '';
+                    card.style.transform = '';
+                    card.style.transition = '';
+                }
+            });
         });
-    }
-    
-    if (showLessBtn) {
-        showLessBtn.addEventListener('click', function() {
-            setTimeout(updateSearchAfterToggle, 100);
-        });
-    }
+    });
 });

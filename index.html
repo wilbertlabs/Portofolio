@@ -419,24 +419,52 @@
 
     <!-- Navbar -->
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center">
-        <div class="container mx-auto px-4 md:px-8 lg:px-12 w-full">
-            <div class="flex items-center justify-between h-[80px]">
-                <img class="img-before-venus-text" src="favicon.png" alt="">
-                <span class="venus-text">Wilbert</span>
+        <div class="container mx-auto px-4 md:px-8 lg:px-12 w-full relative">
+            <div class="flex items-center h-[80px]">
+                <!-- LEFT: Logo -->
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <img class="img-before-venus-text" src="favicon.png" alt="Wilbert logo">
+                    <span class="venus-text">Wilbert</span>
+                </div>
 
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center gap-6">
-                    <a href="#hero" class="text-white hover:text-[#38b6ff] text-sm transition">Home</a>
-                    <a href="#about" class="text-white hover:text-[#38b6ff] text-sm transition">About</a>
-                    <a href="#services" class="text-white hover:text-[#38b6ff] text-sm transition">Services</a>
-                    <a href="#portfolio" class="text-white hover:text-[#38b6ff] text-sm transition">Portfolio</a>
-                    <a href="#contact" class="text-white hover:text-[#38b6ff] text-sm transition">Contact</a>
-                    <a href="#documentation" class="text-white hover:text-[#38b6ff] text-sm transition">Documentation</a>
-                    
-                    <button id="theme-toggle-desktop" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white hover:bg-white/20 transition" aria-label="Toggle theme">
+                <!-- CENTER: Nav Links (truly centered) -->
+                <div class="hidden lg:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
+                    <a href="#hero" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#portfolio" class="nav-link">Portfolio</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+
+                    <!-- More Dropdown -->
+                    <div class="relative" id="more-dropdown-wrap">
+                        <button id="more-dropdown-btn" class="nav-link flex items-center gap-1" aria-expanded="false" aria-haspopup="true">
+                            More
+                            <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" id="more-chevron"></i>
+                        </button>
+                        <div id="more-dropdown-menu" class="more-dropdown-menu hidden">
+                            <a href="#techstack" class="more-dropdown-item">
+                                <i class="fa-solid fa-microchip text-[#00bbff]"></i>
+                                Tech Stack
+                            </a>
+                            <a href="#services" class="more-dropdown-item">
+                                <i class="fa-solid fa-cube text-[#00bbff]"></i>
+                                Services
+                            </a>
+                            <a href="#documentation" class="more-dropdown-item">
+                                <i class="fa-solid fa-book text-[#00bbff]"></i>
+                                Documentation
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT: Actions -->
+                <div class="hidden lg:flex items-center gap-3 ml-auto flex-shrink-0">
+                    <div class="nav-divider"></div>
+                    <button id="theme-toggle-desktop" class="w-9 h-9 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white hover:bg-white/20 transition" aria-label="Toggle theme">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                    
+
                     <button onclick="window.location.href='signin/signin.html'" class="px-4 py-2 bg-white/10 text-white rounded-lg text-sm hover:bg-white/20 transition">Sign In</button>
                     <button onclick="window.location.href='signup/signup.html'" class="px-4 py-2 bg-[#00bbff] text-white rounded-lg text-sm hover:bg-[#00ddff] transition">Sign Up</button>
                 </div>
@@ -456,12 +484,16 @@
             <!-- Mobile Menu Dropdown -->
             <div id="mobile-menu" class="hidden lg:hidden bg-[#061A36] rounded-lg mt-2 p-4" role="menu">
                 <div class="flex flex-col space-y-3">
-                    <a href="#hero" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Home</a>
-                    <a href="#about" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">About</a>
-                    <a href="#services" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Services</a>
-                    <a href="#portfolio" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Portfolio</a>
-                    <a href="#contact" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Contact</a>
-                    <a href="#documentation" class="text-white py-2 hover:text-[#38b6ff] transition" role="menuitem">Documentation</a>
+                    <a href="#hero" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-house w-4"></i> Home</a>
+                    <a href="#about" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-user w-4"></i> About</a>
+                    <a href="#portfolio" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-briefcase w-4"></i> Portfolio</a>
+                    <a href="#contact" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-envelope w-4"></i> Contact</a>
+                    <div class="border-t border-white/10 pt-2 mt-1">
+                        <p class="text-white/40 text-xs uppercase tracking-wider mb-2 px-1">More</p>
+                        <a href="#techstack" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-microchip w-4"></i> Tech Stack</a>
+                        <a href="#services" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-cube w-4"></i> Services</a>
+                        <a href="#documentation" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-book w-4"></i> Documentation</a>
+                    </div>
                     
                     <div class="flex items-center justify-between py-2 border-t border-white/10 mt-2 pt-2">
                         <span class="text-white">Dark Mode</span>
@@ -596,6 +628,46 @@
         </div>
     </section>
 
+
+    <!-- Tech Stack Section -->
+    <section id="techstack" class="py-20 bg-gradient-to-br from-[#0b1220] to-[#0f172a]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="text-center mb-14">
+                <div class="flex items-center justify-center gap-2 mb-4 scroll-animate fade-up">
+                    <span class="dot-green-small" aria-hidden="true"></span>
+                    <p class="text-[#00ff88] text-lg">Tech Stack</p>
+                </div>
+                <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">Tools &amp; Technologies I Use</h2>
+                <p class="text-white/70 text-lg max-w-2xl mx-auto scroll-animate fade-up delay-300">Beragam teknologi yang saya kuasai untuk membangun produk digital yang modern dan berkualitas.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 mb-12 scroll-animate fade-up delay-400" id="ts-tabs">
+                <button class="ts-tab-btn active" data-ts="all">All</button>
+                <button class="ts-tab-btn" data-ts="frontend">Frontend</button>
+                <button class="ts-tab-btn" data-ts="backend">Backend</button>
+                <button class="ts-tab-btn" data-ts="tools">Tools</button>
+                <button class="ts-tab-btn" data-ts="design">Design</button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" id="ts-grid">
+                <div class="ts-card scroll-animate scale-in delay-100" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#e34f26,#f06529)"><i class="fa-brands fa-html5"></i></div><span class="ts-name">HTML5</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:95%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-100" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#264de4,#2965f1)"><i class="fa-brands fa-css3-alt"></i></div><span class="ts-name">CSS3</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:90%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#f0db4f,#e5c100)"><i class="fa-brands fa-js" style="color:#1a1a1a"></i></div><span class="ts-name">JavaScript</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:88%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#61dafb,#21b8d4)"><i class="fa-brands fa-react" style="color:#1a1a1a"></i></div><span class="ts-name">React</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:80%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#06b6d4,#0891b2)"><img src="https://cdn.simpleicons.org/tailwindcss/white" alt="Tailwind" style="width:28px;height:28px"></div><span class="ts-name">Tailwind</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:92%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#7952b3,#5a3d8a)"><img src="https://cdn.simpleicons.org/bootstrap/white" alt="Bootstrap" style="width:28px;height:28px"></div><span class="ts-name">Bootstrap</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:85%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-100" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#3c873a,#215732)"><i class="fa-brands fa-node-js"></i></div><span class="ts-name">Node.js</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:75%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#3776ab,#1c4f80)"><i class="fa-brands fa-python"></i></div><span class="ts-name">Python</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:70%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#4479a1,#2e6390)"><img src="https://cdn.simpleicons.org/mysql/white" alt="MySQL" style="width:28px;height:28px"></div><span class="ts-name">MySQL</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:72%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#47a248,#2d6e2e)"><img src="https://cdn.simpleicons.org/mongodb/white" alt="MongoDB" style="width:28px;height:28px"></div><span class="ts-name">MongoDB</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:65%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-100" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#f05032,#bd3a22)"><i class="fa-brands fa-git-alt"></i></div><span class="ts-name">Git</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:88%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#181717,#444)"><i class="fa-brands fa-github"></i></div><span class="ts-name">GitHub</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:90%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#007acc,#005a9e)"><img src="https://cdn.simpleicons.org/visualstudiocode/white" alt="VS Code" style="width:28px;height:28px"></div><span class="ts-name">VS Code</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:95%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#ff6c37,#e04e1f)"><img src="https://cdn.simpleicons.org/postman/white" alt="Postman" style="width:28px;height:28px"></div><span class="ts-name">Postman</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:80%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-100" data-ts="design"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#f24e1e,#c93d13)"><img src="https://cdn.simpleicons.org/figma/white" alt="Figma" style="width:28px;height:28px"></div><span class="ts-name">Figma</span><span class="ts-badge design">Design</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:85%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="design"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#31a8ff,#0070c0)"><img src="https://cdn.simpleicons.org/adobephotoshop/white" alt="Photoshop" style="width:28px;height:28px"></div><span class="ts-name">Photoshop</span><span class="ts-badge design">Design</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:70%"></div></div></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Services Section -->
     <section id="services" class="py-20 bg-gradient-to-br from-[#0a1628] to-[#162647]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
@@ -668,14 +740,39 @@
                 </div>
             </div>
             <!-- ============================================ -->
+
+
+            <!-- ========================= -->
+<!-- PORTFOLIO FILTER -->
+<!-- ========================= -->
+
+<div class="portfolio-filter scroll-animate fade-up delay-400">
+    
+    <button class="filter-btn active" data-filter="all">
+        All
+    </button>
+
+    <button class="filter-btn" data-filter="web">
+        Web App
+    </button>
+
+    <button class="filter-btn" data-filter="clone">
+        Clone App
+    </button>
+
+    <button class="filter-btn" data-filter="ui">
+        UI Design
+    </button>
+
+</div>
             
         </div>
 
 
-        <!-- Main Projects Grid (6 projects selalu terlihat) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6" id="main-projects">
+        <!-- Portfolio Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="all-projects">
             <!-- YouTube Clone -->
-            <div class="group scroll-animate scale-in delay-100">
+            <div class="project-card group scroll-animate scale-in delay-100" data-category="clone">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#ff0000] to-[#cc0000] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -718,9 +815,9 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Netflix Clone -->
-            <div class="group scroll-animate scale-in delay-200">
+            <div class="project-card group scroll-animate scale-in delay-200" data-category="clone">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#e50914] to-[#b2070f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -754,9 +851,9 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- WhatsApp Clone -->
-            <div class="group scroll-animate scale-in delay-300">
+            <div class="project-card group scroll-animate scale-in delay-300" data-category="clone">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#25D366] to-[#128C7E] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -808,9 +905,9 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Spotify Clone -->
-            <div class="group scroll-animate scale-in delay-400">
+            <div class="project-card group scroll-animate scale-in delay-400" data-category="clone">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#1DB954] to-[#191414] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -854,9 +951,9 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Instagram Clone -->
-            <div class="group scroll-animate scale-in delay-500">
+            <div class="project-card group scroll-animate scale-in delay-500" data-category="clone">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#f09433] via-[#d62976] to-[#962fbf] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -900,9 +997,9 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Aplikasi Kasir -->
-            <div class="group scroll-animate scale-in delay-600">
+            <div class="project-card group scroll-animate scale-in delay-600" data-category="web">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#667eea] to-[#764ba2] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative kasir-preview">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -961,7 +1058,7 @@
                             <i class="fa-solid fa-cash-register text-white text-[10px]"></i>
                         </div>
                         
-                        <a href="Program Kasir Sederhana/index.html" target="_blank"" class="absolute inset-0 z-10">
+                        <a href="Program Kasir Sederhana/index.html" target="_blank" class="absolute inset-0 z-10">
                             <span class="sr-only">View Aplikasi Kasir</span>
                         </a>
                     </div>
@@ -974,12 +1071,10 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Hidden Projects Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mt-6 hidden" id="hidden-projects">
+            <!-- More Projects -->
             <!-- Dashboard Analitik -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 700ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 700ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1023,7 +1118,7 @@
             </div>
 
             <!-- E-Commerce Frontend -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 800ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 800ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#f97316] to-[#c2410c] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1065,7 +1160,7 @@
             </div>
 
             <!-- Mini Trello -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 900ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 900ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#0b1d36] to-[#1a2b4a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1101,7 +1196,7 @@
             </div>
 
             <!-- Travel API -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1000ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1000ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#0b4f6c] to-[#0b2b4a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1131,7 +1226,7 @@
             </div>
 
             <!-- Chat UI -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1100ms">
+            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 1100ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#111b21] to-[#202c33] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1170,7 +1265,7 @@
             </div>
 
             <!-- Crypto Tracker -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1200ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1200ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#0a0f1a] to-[#1a1f2a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1204,7 +1299,7 @@
             </div>
 
             <!-- Quiz App -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1300ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1300ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#1e3a5f] to-[#0f2a3f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1238,7 +1333,7 @@
             </div>
 
             <!-- Movie Search -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1400ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1400ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#141414] to-[#000000] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1268,7 +1363,7 @@
             </div>
 
             <!-- Kalender -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1500ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1500ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#2d3748] to-[#1a202c] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1307,7 +1402,7 @@
             </div>
 
             <!-- Finance Tracker -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1600ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1600ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#065f46] to-[#064e3b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1343,7 +1438,7 @@
             </div>
 
             <!-- Landing Page SaaS -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1700ms">
+            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 1700ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#0ea5e9] to-[#0284c7] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1373,7 +1468,7 @@
             </div>
 
             <!-- Mini Game -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1800ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1800ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#581c87] to-[#6b21a8] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1409,7 +1504,7 @@
             </div>
 
             <!-- File Organizer -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 1900ms">
+            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1900ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#334155] to-[#1e293b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1444,7 +1539,7 @@
             </div>
 
             <!-- Restaurant -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 2000ms">
+            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 2000ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#0f172a] to-[#1e293b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1476,7 +1571,7 @@
             </div>
 
             <!-- AI Tool Interface -->
-            <div class="group scroll-animate scale-in" style="transition-delay: 2100ms">
+            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 2100ms">
                 <div class="space-y-3">
                     <div class="rounded-xl overflow-hidden bg-gradient-to-br from-[#10a37f] to-[#0d8c6f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
                         <div class="absolute inset-0 p-3 flex flex-col">
@@ -1524,7 +1619,7 @@
                         </div>
                         <div>
                             <p class="text-white/60 text-sm">Email</p>
-                            <p class="text-white text-xl break-all">wilbert.lim08@gmail.com</p>
+                            <p class="text-white text-xl break-all"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="12657b7e707760663c7e7b7f222a52757f737b7e3c717d7f">[email&#160;protected]</a></p>
                         </div>
                     </div>
                     <div>
@@ -1586,7 +1681,7 @@
                         </div>
                         <div>
                             <p class="text-white text-lg">Email</p>
-                            <p class="text-white/60 break-all">wilbert.lim08@gmail.com</p>
+                            <p class="text-white/60 break-all"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1067797c727562643e7c797d202850777d71797c3e737f7d">[email&#160;protected]</a></p>
                         </div>
                         <div>
                             <p class="text-white text-lg mb-3">Follow Us</p>
@@ -1663,7 +1758,7 @@
                     </div>
                     <div class="footer-contact-item">
                         <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                        <span>wilbert.lim08@gmail.com</span>
+                        <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f4839d9896918680da989d99c4ccb49399959d98da979b99">[email&#160;protected]</a></span>
                     </div>
                     <div class="footer-contact-item">
                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
@@ -1673,16 +1768,15 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2026 Wilbert. All rights reserved. | Designed with <i class="fa-solid fa-heart" style="color: #00bbff;" aria-hidden="true"></i> for creative excellence</p>
+                <p>&copy; 2026 Wilbert. All rights reserved. | Designed with <i class="fa-solid fa-heart" style="color: #00bbff;"></i> by Wilbert</p>
             </div>
         </div>
     </footer>
 
     <!-- Scroll to Top Button -->
-    <button id="scroll-to-top" class="cursor-pointer" aria-label="Scroll to top">
-        <i class="fa-solid fa-arrow-up text-xl" aria-hidden="true"></i>
+    <button id="scroll-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-[#00bbff] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#00ddff] transition z-50 opacity-0 pointer-events-none" aria-label="Scroll to top">
+        <i class="fa-solid fa-arrow-up"></i>
     </button>
-
 
     <script src="script.js"></script>
 </body>
