@@ -1,33 +1,51 @@
 // Loading Animation
-window.addEventListener('load', function() {
-    const loadingContainer = document.getElementById('loadingContainer');
-    const body = document.body;
-    
-    let progress = 0;
-    const loadingPercentage = document.getElementById('loadingPercentage');
-    const loadingProgress = document.getElementById('loadingProgress');
-    
-    const interval = setInterval(function() {
-        progress += Math.random() * 15;
-        if (progress > 100) progress = 100;
-        
-        loadingPercentage.textContent = Math.round(progress) + '%';
-        loadingProgress.style.width = progress + '%';
-        
-        if (progress === 100) {
-            clearInterval(interval);
-            
-            body.classList.remove('loading');
-            
-            setTimeout(() => {
-                loadingContainer.classList.add('fade-out');
-                
-                setTimeout(() => {
-                    loadingContainer.style.display = 'none';
-                }, 500);
-            }, 500);
+window.addEventListener('load', function () {
+    const container = document.getElementById('loadingContainer');
+    const pctEl     = document.getElementById('loaderPct');
+    const bigNumEl  = document.getElementById('loaderBigNum');
+    const barFill   = document.getElementById('loaderBarFill');
+    const body      = document.body;
+
+    if (!container || !pctEl || !barFill) return;
+
+    barFill.classList.add('active');
+
+    const duration  = 2400;
+    const startTime = performance.now();
+    let lastRounded = -1;
+
+    function easeOut(t) { return 1 - Math.pow(1 - t, 2.8); }
+
+    function tick(now) {
+        const t      = Math.min((now - startTime) / duration, 1);
+        const eased  = easeOut(t);
+        const jitter = t < 0.9 ? (Math.random() * 2 - 1) * 0.35 : 0;
+        const pct    = Math.min(eased * 100 + jitter, t >= 1 ? 100 : 99);
+        const rounded = Math.round(pct);
+
+        if (rounded !== lastRounded) {
+            lastRounded = rounded;
+            pctEl.textContent    = rounded + '%';
+            if (bigNumEl) bigNumEl.textContent = rounded;
         }
-    }, 100);
+        barFill.style.width = pct + '%';
+
+        if (t < 1) {
+            requestAnimationFrame(tick);
+        } else {
+            pctEl.textContent    = '100%';
+            if (bigNumEl) bigNumEl.textContent = '100';
+            barFill.style.width  = '100%';
+            setTimeout(() => {
+                barFill.classList.remove('active');
+                container.classList.add('fade-out');
+                body.classList.remove('loading');
+                setTimeout(() => { container.style.display = 'none'; }, 900);
+            }, 400);
+        }
+    }
+
+    requestAnimationFrame(tick);
 });
 
 // Navbar Scroll Effect

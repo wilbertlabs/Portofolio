@@ -218,8 +218,18 @@ body.light-mode {
     color: #1e293b;
 }
 
-body.light-mode .bg-gradient-to-br {
+/* Light mode: apply light gradient ONLY to page sections, never to project card thumbnails */
+body.light-mode #about.bg-gradient-to-br,
+body.light-mode #services.bg-gradient-to-br,
+body.light-mode #portfolio.bg-gradient-to-br,
+body.light-mode #contact.bg-gradient-to-br,
+body.light-mode #documentation.bg-gradient-to-br {
     background: linear-gradient(135deg, #f8fafc, #eef2f6) !important;
+}
+
+/* Remove the old broad override entirely — project card thumbnails must keep their colors */
+body.light-mode .bg-gradient-to-br {
+    /* intentionally NOT overriding here anymore */
 }
 
 body.light-mode .from-\[\#0b1533\],
@@ -784,11 +794,11 @@ body.light-mode #scroll-to-top:hover {
 
 /* Documentation */
 #documentation button {
-    height: 43px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 2.5px;
+    margin-top: 2px;
 }
 
 /* Hero Section */
@@ -1197,3 +1207,50 @@ body.light-mode .nav-divider { background:#cbd5e1; }
 @media (min-width:1024px) and (max-width:1200px) {
     .nav-link { font-size:13px !important; }
 }
+/* ============================================ */
+/* PROJECT CARD - Elegant Visit Site Button     */
+/* ============================================ */
+.project-visit-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding: 11px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 2;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.project-visit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #00bbff 0%, #0055ff 100%);
+    transform: translateX(-101%);
+    transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+    z-index: 0;
+}
+.project-visit-btn:hover::before { transform: translateX(0); }
+.project-visit-btn:hover { border-color: transparent; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,187,255,0.35); }
+.project-visit-btn .btn-text { position:relative; z-index:1; font-size:13px; font-weight:600; letter-spacing:0.3px; color:rgba(255,255,255,0.75); transition:color 0.3s ease; }
+.project-visit-btn:hover .btn-text { color:#fff; }
+.project-visit-btn .btn-icon { position:relative; z-index:1; width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; flex-shrink:0; }
+.project-visit-btn .btn-icon i { font-size:10px; color:rgba(255,255,255,0.75); transition:color 0.3s ease, transform 0.3s ease; }
+.project-visit-btn:hover .btn-icon { background:rgba(255,255,255,0.22); border-color:rgba(255,255,255,0.4); transform:rotate(8deg) scale(1.1); }
+.project-visit-btn:hover .btn-icon i { color:#fff; transform:translate(1px,-1px); }
+
+body.light-mode .project-visit-btn { background:rgba(15,23,42,0.05); border-color:rgba(15,23,42,0.12); }
+body.light-mode .project-visit-btn::before { background:linear-gradient(135deg,#2563eb,#1d4ed8); }
+body.light-mode .project-visit-btn:hover { box-shadow:0 10px 28px rgba(37,99,235,0.3); }
+body.light-mode .project-visit-btn .btn-text { color:#475569; }
+body.light-mode .project-visit-btn:hover .btn-text { color:#fff; }
+body.light-mode .project-visit-btn .btn-icon { background:rgba(15,23,42,0.08); border-color:rgba(15,23,42,0.15); }
+body.light-mode .project-visit-btn .btn-icon i { color:#64748b; }
+body.light-mode .project-visit-btn:hover .btn-icon { background:rgba(255,255,255,0.2); border-color:rgba(255,255,255,0.35); }
+body.light-mode .project-visit-btn:hover .btn-icon i { color:#fff; }
