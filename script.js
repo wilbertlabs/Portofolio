@@ -1,31 +1,32 @@
-// Loading Animation
-window.addEventListener('load', function () {
+window.addEventListener('load', function() {
     const container = document.getElementById('loadingContainer');
-    const pctEl     = document.getElementById('loaderPct');
-    const bigNumEl  = document.getElementById('loaderBigNum');
-    const barFill   = document.getElementById('loaderBarFill');
-    const body      = document.body;
+    const pctEl = document.getElementById('loaderPct');
+    const bigNumEl = document.getElementById('loaderBigNum');
+    const barFill = document.getElementById('loaderBarFill');
+    const body = document.body;
 
     if (!container || !pctEl || !barFill) return;
 
     barFill.classList.add('active');
 
-    const duration  = 2400;
+    const duration = 2400;
     const startTime = performance.now();
     let lastRounded = -1;
 
-    function easeOut(t) { return 1 - Math.pow(1 - t, 2.8); }
+    function easeOut(t) {
+        return 1 - Math.pow(1 - t, 2.8);
+    }
 
     function tick(now) {
-        const t      = Math.min((now - startTime) / duration, 1);
-        const eased  = easeOut(t);
+        const t = Math.min((now - startTime) / duration, 1);
+        const eased = easeOut(t);
         const jitter = t < 0.9 ? (Math.random() * 2 - 1) * 0.35 : 0;
-        const pct    = Math.min(eased * 100 + jitter, t >= 1 ? 100 : 99);
+        const pct = Math.min(eased * 100 + jitter, t >= 1 ? 100 : 99);
         const rounded = Math.round(pct);
 
         if (rounded !== lastRounded) {
             lastRounded = rounded;
-            pctEl.textContent    = rounded + '%';
+            pctEl.textContent = rounded + '%';
             if (bigNumEl) bigNumEl.textContent = rounded;
         }
         barFill.style.width = pct + '%';
@@ -33,14 +34,16 @@ window.addEventListener('load', function () {
         if (t < 1) {
             requestAnimationFrame(tick);
         } else {
-            pctEl.textContent    = '100%';
+            pctEl.textContent = '100%';
             if (bigNumEl) bigNumEl.textContent = '100';
-            barFill.style.width  = '100%';
+            barFill.style.width = '100%';
             setTimeout(() => {
                 barFill.classList.remove('active');
                 container.classList.add('fade-out');
                 body.classList.remove('loading');
-                setTimeout(() => { container.style.display = 'none'; }, 900);
+                setTimeout(() => {
+                    container.style.display = 'none';
+                }, 900);
             }, 400);
         }
     }
@@ -48,14 +51,15 @@ window.addEventListener('load', function () {
     requestAnimationFrame(tick);
 });
 
-// Navbar Scroll Effect
 window.addEventListener("scroll", function() {
     const navbar = document.getElementById("navbar");
-    if (window.scrollY > 50) navbar.classList.add("scrolled");
-    else navbar.classList.remove("scrolled");
+    if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+    } else {
+        navbar.classList.remove("scrolled");
+    }
 });
 
-// Mobile Menu
 const mobileBtn = document.getElementById('mobile-menu-button');
 const mobileMenu = document.getElementById('mobile-menu');
 
@@ -75,7 +79,6 @@ mobileLinks.forEach(link => {
     });
 });
 
-// Theme Toggle
 const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
 const themeToggleMobile = document.getElementById('theme-toggle-mobile');
 const themeToggleMobileMenu = document.getElementById('theme-toggle-mobile-menu');
@@ -120,7 +123,7 @@ if (themeToggleDesktop) themeToggleDesktop.addEventListener('click', toggleTheme
 if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
 if (themeToggleMobileMenu) themeToggleMobileMenu.addEventListener('click', toggleTheme);
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     const elements = document.querySelectorAll(".scroll-animate");
 
     const observer = new IntersectionObserver((entries) => {
@@ -138,7 +141,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Scroll to Top
 const scrollTopBtn = document.getElementById('scroll-to-top');
 
 window.addEventListener('scroll', function() {
@@ -152,10 +154,12 @@ window.addEventListener('scroll', function() {
 });
 
 scrollTopBtn.addEventListener('click', function() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 });
 
-// Form Validation
 const contactForm = document.getElementById('contactForm');
 const formMessage = document.getElementById('formMessage');
 const submitBtn = document.getElementById('submitBtn');
@@ -167,7 +171,7 @@ function isValidEmail(email) {
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const firstName = document.getElementById('firstName').value.trim();
         const lastName = document.getElementById('lastName').value.trim();
         const email = document.getElementById('email').value.trim();
@@ -189,10 +193,9 @@ if (contactForm) {
             return;
         }
 
-        // Simulate form submission
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
-        
+
         setTimeout(() => {
             formMessage.textContent = 'Thank you! Your inquiry has been sent.';
             formMessage.classList.remove('hidden', 'text-red-400');
@@ -204,7 +207,6 @@ if (contactForm) {
     });
 }
 
-// Newsletter
 const newsletterBtn = document.getElementById('newsletterBtn');
 const newsletterEmail = document.getElementById('newsletterEmail');
 const newsletterMessage = document.getElementById('newsletterMessage');
@@ -212,7 +214,7 @@ const newsletterMessage = document.getElementById('newsletterMessage');
 if (newsletterBtn) {
     newsletterBtn.addEventListener('click', function() {
         const email = newsletterEmail.value.trim();
-        
+
         if (!email || !isValidEmail(email)) {
             newsletterMessage.textContent = 'Please enter a valid email address';
             newsletterMessage.classList.remove('hidden', 'text-green-400');
@@ -222,7 +224,7 @@ if (newsletterBtn) {
 
         newsletterBtn.disabled = true;
         newsletterBtn.textContent = 'Subscribing...';
-        
+
         setTimeout(() => {
             newsletterMessage.textContent = 'Thank you for subscribing!';
             newsletterMessage.classList.remove('hidden', 'text-red-400');
@@ -234,18 +236,18 @@ if (newsletterBtn) {
     });
 }
 
-// Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+    anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({
+                behavior: 'smooth'
+            });
         }
     });
 });
 
-// Lazy loading for images
 if ('loading' in HTMLImageElement.prototype) {
     const images = document.querySelectorAll('img[loading="lazy"]');
     images.forEach(img => {
@@ -253,10 +255,7 @@ if ('loading' in HTMLImageElement.prototype) {
     });
 }
 
-// ============================================
-// PORTFOLIO: Show More/Less + Filter + Search
-// ============================================
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const grid = document.getElementById('all-projects');
     const showMoreContainer = document.getElementById('portfolio-button-container');
     const searchInput = document.getElementById('search-input');
@@ -274,7 +273,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const allCards = Array.from(grid.querySelectorAll('.project-card'));
 
-    // Create Show More / Show Less buttons
     let showMoreBtn, showLessBtn;
     if (showMoreContainer) {
         showMoreContainer.innerHTML = '';
@@ -292,15 +290,18 @@ document.addEventListener('DOMContentLoaded', function () {
         showMoreContainer.appendChild(showMoreBtn);
         showMoreContainer.appendChild(showLessBtn);
 
-        showMoreBtn.addEventListener('click', function () {
+        showMoreBtn.addEventListener('click', function() {
             showAll = true;
             renderCards();
         });
 
-        showLessBtn.addEventListener('click', function () {
+        showLessBtn.addEventListener('click', function() {
             showAll = false;
             renderCards();
-            document.querySelector('#portfolio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.querySelector('#portfolio').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
         });
     }
 
@@ -319,7 +320,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (matchFilter && matchSearch) {
                 matchCount++;
-                // Jika filter bukan 'all', tampilkan semua tanpa batasan
                 const limitApplied = currentFilter === 'all';
                 if (!limitApplied || showAll || shown < ITEMS_PER_PAGE) {
                     card.style.display = 'block';
@@ -333,14 +333,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Kelola tombol Show More / Show Less
         if (showMoreBtn && showLessBtn) {
             if (currentFilter !== 'all') {
-                // Filter spesifik: sembunyikan kedua tombol
                 showMoreBtn.classList.add('hidden');
                 showLessBtn.classList.add('hidden');
             } else {
-                // Filter 'all': tampilkan tombol sesuai kondisi
                 if (matchCount > ITEMS_PER_PAGE) {
                     if (showAll) {
                         showMoreBtn.classList.add('hidden');
@@ -356,7 +353,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Pesan tidak ada hasil
         if (noResultsMsg) {
             if (matchCount === 0 && currentSearch !== '') {
                 noResultsMsg.classList.remove('hidden');
@@ -367,9 +363,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Filter buttons
     filterButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             filterButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             currentFilter = this.getAttribute('data-filter');
@@ -378,9 +373,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Search
     if (searchInput) {
-        searchInput.addEventListener('input', function () {
+        searchInput.addEventListener('input', function() {
             currentSearch = this.value.trim().toLowerCase();
             showAll = false;
             renderCards();
@@ -391,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (clearButton) {
-        clearButton.addEventListener('click', function () {
+        clearButton.addEventListener('click', function() {
             searchInput.value = '';
             currentSearch = '';
             renderCards();
@@ -400,23 +394,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Initial render
     renderCards();
 });
-// ============================================
-// MORE DROPDOWN - Navbar
-// ============================================
-(function () {
-    const btn     = document.getElementById('more-dropdown-btn');
-    const menu    = document.getElementById('more-dropdown-menu');
+
+(function() {
+    const btn = document.getElementById('more-dropdown-btn');
+    const menu = document.getElementById('more-dropdown-menu');
     const chevron = document.getElementById('more-chevron');
-    const wrap    = document.getElementById('more-dropdown-wrap');
+    const wrap = document.getElementById('more-dropdown-wrap');
 
     if (!btn || !menu) return;
 
     function openMenu() {
         menu.classList.remove('hidden');
-        // Trigger reflow so transition plays
         requestAnimationFrame(() => {
             requestAnimationFrame(() => menu.classList.add('open'));
         });
@@ -428,7 +418,6 @@ document.addEventListener('DOMContentLoaded', function () {
         menu.classList.remove('open');
         chevron.classList.remove('rotated');
         btn.setAttribute('aria-expanded', 'false');
-        // Hide after transition
         setTimeout(() => {
             if (!menu.classList.contains('open')) {
                 menu.classList.add('hidden');
@@ -436,41 +425,40 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 250);
     }
 
-    btn.addEventListener('click', function (e) {
+    btn.addEventListener('click', function(e) {
         e.stopPropagation();
         menu.classList.contains('open') ? closeMenu() : openMenu();
     });
 
-    // Close when clicking outside
-    document.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
         if (!wrap.contains(e.target)) closeMenu();
     });
 
-    // Close when a link inside is clicked
     menu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', closeMenu);
     });
 
-    // Close on Escape
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeMenu();
     });
 })();
-// ============================================
-// TECH STACK - Tab Filter + Scroll Animation
-// ============================================
-document.addEventListener('DOMContentLoaded', function () {
+
+document.addEventListener('DOMContentLoaded', function() {
     const tabBtns = document.querySelectorAll('.ts-tab-btn');
     const tsCards = document.querySelectorAll('.ts-card');
     if (!tabBtns.length || !tsCards.length) return;
 
     const tsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('animated'); });
-    }, { threshold: 0.15 });
+        entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('animated');
+        });
+    }, {
+        threshold: 0.15
+    });
     tsCards.forEach(card => tsObserver.observe(card));
 
     tabBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             tabBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             const filter = this.getAttribute('data-ts');

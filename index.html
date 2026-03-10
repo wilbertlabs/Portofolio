@@ -4,390 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO Meta Tags -->
     <meta name="description" content="Professional portfolio showcasing web development, UX design, and creative digital solutions by Wilbird">
     <meta name="keywords" content="portfolio, web developer, UX designer, frontend developer, Indonesia">
     <meta name="author" content="Wilbert">
     <meta name="robots" content="index, follow">
     
-    <!-- Open Graph / Social Media -->
     <meta property="og:title" content="Wilbert - Professional Portfolio">
     <meta property="og:description" content="Explore my professional portfolio showcasing innovative web development and design projects">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/og-image.jpg">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     
     <title>Wilbert - Professional Portfolio</title>
     
-    <!-- Preload Critical Resources -->
     <link rel="preload" href="style.css" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
     
-    <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* ── Loading Screen ── */
-        .loading-container {
-            position: fixed;
-            inset: 0;
-            background: #060d1f;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 48px 52px;
-            transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1),
-                        visibility 0.8s cubic-bezier(0.4,0,0.2,1);
-            overflow: hidden;
-        }
-        .loading-container::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at 15% 60%, rgba(0,187,255,0.07) 0%, transparent 55%),
-                radial-gradient(ellipse at 85% 20%, rgba(123,47,247,0.07) 0%, transparent 55%);
-            pointer-events: none;
-        }
-        body.light-mode .loading-container { background: #f0f4f8; }
-        .loading-container.fade-out { opacity: 0; visibility: hidden; }
-
-        /* Top accent line */
-        .loader-topline {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #00bbff 40%, #7b2ff7 70%, transparent 100%);
-            opacity: 0;
-            animation: ltopIn 0.5s 0.2s ease forwards;
-        }
-        @keyframes ltopIn { to { opacity: 1; } }
-
-        /* Ghost big number behind content */
-        .loader-big-num-bg {
-            position: absolute;
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(160px, 28vw, 320px);
-            font-weight: 800;
-            line-height: 1;
-            color: transparent;
-            -webkit-text-stroke: 1.5px rgba(255,255,255,0.05);
-            user-select: none;
-            letter-spacing: -8px;
-            pointer-events: none;
-            transition: -webkit-text-stroke-color 0.1s;
-        }
-        body.light-mode .loader-big-num-bg {
-            -webkit-text-stroke: 1.5px rgba(0,0,0,0.045);
-        }
-
-        /* Center content box */
-        .loader-center-box {
-            position: relative;
-            z-index: 2;
-            width: min(480px, 88vw);
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        /* Name + percent row */
-        .loader-meta {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
-        .loader-name {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(32px, 5.5vw, 56px);
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: -1px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: lUp 0.7s 0.35s cubic-bezier(0.4,0,0.2,1) forwards;
-        }
-        body.light-mode .loader-name { color: #0f172a; }
-
-        .loader-pct {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(32px, 5.5vw, 56px);
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: -1px;
-            text-align: right;
-            min-width: 110px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: lUp 0.7s 0.45s cubic-bezier(0.4,0,0.2,1) forwards;
-        }
-        body.light-mode .loader-pct { color: #0f172a; }
-
-        @keyframes lUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* Progress bar */
-        .loader-bar-track {
-            width: 100%;
-            height: 2px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 2px;
-            overflow: visible;
-            position: relative;
-            opacity: 0;
-            animation: lUp 0.7s 0.55s cubic-bezier(0.4,0,0.2,1) forwards;
-            margin-bottom: 16px;
-        }
-        body.light-mode .loader-bar-track { background: rgba(0,0,0,0.1); }
-
-        .loader-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: #ffffff;
-            border-radius: 2px;
-            transition: width 0.12s linear;
-            position: relative;
-        }
-        body.light-mode .loader-bar-fill { background: #0f172a; }
-
-        .loader-bar-fill::after {
-            content: '';
-            position: absolute;
-            right: -3px; top: 50%;
-            transform: translateY(-50%);
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: #fff;
-            box-shadow: 0 0 10px 3px rgba(255,255,255,0.7),
-                        0 0 22px 6px rgba(0,187,255,0.45);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .loader-bar-fill.active::after { opacity: 1; }
-        body.light-mode .loader-bar-fill::after {
-            background: #0f172a;
-            box-shadow: 0 0 10px 3px rgba(15,23,42,0.4),
-                        0 0 20px 6px rgba(37,99,235,0.3);
-        }
-
-        /* Sub label */
-        .loader-sub {
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.22);
-            opacity: 0;
-            animation: lUp 0.7s 0.65s cubic-bezier(0.4,0,0.2,1) forwards;
-        }
-        body.light-mode .loader-sub { color: rgba(0,0,0,0.22); }
-
-        body.loading main,
-        body.loading section,
-        body.loading nav,
-        body.loading #scroll-to-top {
-            opacity: 0;
-            pointer-events: none;
-        }
-        body.loading .loading-container { display: flex; }
-
-        /* Footer Styles */
-        .footer {
-            background: linear-gradient(135deg, #0a1628, #0f1d4a);
-            padding: 60px 0 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        body.light-mode .footer {
-            background: linear-gradient(135deg, #f8fafc, #eef2f6);
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 20px;
-        }
-
-        body.light-mode .footer-logo {
-            color: #1e293b;
-        }
-
-        .footer-about {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        body.light-mode .footer-about {
-            color: #4a5568;
-        }
-
-        .footer-title {
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body.light-mode .footer-title {
-            color: #1e293b;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-size: 14px;
-        }
-
-        .footer-links a:hover {
-            color: #00bbff;
-        }
-
-        body.light-mode .footer-links a {
-            color: #4a5568;
-        }
-
-        body.light-mode .footer-links a:hover {
-            color: #3b82f6;
-        }
-
-        .footer-contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        body.light-mode .footer-contact-item {
-            color: #4a5568;
-        }
-
-        .footer-contact-item i {
-            color: #00bbff;
-            width: 20px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-        }
-
-        body.light-mode .footer-bottom {
-            border-top: 1px solid #e2e8f0;
-            color: #94a3b8;
-        }
-
-        @media (max-width: 768px) {
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 30px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-        }
-
-        /* Styling untuk preview kasir */
-        .kasir-preview {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .kasir-preview::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        /* Portfolio */
-        .aspect-\[4\/3\] {
-            aspect-ratio: 4/3;
-            width: 100%;
-            height: auto;
-        }
-
-        .group h3 {
-            transition: color 0.3s ease;
-        }
-
-        #portfolio .grid {
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #portfolio .group {
-            width: 100%;
-            max-width: 100%;
-        }
-
-        #portfolio .group img {
-            object-fit: cover;
-            background-color: #0f172a;
-        }
-    </style>
 </head>
 <body class="dark-mode loading">
-    <!-- Loading Animation -->
     <div class="loading-container" id="loadingContainer">
         <div class="loader-topline"></div>
-
-        <!-- Ghost number (behind everything) -->
         <span class="loader-big-num-bg" id="loaderBigNum">0</span>
-
-        <!-- Centered content -->
         <div class="loader-center-box">
             <div class="loader-meta">
                 <span class="loader-name">Wilbert</span>
@@ -396,29 +39,24 @@
             <div class="loader-bar-track">
                 <div class="loader-bar-fill" id="loaderBarFill"></div>
             </div>
-            <span class="loader-sub">Portfolio &mdash; Loading</span>
+            <span class="loader-sub">Portfolio — Loading</span>
         </div>
     </div>
-    </div>
 
-    <!-- Navbar -->
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center">
         <div class="container mx-auto px-4 md:px-8 lg:px-12 w-full relative">
             <div class="flex items-center h-[80px]">
-                <!-- LEFT: Logo -->
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <img class="img-before-venus-text" src="favicon.png" alt="Wilbert logo">
                     <span class="venus-text">Wilbert</span>
                 </div>
 
-                <!-- CENTER: Nav Links (truly centered) -->
                 <div class="hidden lg:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
                     <a href="#hero" class="nav-link">Home</a>
                     <a href="#about" class="nav-link">About</a>
                     <a href="#portfolio" class="nav-link">Portfolio</a>
                     <a href="#contact" class="nav-link">Contact</a>
 
-                    <!-- More Dropdown -->
                     <div class="relative" id="more-dropdown-wrap">
                         <button id="more-dropdown-btn" class="nav-link flex items-center gap-1" aria-expanded="false" aria-haspopup="true">
                             More
@@ -439,33 +77,27 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- RIGHT: Actions -->
                 <div class="hidden lg:flex items-center gap-3 ml-auto flex-shrink-0">
                     <div class="nav-divider"></div>
                     <button id="theme-toggle-desktop" class="w-9 h-9 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white hover:bg-white/20 transition" aria-label="Toggle theme">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-
                     <button onclick="window.location.href='signin/signin.html'" class="px-4 py-2 bg-white/10 text-white rounded-lg text-sm hover:bg-white/20 transition">Sign In</button>
                     <button onclick="window.location.href='signup/signup.html'" class="px-4 py-2 bg-[#00bbff] text-white rounded-lg text-sm hover:bg-[#00ddff] transition">Sign Up</button>
                 </div>
 
-                <!-- Mobile Menu Button -->
                 <div class="flex items-center gap-2 lg:hidden ml-auto">
                     <button id="theme-toggle-mobile" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white" aria-label="Toggle theme">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                    
                     <button id="mobile-menu-button" class="text-white" aria-label="Toggle menu" aria-expanded="false">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Mobile Menu Dropdown -->
             <div id="mobile-menu" class="hidden lg:hidden bg-[#061A36] rounded-lg mt-2 p-4" role="menu">
                 <div class="flex flex-col space-y-3">
                     <a href="#hero" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-house w-4"></i> Home</a>
@@ -495,7 +127,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="hero" class="min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-screen flex items-center pt-0">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
@@ -542,7 +173,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -612,8 +242,6 @@
         </div>
     </section>
 
-
-    <!-- Tech Stack Section -->
     <section id="techstack" class="py-20 bg-gradient-to-br from-[#0b1220] to-[#0f172a]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="text-center mb-14">
@@ -621,7 +249,7 @@
                     <span class="dot-green-small" aria-hidden="true"></span>
                     <p class="text-[#00ff88] text-lg">Tech Stack</p>
                 </div>
-                <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">Tools &amp; Technologies I Use</h2>
+                <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">Tools & Technologies I Use</h2>
                 <p class="text-white/70 text-lg max-w-2xl mx-auto scroll-animate fade-up delay-300">Beragam teknologi yang saya kuasai untuk membangun produk digital yang modern dan berkualitas.</p>
             </div>
             <div class="flex flex-wrap justify-center gap-3 mb-12 scroll-animate fade-up delay-400" id="ts-tabs">
@@ -652,7 +280,6 @@
         </div>
     </section>
 
-    <!-- Services Section -->
     <section id="services" class="py-20 bg-gradient-to-br from-[#0a1628] to-[#162647]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="text-center mb-12">
@@ -692,985 +319,909 @@
         </div>
     </section>
 
-<section id="portfolio" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
-    <div class="container mx-auto px-4 md:px-8 lg:px-12">
-        <div class="text-center mb-12">
-            <div class="flex items-center justify-center gap-2 mb-4 scroll-animate fade-up">
-                <span class="dot-green-small" aria-hidden="true"></span>
-                <p class="text-[#00ff88] text-lg">Portfolio</p>
+    <section id="portfolio" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="text-center mb-12">
+                <div class="flex items-center justify-center gap-2 mb-4 scroll-animate fade-up">
+                    <span class="dot-green-small" aria-hidden="true"></span>
+                    <p class="text-[#00ff88] text-lg">Portfolio</p>
+                </div>
+                <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">Explore my portfolio showcase</h2>
+                <p class="text-white/70 text-lg max-w-2xl mx-auto scroll-animate fade-up delay-300">Dive into a curated collection of my finest work, showcasing expertise across various industries.</p>
+                
+                <div class="max-w-xl mx-auto mt-8 mb-12 scroll-animate fade-up delay-400" id="search-container">
+                    <div class="relative">
+                        <input type="text" 
+                               id="search-input" 
+                               placeholder="Cari project" 
+                               class="w-full px-6 py-4 pr-12 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-[#00bbff] focus:ring-2 focus:ring-[#00bbff]/50 transition-all">
+                        <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 transform -translate-y-1/2 text-white/50 text-xl"></i>
+                    </div>
+                    <div class="flex items-center justify-between mt-2 text-sm">
+                        <button id="clear-search" class="text-[#00bbff] hover:text-white transition hidden">
+                            <i class="fa-solid fa-times mr-1"></i> Hapus pencarian
+                        </button>
+                    </div>
+                    <div id="no-results-message" class="text-center py-6 hidden">
+                        <i class="fa-solid fa-search text-4xl text-white/20 mb-3"></i>
+                        <p class="text-white/60">Tidak ada project yang cocok dengan pencarian "<span id="search-term-display" class="text-[#00bbff]"></span>"</p>
+                    </div>
+                </div>
+
+                <div class="portfolio-filter scroll-animate fade-up delay-400">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="web">Web App</button>
+                    <button class="filter-btn" data-filter="clone">Clone App</button>
+                    <button class="filter-btn" data-filter="ui">UI Design</button>
+                </div>
             </div>
-            <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">Explore my portfolio showcase</h2>
-            <p class="text-white/70 text-lg max-w-2xl mx-auto scroll-animate fade-up delay-300">Dive into a curated collection of my finest work, showcasing expertise across various industries.</p>
-            
-            <!-- ============================================ -->
-            <!-- KOLOM PENCARIAN - TAMBAHKAN DISINI -->
-            <!-- ============================================ -->
-            <div class="max-w-xl mx-auto mt-8 mb-12 scroll-animate fade-up delay-400" id="search-container">
-                <div class="relative">
-                    <input type="text" 
-                           id="search-input" 
-                           placeholder="Cari project" 
-                           class="w-full px-6 py-4 pr-12 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-[#00bbff] focus:ring-2 focus:ring-[#00bbff]/50 transition-all">
-                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 transform -translate-y-1/2 text-white/50 text-xl"></i>
-                </div>
-                <div class="flex items-center justify-between mt-2 text-sm">
-                    <button id="clear-search" class="text-[#00bbff] hover:text-white transition hidden">
-                        <i class="fa-solid fa-times mr-1"></i> Hapus pencarian
-                    </button>
-                </div>
-                <div id="no-results-message" class="text-center py-6 hidden">
-                    <i class="fa-solid fa-search text-4xl text-white/20 mb-3"></i>
-                    <p class="text-white/60">Tidak ada project yang cocok dengan pencarian "<span id="search-term-display" class="text-[#00bbff]"></span>"</p>
-                </div>
-            </div>
-            <!-- ============================================ -->
 
-
-            <!-- ========================= -->
-<!-- PORTFOLIO FILTER -->
-<!-- ========================= -->
-
-<div class="portfolio-filter scroll-animate fade-up delay-400">
-    
-    <button class="filter-btn active" data-filter="all">
-        All
-    </button>
-
-    <button class="filter-btn" data-filter="web">
-        Web App
-    </button>
-
-    <button class="filter-btn" data-filter="clone">
-        Clone App
-    </button>
-
-    <button class="filter-btn" data-filter="ui">
-        UI Design
-    </button>
-
-</div>
-            
-        </div>
-
-
-        <!-- Portfolio Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="all-projects">
-            <!-- YouTube Clone -->
-            <div class="project-card group scroll-animate scale-in delay-100" data-category="clone">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#ff0000] to-[#cc0000] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-1">
-                                    <div class="w-4 h-4 bg-white rounded-sm flex items-center justify-center">
-                                        <i class="fa-solid fa-play text-[#ff0000] text-[8px]"></i>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="all-projects">
+                <div class="project-card group scroll-animate scale-in delay-100" data-category="clone">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#ff0000] to-[#cc0000] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-1">
+                                        <div class="w-4 h-4 bg-white rounded-sm flex items-center justify-center">
+                                            <i class="fa-solid fa-play text-[#ff0000] text-[8px]"></i>
+                                        </div>
+                                        <span class="text-white text-xs font-bold">YouTube</span>
                                     </div>
-                                    <span class="text-white text-xs font-bold">YouTube</span>
-                                </div>
-                                <div class="flex gap-1">
-                                    <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
-                                    <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
-                                    <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
-                                </div>
-                            </div>
-                            <!-- Video Thumbnail Preview -->
-                            <div class="bg-white/20 rounded flex-1 flex items-center justify-center">
-                                <i class="fa-solid fa-play-circle text-white/50 text-2xl"></i>
-                            </div>
-                            <!-- Video Info -->
-                            <div class="mt-2 flex items-start gap-2">
-                                <div class="w-6 h-6 bg-white/30 rounded-full flex-shrink-0"></div>
-                                <div class="flex-1">
-                                    <div class="h-2 bg-white/40 rounded w-3/4 mb-1"></div>
-                                    <div class="h-1.5 bg-white/20 rounded w-1/2"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="Youtube Clone/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View YouTube Clone</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">YouTube Clone</h3>
-                        <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
-                            <i class="fa-brands fa-youtube text-xs"></i> Video Platform
-                        </p>
-                        <a href="Youtube Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Netflix Clone -->
-            <div class="project-card group scroll-animate scale-in delay-200" data-category="clone">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#e50914] to-[#b2070f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-white text-xs font-bold tracking-wider">N E T F L I X</span>
-                                <div class="w-4 h-4 bg-white/20 rounded flex items-center justify-center">
-                                    <i class="fa-solid fa-user text-white text-[8px]"></i>
-                                </div>
-                            </div>
-                            <!-- Movie Cards Preview -->
-                            <div class="grid grid-cols-3 gap-1 flex-1">
-                                <div class="bg-white/30 rounded h-full"></div>
-                                <div class="bg-white/30 rounded h-full"></div>
-                                <div class="bg-white/30 rounded h-full"></div>
-                            </div>
-                            <!-- Progress Bar -->
-                            <div class="mt-2 h-1 bg-white/20 rounded-full overflow-hidden">
-                                <div class="h-full w-2/3 bg-[#e50914] rounded-full"></div>
-                            </div>
-                        </div>
-                        <a href="Netflix Clone/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Netflix Clone</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">Netflix Clone</h3>
-                        <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
-                            Streaming Platform
-                        </p>
-                        <a href="Netflix Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- WhatsApp Clone -->
-            <div class="project-card group scroll-animate scale-in delay-300" data-category="clone">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#25D366] to-[#128C7E] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-brands fa-whatsapp text-white text-xs"></i>
-                                    <span class="text-white text-xs font-semibold">WhatsApp</span>
-                                </div>
-                                <div class="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center">
-                                    <span class="text-white text-[8px]">3</span>
-                                </div>
-                            </div>
-                            <!-- Chat Preview -->
-                            <div class="space-y-1 flex-1">
-                                <div class="flex justify-start">
-                                    <div class="bg-white/30 rounded-lg p-1 max-w-[80%]">
-                                        <div class="h-1.5 bg-white/40 rounded w-12"></div>
+                                    <div class="flex gap-1">
+                                        <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+                                        <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+                                        <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
                                     </div>
                                 </div>
-                                <div class="flex justify-end">
-                                    <div class="bg-[#25D366]/50 rounded-lg p-1 max-w-[80%]">
-                                        <div class="h-1.5 bg-white/40 rounded w-8"></div>
-                                    </div>
+                                <div class="bg-white/20 rounded flex-1 flex items-center justify-center">
+                                    <i class="fa-solid fa-play-circle text-white/50 text-2xl"></i>
                                 </div>
-                                <div class="flex justify-start">
-                                    <div class="bg-white/30 rounded-lg p-1 max-w-[80%]">
-                                        <div class="h-1.5 bg-white/40 rounded w-16"></div>
+                                <div class="mt-2 flex items-start gap-2">
+                                    <div class="w-6 h-6 bg-white/30 rounded-full flex-shrink-0"></div>
+                                    <div class="flex-1">
+                                        <div class="h-2 bg-white/40 rounded w-3/4 mb-1"></div>
+                                        <div class="h-1.5 bg-white/20 rounded w-1/2"></div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Input Preview -->
-                            <div class="mt-2 flex items-center gap-1">
-                                <div class="flex-1 h-3 bg-white/20 rounded-full"></div>
-                                <div class="w-4 h-4 bg-white/30 rounded-full flex items-center justify-center">
-                                    <i class="fa-solid fa-paper-plane text-white text-[6px]"></i>
-                                </div>
-                            </div>
+                            <a href="Youtube Clone/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View YouTube Clone</span>
+                            </a>
                         </div>
-                        <a href="Whatsapp Clone/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View WhatsApp Clone</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">WhatsApp Clone</h3>
-                        <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
-                            <i class="fa-brands fa-whatsapp text-xs"></i> Chat App
-                        </p>
-                        <a href="Whatsapp Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">YouTube Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+                                <i class="fa-brands fa-youtube text-xs"></i> Video Platform
+                            </p>
+                            <a href="Youtube Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Spotify Clone -->
-            <div class="project-card group scroll-animate scale-in delay-400" data-category="clone">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#1DB954] to-[#191414] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between mb-2">
-                                <i class="fa-brands fa-spotify text-white text-sm"></i>
-                                <div class="w-4 h-4 bg-white/20 rounded-full"></div>
-                            </div>
-                            <!-- Playlist Preview -->
-                            <div class="grid grid-cols-2 gap-1 flex-1">
-                                <div class="bg-white/30 rounded p-1">
-                                    <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded w-2/3"></div>
-                                </div>
-                                <div class="bg-white/30 rounded p-1">
-                                    <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded w-1/2"></div>
-                                </div>
-                            </div>
-                            <!-- Player Preview -->
-                            <div class="mt-2">
-                                <div class="flex items-center justify-center gap-2 mb-1">
-                                    <i class="fa-solid fa-backward-step text-white/60 text-[8px]"></i>
-                                    <i class="fa-solid fa-circle-play text-white text-xs"></i>
-                                    <i class="fa-solid fa-forward-step text-white/60 text-[8px]"></i>
-                                </div>
-                                <div class="h-1 bg-white/20 rounded-full overflow-hidden">
-                                    <div class="h-full w-2/3 bg-[#1DB954] rounded-full"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="Spotify Clone/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Spotify Clone</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">Spotify Clone</h3>
-                        <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
-                            <i class="fa-brands fa-spotify text-xs"></i> Music Streaming
-                        </p>
-                        <a href="Spotify Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Instagram Clone -->
-            <div class="project-card group scroll-animate scale-in delay-500" data-category="clone">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#f09433] via-[#d62976] to-[#962fbf] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-1">
-                                    <i class="fa-brands fa-instagram text-white text-xs"></i>
-                                    <span class="text-white text-xs">Instagram</span>
-                                </div>
-                                <div class="flex gap-1">
-                                    <div class="w-3 h-3 bg-white/30 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-white/30 rounded-full"></div>
-                                </div>
-                            </div>
-                            <!-- Story Preview -->
-                            <div class="flex gap-1 mb-2">
-                                <div class="w-4 h-4 rounded-full border border-white/50 flex items-center justify-center">
-                                    <div class="w-3 h-3 bg-white/30 rounded-full"></div>
-                                </div>
-                                <div class="w-4 h-4 rounded-full border border-white/50"></div>
-                                <div class="w-4 h-4 rounded-full border border-white/50"></div>
-                            </div>
-                            <!-- Post Preview -->
-                            <div class="bg-white/30 rounded flex-1"></div>
-                            <!-- Actions Preview -->
-                            <div class="flex items-center gap-2 mt-2">
-                                <i class="fa-regular fa-heart text-white text-[10px]"></i>
-                                <i class="fa-regular fa-comment text-white text-[10px]"></i>
-                                <i class="fa-regular fa-paper-plane text-white text-[10px]"></i>
-                            </div>
-                        </div>
-                        <a href="Instagram Clone/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Instagram Clone</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">Instagram Clone</h3>
-                        <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
-                            <i class="fa-brands fa-instagram text-xs"></i> Social Media
-                        </p>
-                        <a href="Instagram Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Aplikasi Kasir -->
-            <div class="project-card group scroll-animate scale-in delay-600" data-category="web">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#667eea] to-[#764ba2] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative kasir-preview">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <!-- Header -->
-                            <div class="bg-white/20 backdrop-blur-sm rounded-t-lg p-1.5 flex items-center gap-1.5">
-                                <div class="w-2 h-2 bg-red-400 rounded-full"></div>
-                                <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                                <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                                <span class="text-white text-[10px] ml-1">Kasir</span>
-                            </div>
-                            
-                            <!-- Content -->
-                            <div class="flex-1 grid grid-cols-2 gap-1 mt-1.5">
-                                <!-- Products Column -->
-                                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-1.5">
-                                    <div class="text-white text-[8px] font-semibold mb-1">Menu</div>
-                                    <div class="space-y-1">
-                                        <div class="bg-white/20 h-1.5 rounded-full w-3/4"></div>
-                                        <div class="bg-white/20 h-1.5 rounded-full w-full"></div>
-                                        <div class="bg-white/20 h-1.5 rounded-full w-2/3"></div>
+                <div class="project-card group scroll-animate scale-in delay-200" data-category="clone">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#e50914] to-[#b2070f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-white text-xs font-bold tracking-wider">N E T F L I X</span>
+                                    <div class="w-4 h-4 bg-white/20 rounded flex items-center justify-center">
+                                        <i class="fa-solid fa-user text-white text-[8px]"></i>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-1 mt-1">
-                                        <div class="bg-white/30 h-3 rounded"></div>
-                                        <div class="bg-white/30 h-3 rounded"></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-1 flex-1">
+                                    <div class="bg-white/30 rounded h-full"></div>
+                                    <div class="bg-white/30 rounded h-full"></div>
+                                    <div class="bg-white/30 rounded h-full"></div>
+                                </div>
+                                <div class="mt-2 h-1 bg-white/20 rounded-full overflow-hidden">
+                                    <div class="h-full w-2/3 bg-[#e50914] rounded-full"></div>
+                                </div>
+                            </div>
+                            <a href="Netflix Clone/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Netflix Clone</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">Netflix Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">Streaming Platform</p>
+                            <a href="Netflix Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in delay-300" data-category="clone">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#25D366] to-[#128C7E] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-1">
+                                        <i class="fa-brands fa-whatsapp text-white text-xs"></i>
+                                        <span class="text-white text-xs font-semibold">WhatsApp</span>
+                                    </div>
+                                    <div class="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-[8px]">3</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-1 flex-1">
+                                    <div class="flex justify-start">
+                                        <div class="bg-white/30 rounded-lg p-1 max-w-[80%]">
+                                            <div class="h-1.5 bg-white/40 rounded w-12"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <div class="bg-[#25D366]/50 rounded-lg p-1 max-w-[80%]">
+                                            <div class="h-1.5 bg-white/40 rounded w-8"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <div class="bg-white/30 rounded-lg p-1 max-w-[80%]">
+                                            <div class="h-1.5 bg-white/40 rounded w-16"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex items-center gap-1">
+                                    <div class="flex-1 h-3 bg-white/20 rounded-full"></div>
+                                    <div class="w-4 h-4 bg-white/30 rounded-full flex items-center justify-center">
+                                        <i class="fa-solid fa-paper-plane text-white text-[6px]"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="Whatsapp Clone/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View WhatsApp Clone</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">WhatsApp Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+                                <i class="fa-brands fa-whatsapp text-xs"></i> Chat App
+                            </p>
+                            <a href="Whatsapp Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in delay-400" data-category="clone">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#1DB954] to-[#191414] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <i class="fa-brands fa-spotify text-white text-sm"></i>
+                                    <div class="w-4 h-4 bg-white/20 rounded-full"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-1 flex-1">
+                                    <div class="bg-white/30 rounded p-1">
+                                        <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded w-2/3"></div>
+                                    </div>
+                                    <div class="bg-white/30 rounded p-1">
+                                        <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded w-1/2"></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="flex items-center justify-center gap-2 mb-1">
+                                        <i class="fa-solid fa-backward-step text-white/60 text-[8px]"></i>
+                                        <i class="fa-solid fa-circle-play text-white text-xs"></i>
+                                        <i class="fa-solid fa-forward-step text-white/60 text-[8px]"></i>
+                                    </div>
+                                    <div class="h-1 bg-white/20 rounded-full overflow-hidden">
+                                        <div class="h-full w-2/3 bg-[#1DB954] rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="Spotify Clone/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Spotify Clone</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">Spotify Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+                                <i class="fa-brands fa-spotify text-xs"></i> Music Streaming
+                            </p>
+                            <a href="Spotify Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in delay-500" data-category="clone">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#f09433] via-[#d62976] to-[#962fbf] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-1">
+                                        <i class="fa-brands fa-instagram text-white text-xs"></i>
+                                        <span class="text-white text-xs">Instagram</span>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <div class="w-3 h-3 bg-white/30 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-white/30 rounded-full"></div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-1 mb-2">
+                                    <div class="w-4 h-4 rounded-full border border-white/50 flex items-center justify-center">
+                                        <div class="w-3 h-3 bg-white/30 rounded-full"></div>
+                                    </div>
+                                    <div class="w-4 h-4 rounded-full border border-white/50"></div>
+                                    <div class="w-4 h-4 rounded-full border border-white/50"></div>
+                                </div>
+                                <div class="bg-white/30 rounded flex-1"></div>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <i class="fa-regular fa-heart text-white text-[10px]"></i>
+                                    <i class="fa-regular fa-comment text-white text-[10px]"></i>
+                                    <i class="fa-regular fa-paper-plane text-white text-[10px]"></i>
+                                </div>
+                            </div>
+                            <a href="Instagram Clone/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Instagram Clone</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">Instagram Clone</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+                                <i class="fa-brands fa-instagram text-xs"></i> Social Media
+                            </p>
+                            <a href="Instagram Clone/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in delay-600" data-category="web">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#667eea] to-[#764ba2] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative kasir-preview">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="bg-white/20 backdrop-blur-sm rounded-t-lg p-1.5 flex items-center gap-1.5">
+                                    <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                                    <span class="text-white text-[10px] ml-1">Kasir</span>
+                                </div>
+                                
+                                <div class="flex-1 grid grid-cols-2 gap-1 mt-1.5">
+                                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-1.5">
+                                        <div class="text-white text-[8px] font-semibold mb-1">Menu</div>
+                                        <div class="space-y-1">
+                                            <div class="bg-white/20 h-1.5 rounded-full w-3/4"></div>
+                                            <div class="bg-white/20 h-1.5 rounded-full w-full"></div>
+                                            <div class="bg-white/20 h-1.5 rounded-full w-2/3"></div>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-1 mt-1">
+                                            <div class="bg-white/30 h-3 rounded"></div>
+                                            <div class="bg-white/30 h-3 rounded"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-1.5">
+                                        <div class="text-white text-[8px] font-semibold mb-1">Cart</div>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-1">
+                                                <div class="bg-white/20 h-1.5 rounded-full w-1/2"></div>
+                                                <div class="bg-white/20 h-1.5 rounded-full w-4"></div>
+                                            </div>
+                                            <div class="flex items-center gap-1">
+                                                <div class="bg-white/20 h-1.5 rounded-full w-2/3"></div>
+                                                <div class="bg-white/20 h-1.5 rounded-full w-4"></div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-white/30 h-4 rounded mt-1 flex items-center justify-center">
+                                            <span class="text-white text-[6px]">Rp 30k</span>
+                                        </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Cart Column -->
-                                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-1.5">
-                                    <div class="text-white text-[8px] font-semibold mb-1">Cart</div>
-                                    <div class="space-y-1">
-                                        <div class="flex items-center gap-1">
-                                            <div class="bg-white/20 h-1.5 rounded-full w-1/2"></div>
-                                            <div class="bg-white/20 h-1.5 rounded-full w-4"></div>
-                                        </div>
-                                        <div class="flex items-center gap-1">
-                                            <div class="bg-white/20 h-1.5 rounded-full w-2/3"></div>
-                                            <div class="bg-white/20 h-1.5 rounded-full w-4"></div>
-                                        </div>
-                                    </div>
-                                    <div class="bg-white/30 h-4 rounded mt-1 flex items-center justify-center">
-                                        <span class="text-white text-[6px]">Rp 30k</span>
-                                    </div>
+                                <div class="bg-white/10 backdrop-blur-sm rounded-b-lg p-1 mt-1 flex items-center justify-between">
+                                    <div class="bg-white/30 h-2 rounded w-1/3"></div>
+                                    <div class="bg-green-400/50 h-2 rounded w-1/4"></div>
                                 </div>
                             </div>
                             
-                            <!-- Payment -->
-                            <div class="bg-white/10 backdrop-blur-sm rounded-b-lg p-1 mt-1 flex items-center justify-between">
-                                <div class="bg-white/30 h-2 rounded w-1/3"></div>
-                                <div class="bg-green-400/50 h-2 rounded w-1/4"></div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-cash-register text-white text-[10px]"></i>
                             </div>
+                            
+                            <a href="Program Kasir Sederhana/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Aplikasi Kasir</span>
+                            </a>
                         </div>
                         
-                        <!-- Icon -->
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-cash-register text-white text-[10px]"></i>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">Aplikasi Kasir</h3>
+                            <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-cash-register text-xs"></i> Point of Sale
+                            </p>
+                            <a href="Program Kasir Sederhana/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
                         </div>
-                        
-                        <a href="Program Kasir Sederhana/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Aplikasi Kasir</span>
-                        </a>
-                    </div>
-                    
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">Aplikasi Kasir</h3>
-                        <p class="text-white/60 text-sm flex items-center gap-1 mt-1">
-                            <i class="fa-solid fa-cash-register text-xs"></i> Point of Sale
-                        </p>
-                        <a href="Program Kasir Sederhana/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
                     </div>
                 </div>
-            </div>
 
-            <!-- More Projects -->
-            <!-- Dashboard Analitik -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 700ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-white text-xs font-semibold">📊 Dashboard</span>
-                                <div class="flex gap-1">
-                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                    <div class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 700ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-white text-xs font-semibold">📊 Dashboard</span>
+                                    <div class="flex gap-1">
+                                        <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                        <div class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Chart Preview -->
-                            <div class="grid grid-cols-3 gap-1 h-12 mb-2">
-                                <div class="bg-blue-500/30 h-8 rounded self-end"></div>
-                                <div class="bg-purple-500/30 h-12 rounded self-end"></div>
-                                <div class="bg-blue-500/30 h-6 rounded self-end"></div>
-                            </div>
-                            <!-- Stats Preview -->
-                            <div class="grid grid-cols-2 gap-1">
-                                <div class="bg-white/10 rounded p-1">
-                                    <div class="h-2 bg-white/20 rounded w-2/3 mb-1"></div>
-                                    <div class="h-3 bg-white/30 rounded w-full"></div>
+                                <div class="grid grid-cols-3 gap-1 h-12 mb-2">
+                                    <div class="bg-blue-500/30 h-8 rounded self-end"></div>
+                                    <div class="bg-purple-500/30 h-12 rounded self-end"></div>
+                                    <div class="bg-blue-500/30 h-6 rounded self-end"></div>
                                 </div>
-                                <div class="bg-white/10 rounded p-1">
-                                    <div class="h-2 bg-white/20 rounded w-1/2 mb-1"></div>
-                                    <div class="h-3 bg-white/30 rounded w-full"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-chart-line text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Dashboard-Panel/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Dashboard Analitik</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">📊 Dashboard Analitik</h3>
-                        <p class="text-white/60 text-sm">Admin Panel • Grafik Interaktif</p>
-                        <a href="Projects-website/Dashboard-Panel/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- E-Commerce Frontend -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 800ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#f97316] to-[#c2410c] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-white text-xs font-semibold">🛒 E-Shop</span>
-                                <div class="bg-white/30 w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px]">3</div>
-                            </div>
-                            <!-- Product Preview -->
-                            <div class="grid grid-cols-2 gap-1 flex-1">
-                                <div class="bg-white/30 rounded p-1">
-                                    <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded w-1/2"></div>
-                                </div>
-                                <div class="bg-white/30 rounded p-1">
-                                    <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded w-2/3"></div>
-                                </div>
-                            </div>
-                            <!-- Cart Preview -->
-                            <div class="mt-2 bg-white/20 rounded p-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="h-2 bg-white/30 rounded w-1/2"></div>
-                                    <div class="h-2 bg-white/30 rounded w-8"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-cart-shopping text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Eccomerce/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View E-Commerce</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">🛒 E-Commerce</h3>
-                        <p class="text-white/60 text-sm">Cart System • Checkout</p>
-                        <a href="Projects-website/Eccomerce/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mini Trello -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 900ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0b1d36] to-[#1a2b4a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">📋 Trello</span>
-                            <div class="grid grid-cols-3 gap-1 flex-1">
-                                <div class="bg-blue-500/30 rounded p-1">
-                                    <div class="h-1 bg-white/20 rounded mb-1"></div>
-                                    <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                                    <div class="h-1 bg-white/20 rounded mt-1"></div>
-                                </div>
-                                <div class="bg-purple-500/30 rounded p-1">
-                                    <div class="h-1 bg-white/20 rounded mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded"></div>
-                                </div>
-                                <div class="bg-green-500/30 rounded p-1">
-                                    <div class="h-1 bg-white/20 rounded mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-list-check text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Trello/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Mini Trello</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">📋 Mini Trello</h3>
-                        <p class="text-white/60 text-sm">Drag & Drop • Task Board</p>
-                        <a href="Projects-website/Trello/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Travel API -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1000ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0b4f6c] to-[#0b2b4a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">🌍 Travel</span>
-                            <div class="grid grid-cols-2 gap-1 mb-2">
-                                <div class="bg-white/20 h-3 rounded"></div>
-                                <div class="bg-white/20 h-3 rounded"></div>
-                            </div>
-                            <div class="bg-amber-500/50 h-2 rounded mb-2"></div>
-                            <div class="flex items-center gap-1">
-                                <i class="fa-solid fa-cloud-sun text-white/50 text-[8px]"></i>
-                                <span class="text-white/50 text-[6px]">28°C</span>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-plane text-white text-[10px]"></i>
-                        </div>
-                        <a href="projects-website/Travel/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Travel API</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">🌍 Travel API</h3>
-                        <p class="text-white/60 text-sm">Fetch API • Cuaca/Destinasi</p>
-                        <a href="projects-website/Travel/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat UI -->
-            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 1100ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#111b21] to-[#202c33] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <div class="bg-[#202c33] rounded-t p-1 flex items-center gap-1 mb-2">
-                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span class="text-white text-[8px]">Online</span>
-                            </div>
-                            <div class="space-y-1 flex-1">
-                                <div class="flex justify-start">
-                                    <div class="bg-[#202c33] text-white text-[8px] p-1 rounded max-w-[70%]">Halo!</div>
-                                </div>
-                                <div class="flex justify-end">
-                                    <div class="bg-[#005c4b] text-white text-[8px] p-1 rounded max-w-[70%]">Hai</div>
-                                </div>
-                                <div class="flex justify-start">
-                                    <div class="bg-[#202c33] text-white text-[8px] p-1 rounded max-w-[70%]">Apa kabar?</div>
-                                </div>
-                            </div>
-                            <div class="mt-2 flex items-center gap-1">
-                                <div class="flex-1 h-2 bg-white/20 rounded-full"></div>
-                                <div class="w-3 h-3 bg-white/30 rounded-full"></div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-comment text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Chat Ui/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Chat UI</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">💬 Chat UI</h3>
-                        <p class="text-white/60 text-sm">Realtime • WhatsApp Style</p>
-                        <a href="Projects-website/Chat Ui/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Crypto Tracker -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1200ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0a0f1a] to-[#1a1f2a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">📈 Crypto</span>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-green-400 text-[8px]">BTC ▲5%</span>
-                                <span class="text-red-400 text-[8px]">ETH ▼2%</span>
-                            </div>
-                            <div class="bg-gradient-to-r from-green-500 to-red-500 h-4 rounded mb-2"></div>
-                            <div class="grid grid-cols-2 gap-1">
-                                <div class="bg-white/10 rounded p-1">
-                                    <div class="h-1 bg-white/20 rounded w-2/3"></div>
-                                </div>
-                                <div class="bg-white/10 rounded p-1">
-                                    <div class="h-1 bg-white/20 rounded w-1/2"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-chart-simple text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Crypto Tracker/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Crypto Tracker</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">📈 Crypto Tracker</h3>
-                        <p class="text-white/60 text-sm">Harga Realtime • Chart</p>
-                        <a href="Projects-website/Crypto Tracker/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quiz App -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1300ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#1e3a5f] to-[#0f2a3f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-white text-xs font-semibold">🧠 Quiz</span>
-                                <span class="text-yellow-500 text-[8px]">⏱️ 1:30</span>
-                            </div>
-                            <div class="bg-white/10 rounded p-2 flex-1">
-                                <div class="h-2 bg-white/20 rounded w-3/4 mb-2"></div>
                                 <div class="grid grid-cols-2 gap-1">
-                                    <div class="h-3 bg-white/30 rounded"></div>
-                                    <div class="h-3 bg-white/30 rounded"></div>
-                                    <div class="h-3 bg-white/30 rounded"></div>
-                                    <div class="h-3 bg-white/30 rounded"></div>
+                                    <div class="bg-white/10 rounded p-1">
+                                        <div class="h-2 bg-white/20 rounded w-2/3 mb-1"></div>
+                                        <div class="h-3 bg-white/30 rounded w-full"></div>
+                                    </div>
+                                    <div class="bg-white/10 rounded p-1">
+                                        <div class="h-2 bg-white/20 rounded w-1/2 mb-1"></div>
+                                        <div class="h-3 bg-white/30 rounded w-full"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mt-2 bg-blue-500/50 h-2 rounded-full w-1/2 self-center"></div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-chart-line text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Dashboard-Panel/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Dashboard Analitik</span>
+                            </a>
                         </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-question text-white text-[10px]"></i>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">📊 Dashboard Analitik</h3>
+                            <p class="text-white/60 text-sm">Admin Panel • Grafik Interaktif</p>
+                            <a href="Projects-website/Dashboard-Panel/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
                         </div>
-                        <a href="Projects-website/Quiz App/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Quiz App</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">🧠 Quiz App</h3>
-                        <p class="text-white/60 text-sm">Timer • Leaderboard</p>
-                        <a href="Projects-website/Quiz App/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
                     </div>
                 </div>
-            </div>
 
-            <!-- Movie Search -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1400ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#141414] to-[#000000] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-[#e50914] text-xs font-bold mb-2">NETFLIX</span>
-                            <div class="grid grid-cols-3 gap-1 mb-2">
-                                <div class="bg-white/20 h-4 rounded"></div>
-                                <div class="bg-white/20 h-4 rounded"></div>
-                                <div class="bg-white/20 h-4 rounded"></div>
-                            </div>
-                            <div class="bg-white/10 rounded p-1 flex items-center gap-1">
-                                <i class="fa-solid fa-search text-white/50 text-[8px]"></i>
-                                <div class="h-2 bg-white/20 rounded flex-1"></div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-film text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Movie Search App/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Movie Search</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">🎬 Movie Search</h3>
-                        <p class="text-white/60 text-sm">TMDB API • Filter Genre</p>
-                        <a href="Projects-website/Movie Search App/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kalender -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1500ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#2d3748] to-[#1a202c] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">📅 Maret 2026</span>
-                            <div class="grid grid-cols-7 gap-0.5 mb-2">
-                                <div class="h-2 bg-blue-500/30 rounded"></div>
-                                <div class="h-2 bg-blue-500/30 rounded"></div>
-                                <div class="h-2 bg-blue-500/30 rounded"></div>
-                                <div class="h-2 bg-blue-500/30 rounded"></div>
-                                <div class="h-2 bg-blue-500/30 rounded"></div>
-                                <div class="h-2 bg-blue-500/30 rounded"></div>
-                                <div class="h-2 bg-blue-500/30 rounded"></div>
-                            </div>
-                            <div class="grid grid-cols-7 gap-0.5 flex-1">
-                                <div class="bg-white/10 rounded"></div>
-                                <div class="bg-white/10 rounded"></div>
-                                <div class="bg-white/10 rounded"></div>
-                                <div class="bg-white/10 rounded"></div>
-                                <div class="bg-white/10 rounded"></div>
-                                <div class="bg-white/10 rounded"></div>
-                                <div class="bg-white/10 rounded"></div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-calendar text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Calendar/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Kalender</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">📅 Kalender</h3>
-                        <p class="text-white/60 text-sm">Google Calendar Mini</p>
-                        <a href="Projects-website/Calendar/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Finance Tracker -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1600ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#065f46] to-[#064e3b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">💰 Finance</span>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-green-400 text-[8px]">+Rp 5jt</span>
-                                <span class="text-red-400 text-[8px]">-Rp 2jt</span>
-                            </div>
-                            <div class="bg-gradient-to-r from-green-500 to-red-500 h-4 rounded mb-2"></div>
-                            <div class="grid grid-cols-2 gap-1">
-                                <div class="bg-white/10 rounded p-1">
-                                    <div class="h-2 bg-white/20 rounded w-full mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded w-2/3"></div>
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 800ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#f97316] to-[#c2410c] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-white text-xs font-semibold">🛒 E-Shop</span>
+                                    <div class="bg-white/30 w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px]">3</div>
                                 </div>
-                                <div class="bg-white/10 rounded p-1">
-                                    <div class="h-2 bg-white/20 rounded w-full mb-1"></div>
-                                    <div class="h-1 bg-white/20 rounded w-1/2"></div>
+                                <div class="grid grid-cols-2 gap-1 flex-1">
+                                    <div class="bg-white/30 rounded p-1">
+                                        <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded w-1/2"></div>
+                                    </div>
+                                    <div class="bg-white/30 rounded p-1">
+                                        <div class="h-2 bg-white/40 rounded w-full mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded w-2/3"></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 bg-white/20 rounded p-1">
+                                    <div class="flex items-center justify-between">
+                                        <div class="h-2 bg-white/30 rounded w-1/2"></div>
+                                        <div class="h-2 bg-white/30 rounded w-8"></div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-cart-shopping text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Eccomerce/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View E-Commerce</span>
+                            </a>
                         </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-coins text-white text-[10px]"></i>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">🛒 E-Commerce</h3>
+                            <p class="text-white/60 text-sm">Cart System • Checkout</p>
+                            <a href="Projects-website/Eccomerce/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
                         </div>
-                        <a href="Projects-website/Finance Tracker/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Finance Tracker</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">💰 Finance Tracker</h3>
-                        <p class="text-white/60 text-sm">Expense Manager • Grafik</p>
-                        <a href="Projects-website/Finance Tracker/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
                     </div>
                 </div>
-            </div>
 
-            <!-- Landing Page SaaS -->
-            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 1700ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0ea5e9] to-[#0284c7] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">⚡ SaaS</span>
-                            <div class="flex justify-center gap-2 mb-2">
-                                <div class="w-8 h-3 bg-white/30 rounded-full"></div>
-                                <div class="w-8 h-3 bg-white/50 rounded-full"></div>
-                            </div>
-                            <div class="bg-white/20 rounded p-2 flex-1">
-                                <div class="h-2 bg-white/30 rounded w-3/4 mb-2"></div>
-                                <div class="h-2 bg-white/30 rounded w-1/2"></div>
-                            </div>
-                            <div class="mt-2 bg-white/30 h-3 rounded-full"></div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-rocket text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Landing page/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Landing Page</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">⚡ Landing Page SaaS</h3>
-                        <p class="text-white/60 text-sm">Animasi • Pricing Toggle</p>
-                        <a href="Projects-website/Landing page/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mini Game -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1800ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#581c87] to-[#6b21a8] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">🎮 Tic Tac Toe</span>
-                            <div class="grid grid-cols-3 gap-0.5 flex-1">
-                                <div class="bg-white/20 rounded"></div>
-                                <div class="bg-white/20 rounded"></div>
-                                <div class="bg-white/20 rounded"></div>
-                                <div class="bg-white/20 rounded"></div>
-                                <div class="bg-white/30 rounded flex items-center justify-center">
-                                    <i class="fa-solid fa-x text-white text-[10px]"></i>
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 900ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0b1d36] to-[#1a2b4a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">📋 Trello</span>
+                                <div class="grid grid-cols-3 gap-1 flex-1">
+                                    <div class="bg-blue-500/30 rounded p-1">
+                                        <div class="h-1 bg-white/20 rounded mb-1"></div>
+                                        <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                                        <div class="h-1 bg-white/20 rounded mt-1"></div>
+                                    </div>
+                                    <div class="bg-purple-500/30 rounded p-1">
+                                        <div class="h-1 bg-white/20 rounded mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded"></div>
+                                    </div>
+                                    <div class="bg-green-500/30 rounded p-1">
+                                        <div class="h-1 bg-white/20 rounded mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded"></div>
+                                    </div>
                                 </div>
-                                <div class="bg-white/20 rounded"></div>
-                                <div class="bg-white/20 rounded"></div>
-                                <div class="bg-white/30 rounded flex items-center justify-center">
-                                    <i class="fa-regular fa-circle text-white text-[6px]"></i>
-                                </div>
-                                <div class="bg-white/20 rounded"></div>
                             </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-list-check text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Trello/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Mini Trello</span>
+                            </a>
                         </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-gamepad text-white text-[10px]"></i>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">📋 Mini Trello</h3>
+                            <p class="text-white/60 text-sm">Drag & Drop • Task Board</p>
+                            <a href="Projects-website/Trello/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
                         </div>
-                        <a href="Projects-website/Tic Tac Toe/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Mini Game</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">🎮 Mini Game</h3>
-                        <p class="text-white/60 text-sm">Tic Tac Toe AI</p>
-                        <a href="Projects-website/Tic Tac Toe/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
                     </div>
                 </div>
-            </div>
 
-            <!-- File Organizer -->
-            <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1900ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#334155] to-[#1e293b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">📦 Cloud Drive</span>
-                            <div class="space-y-1 flex-1">
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1000ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0b4f6c] to-[#0b2b4a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">🌍 Travel</span>
+                                <div class="grid grid-cols-2 gap-1 mb-2">
+                                    <div class="bg-white/20 h-3 rounded"></div>
+                                    <div class="bg-white/20 h-3 rounded"></div>
+                                </div>
+                                <div class="bg-amber-500/50 h-2 rounded mb-2"></div>
                                 <div class="flex items-center gap-1">
-                                    <div class="w-3 h-3 bg-amber-500/50 rounded"></div>
+                                    <i class="fa-solid fa-cloud-sun text-white/50 text-[8px]"></i>
+                                    <span class="text-white/50 text-[6px]">28°C</span>
+                                </div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-plane text-white text-[10px]"></i>
+                            </div>
+                            <a href="projects-website/Travel/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Travel API</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">🌍 Travel API</h3>
+                            <p class="text-white/60 text-sm">Fetch API • Cuaca/Destinasi</p>
+                            <a href="projects-website/Travel/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 1100ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#111b21] to-[#202c33] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="bg-[#202c33] rounded-t p-1 flex items-center gap-1 mb-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-white text-[8px]">Online</span>
+                                </div>
+                                <div class="space-y-1 flex-1">
+                                    <div class="flex justify-start">
+                                        <div class="bg-[#202c33] text-white text-[8px] p-1 rounded max-w-[70%]">Halo!</div>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <div class="bg-[#005c4b] text-white text-[8px] p-1 rounded max-w-[70%]">Hai</div>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <div class="bg-[#202c33] text-white text-[8px] p-1 rounded max-w-[70%]">Apa kabar?</div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex items-center gap-1">
+                                    <div class="flex-1 h-2 bg-white/20 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-white/30 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-comment text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Chat Ui/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Chat UI</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">💬 Chat UI</h3>
+                            <p class="text-white/60 text-sm">Realtime • WhatsApp Style</p>
+                            <a href="Projects-website/Chat Ui/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1200ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0a0f1a] to-[#1a1f2a] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">📈 Crypto</span>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-green-400 text-[8px]">BTC ▲5%</span>
+                                    <span class="text-red-400 text-[8px]">ETH ▼2%</span>
+                                </div>
+                                <div class="bg-gradient-to-r from-green-500 to-red-500 h-4 rounded mb-2"></div>
+                                <div class="grid grid-cols-2 gap-1">
+                                    <div class="bg-white/10 rounded p-1">
+                                        <div class="h-1 bg-white/20 rounded w-2/3"></div>
+                                    </div>
+                                    <div class="bg-white/10 rounded p-1">
+                                        <div class="h-1 bg-white/20 rounded w-1/2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-chart-simple text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Crypto Tracker/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Crypto Tracker</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">📈 Crypto Tracker</h3>
+                            <p class="text-white/60 text-sm">Harga Realtime • Chart</p>
+                            <a href="Projects-website/Crypto Tracker/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1300ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#1e3a5f] to-[#0f2a3f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-white text-xs font-semibold">🧠 Quiz</span>
+                                    <span class="text-yellow-500 text-[8px]">⏱️ 1:30</span>
+                                </div>
+                                <div class="bg-white/10 rounded p-2 flex-1">
+                                    <div class="h-2 bg-white/20 rounded w-3/4 mb-2"></div>
+                                    <div class="grid grid-cols-2 gap-1">
+                                        <div class="h-3 bg-white/30 rounded"></div>
+                                        <div class="h-3 bg-white/30 rounded"></div>
+                                        <div class="h-3 bg-white/30 rounded"></div>
+                                        <div class="h-3 bg-white/30 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 bg-blue-500/50 h-2 rounded-full w-1/2 self-center"></div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-question text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Quiz App/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Quiz App</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">🧠 Quiz App</h3>
+                            <p class="text-white/60 text-sm">Timer • Leaderboard</p>
+                            <a href="Projects-website/Quiz App/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1400ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#141414] to-[#000000] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-[#e50914] text-xs font-bold mb-2">NETFLIX</span>
+                                <div class="grid grid-cols-3 gap-1 mb-2">
+                                    <div class="bg-white/20 h-4 rounded"></div>
+                                    <div class="bg-white/20 h-4 rounded"></div>
+                                    <div class="bg-white/20 h-4 rounded"></div>
+                                </div>
+                                <div class="bg-white/10 rounded p-1 flex items-center gap-1">
+                                    <i class="fa-solid fa-search text-white/50 text-[8px]"></i>
                                     <div class="h-2 bg-white/20 rounded flex-1"></div>
                                 </div>
-                                <div class="flex items-center gap-1">
-                                    <div class="w-3 h-3 bg-blue-500/50 rounded"></div>
-                                    <div class="h-2 bg-white/20 rounded flex-1"></div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-film text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Movie Search App/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Movie Search</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">🎬 Movie Search</h3>
+                            <p class="text-white/60 text-sm">TMDB API • Filter Genre</p>
+                            <a href="Projects-website/Movie Search App/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1500ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#2d3748] to-[#1a202c] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">📅 Maret 2026</span>
+                                <div class="grid grid-cols-7 gap-0.5 mb-2">
+                                    <div class="h-2 bg-blue-500/30 rounded"></div>
+                                    <div class="h-2 bg-blue-500/30 rounded"></div>
+                                    <div class="h-2 bg-blue-500/30 rounded"></div>
+                                    <div class="h-2 bg-blue-500/30 rounded"></div>
+                                    <div class="h-2 bg-blue-500/30 rounded"></div>
+                                    <div class="h-2 bg-blue-500/30 rounded"></div>
+                                    <div class="h-2 bg-blue-500/30 rounded"></div>
                                 </div>
-                                <div class="flex items-center gap-1">
-                                    <div class="w-3 h-3 bg-green-500/50 rounded"></div>
-                                    <div class="h-2 bg-white/20 rounded flex-1"></div>
+                                <div class="grid grid-cols-7 gap-0.5 flex-1">
+                                    <div class="bg-white/10 rounded"></div>
+                                    <div class="bg-white/10 rounded"></div>
+                                    <div class="bg-white/10 rounded"></div>
+                                    <div class="bg-white/10 rounded"></div>
+                                    <div class="bg-white/10 rounded"></div>
+                                    <div class="bg-white/10 rounded"></div>
+                                    <div class="bg-white/10 rounded"></div>
                                 </div>
                             </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-calendar text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Calendar/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Kalender</span>
+                            </a>
                         </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-folder text-white text-[10px]"></i>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">📅 Kalender</h3>
+                            <p class="text-white/60 text-sm">Google Calendar Mini</p>
+                            <a href="Projects-website/Calendar/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
                         </div>
-                        <a href="Projects-website/File Organizer/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View File Organizer</span>
-                        </a>
                     </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">📦 File Organizer</h3>
-                        <p class="text-white/60 text-sm">Drag & Drop • Folder System</p>
-                        <a href="Projects-website/File Organizer/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1600ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#065f46] to-[#064e3b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">💰 Finance</span>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-green-400 text-[8px]">+Rp 5jt</span>
+                                    <span class="text-red-400 text-[8px]">-Rp 2jt</span>
+                                </div>
+                                <div class="bg-gradient-to-r from-green-500 to-red-500 h-4 rounded mb-2"></div>
+                                <div class="grid grid-cols-2 gap-1">
+                                    <div class="bg-white/10 rounded p-1">
+                                        <div class="h-2 bg-white/20 rounded w-full mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded w-2/3"></div>
+                                    </div>
+                                    <div class="bg-white/10 rounded p-1">
+                                        <div class="h-2 bg-white/20 rounded w-full mb-1"></div>
+                                        <div class="h-1 bg-white/20 rounded w-1/2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-coins text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Finance Tracker/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Finance Tracker</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">💰 Finance Tracker</h3>
+                            <p class="text-white/60 text-sm">Expense Manager • Grafik</p>
+                            <a href="Projects-website/Finance Tracker/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 1700ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0ea5e9] to-[#0284c7] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">⚡ SaaS</span>
+                                <div class="flex justify-center gap-2 mb-2">
+                                    <div class="w-8 h-3 bg-white/30 rounded-full"></div>
+                                    <div class="w-8 h-3 bg-white/50 rounded-full"></div>
+                                </div>
+                                <div class="bg-white/20 rounded p-2 flex-1">
+                                    <div class="h-2 bg-white/30 rounded w-3/4 mb-2"></div>
+                                    <div class="h-2 bg-white/30 rounded w-1/2"></div>
+                                </div>
+                                <div class="mt-2 bg-white/30 h-3 rounded-full"></div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-rocket text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Landing page/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Landing Page</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">⚡ Landing Page SaaS</h3>
+                            <p class="text-white/60 text-sm">Animasi • Pricing Toggle</p>
+                            <a href="Projects-website/Landing page/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1800ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#581c87] to-[#6b21a8] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">🎮 Tic Tac Toe</span>
+                                <div class="grid grid-cols-3 gap-0.5 flex-1">
+                                    <div class="bg-white/20 rounded"></div>
+                                    <div class="bg-white/20 rounded"></div>
+                                    <div class="bg-white/20 rounded"></div>
+                                    <div class="bg-white/20 rounded"></div>
+                                    <div class="bg-white/30 rounded flex items-center justify-center">
+                                        <i class="fa-solid fa-x text-white text-[10px]"></i>
+                                    </div>
+                                    <div class="bg-white/20 rounded"></div>
+                                    <div class="bg-white/20 rounded"></div>
+                                    <div class="bg-white/30 rounded flex items-center justify-center">
+                                        <i class="fa-regular fa-circle text-white text-[6px]"></i>
+                                    </div>
+                                    <div class="bg-white/20 rounded"></div>
+                                </div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-gamepad text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Tic Tac Toe/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Mini Game</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">🎮 Mini Game</h3>
+                            <p class="text-white/60 text-sm">Tic Tac Toe AI</p>
+                            <a href="Projects-website/Tic Tac Toe/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="web" style="transition-delay: 1900ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#334155] to-[#1e293b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">📦 Cloud Drive</span>
+                                <div class="space-y-1 flex-1">
+                                    <div class="flex items-center gap-1">
+                                        <div class="w-3 h-3 bg-amber-500/50 rounded"></div>
+                                        <div class="h-2 bg-white/20 rounded flex-1"></div>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <div class="w-3 h-3 bg-blue-500/50 rounded"></div>
+                                        <div class="h-2 bg-white/20 rounded flex-1"></div>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <div class="w-3 h-3 bg-green-500/50 rounded"></div>
+                                        <div class="h-2 bg-white/20 rounded flex-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-folder text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/File Organizer/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View File Organizer</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">📦 File Organizer</h3>
+                            <p class="text-white/60 text-sm">Drag & Drop • Folder System</p>
+                            <a href="Projects-website/File Organizer/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 2000ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0f172a] to-[#1e293b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">🌟 Restaurant</span>
+                                <div class="bg-white/20 h-3 rounded mb-2"></div>
+                                <div class="grid grid-cols-2 gap-1 flex-1">
+                                    <div class="bg-white/20 rounded p-1">
+                                        <div class="h-1 bg-white/30 rounded w-2/3 mb-1"></div>
+                                        <div class="h-1 bg-amber-500/50 rounded w-1/2"></div>
+                                    </div>
+                                    <div class="bg-white/20 rounded p-1">
+                                        <div class="h-1 bg-white/30 rounded w-3/4 mb-1"></div>
+                                        <div class="h-1 bg-amber-500/50 rounded w-1/3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-utensils text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/Restaurant/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View Restaurant</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">🌟 Restaurant</h3>
+                            <p class="text-white/60 text-sm">GSAP • Parallax</p>
+                            <a href="Projects-website/Restaurant/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 2100ms">
+                    <div class="space-y-3">
+                        <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#10a37f] to-[#0d8c6f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
+                            <div class="absolute inset-0 p-3 flex flex-col">
+                                <span class="text-white text-xs font-semibold mb-2">🤖 ChatGPT</span>
+                                <div class="bg-white/20 rounded p-2 flex-1">
+                                    <div class="h-1.5 bg-white/30 rounded w-3/4 mb-1"></div>
+                                    <div class="h-1.5 bg-white/30 rounded w-1/2 mb-2"></div>
+                                    <div class="h-3 bg-white/40 rounded w-full"></div>
+                                </div>
+                                <div class="mt-2 bg-white/30 h-3 rounded-full"></div>
+                            </div>
+                            <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
+                                <i class="fa-solid fa-robot text-white text-[10px]"></i>
+                            </div>
+                            <a href="Projects-website/AI Tool Interferance/index.html" target="_blank" class="absolute inset-0 z-10">
+                                <span class="sr-only">View AI Tool</span>
+                            </a>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-white font-semibold text-lg">🤖 AI Tool Interface</h3>
+                            <p class="text-white/60 text-sm">ChatGPT Style • Typing Effect</p>
+                            <a href="Projects-website/AI Tool Interferance/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
+                                <span class="btn-text">Visit Site</span>
+                                <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Restaurant -->
-            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 2000ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#0f172a] to-[#1e293b] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">🌟 Restaurant</span>
-                            <div class="bg-white/20 h-3 rounded mb-2"></div>
-                            <div class="grid grid-cols-2 gap-1 flex-1">
-                                <div class="bg-white/20 rounded p-1">
-                                    <div class="h-1 bg-white/30 rounded w-2/3 mb-1"></div>
-                                    <div class="h-1 bg-amber-500/50 rounded w-1/2"></div>
-                                </div>
-                                <div class="bg-white/20 rounded p-1">
-                                    <div class="h-1 bg-white/30 rounded w-3/4 mb-1"></div>
-                                    <div class="h-1 bg-amber-500/50 rounded w-1/3"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-utensils text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/Restaurant/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View Restaurant</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">🌟 Restaurant</h3>
-                        <p class="text-white/60 text-sm">GSAP • Parallax</p>
-                        <a href="Projects-website/Restaurant/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Tool Interface -->
-            <div class="project-card group scroll-animate scale-in" data-category="ui" style="transition-delay: 2100ms">
-                <div class="space-y-3">
-                    <div class="card-thumb rounded-xl overflow-hidden bg-gradient-to-br from-[#10a37f] to-[#0d8c6f] aspect-[4/3] shadow-lg hover:shadow-2xl transition-shadow relative">
-                        <div class="absolute inset-0 p-3 flex flex-col">
-                            <span class="text-white text-xs font-semibold mb-2">🤖 ChatGPT</span>
-                            <div class="bg-white/20 rounded p-2 flex-1">
-                                <div class="h-1.5 bg-white/30 rounded w-3/4 mb-1"></div>
-                                <div class="h-1.5 bg-white/30 rounded w-1/2 mb-2"></div>
-                                <div class="h-3 bg-white/40 rounded w-full"></div>
-                            </div>
-                            <div class="mt-2 bg-white/30 h-3 rounded-full"></div>
-                        </div>
-                        <div class="absolute top-1 right-1 bg-black/30 rounded-full w-5 h-5 flex items-center justify-center">
-                            <i class="fa-solid fa-robot text-white text-[10px]"></i>
-                        </div>
-                        <a href="Projects-website/AI Tool Interferance/index.html" target="_blank" class="absolute inset-0 z-10">
-                            <span class="sr-only">View AI Tool</span>
-                        </a>
-                    </div>
-                    <div class="pt-2">
-                        <h3 class="text-white font-semibold text-lg">🤖 AI Tool Interface</h3>
-                        <p class="text-white/60 text-sm">ChatGPT Style • Typing Effect</p>
-                        <a href="Projects-website/AI Tool Interferance/index.html" target="_blank" rel="noopener noreferrer" class="project-visit-btn">
-                            <span class="btn-text">Visit Site</span>
-                            <span class="btn-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <div id="portfolio-button-container" class="text-center mt-12 scroll-animate fade-up"></div>
         </div>
+    </section>
 
-        <!-- Container for buttons -->
-        <div id="portfolio-button-container" class="text-center mt-12 scroll-animate fade-up"></div>
-    </div>
-</section>
-    <!-- Contact Section -->
     <section id="contact" class="py-20 bg-gradient-to-br from-[#0a1628] to-[#162647]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="flex flex-col lg:flex-row gap-12">
@@ -1730,7 +1281,6 @@
         </div>
     </section>
 
-    <!-- Documentation Section -->
     <section id="documentation" class="py-20 bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -1781,7 +1331,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="footer-grid">
@@ -1841,7 +1390,6 @@
         </div>
     </footer>
 
-    <!-- Scroll to Top Button -->
     <button id="scroll-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-[#00bbff] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#00ddff] transition z-50 opacity-0 pointer-events-none" aria-label="Scroll to top">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
