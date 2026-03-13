@@ -47,7 +47,7 @@
         <div class="container mx-auto px-4 md:px-8 lg:px-12 w-full relative">
             <div class="flex items-center h-[80px]">
                 <div class="flex items-center gap-2 flex-shrink-0">
-                    <img class="img-before-venus-text" src="favicon.png" alt="Wilbert logo">
+                    <img class="img-before-venus-text" src="favicon.png" alt="Wilbert logo" loading="lazy" decoding="async" width="30" height="30">
                     <span class="venus-text">Wilbert</span>
                 </div>
 
@@ -74,6 +74,10 @@
                             <a href="#documentation" class="more-dropdown-item">
                                 <i class="fa-solid fa-book text-[#00bbff]"></i>
                                 Documentation
+                            </a>
+                            <a href="#testimonials" class="more-dropdown-item">
+                                <i class="fa-solid fa-comments text-[#00bbff]"></i>
+                                Testimonials
                             </a>
                         </div>
                     </div>
@@ -103,12 +107,14 @@
                     <a href="#hero" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-house w-4"></i> Home</a>
                     <a href="#about" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-user w-4"></i> About</a>
                     <a href="#portfolio" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-briefcase w-4"></i> Portfolio</a>
+                    <a href="#testimonials" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-comments w-4"></i> Testimonials</a>
                     <a href="#contact" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-envelope w-4"></i> Contact</a>
                     <div class="border-t border-white/10 pt-2 mt-1">
                         <p class="text-white/40 text-xs uppercase tracking-wider mb-2 px-1">More</p>
                         <a href="#techstack" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-microchip w-4"></i> Tech Stack</a>
                         <a href="#services" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-cube w-4"></i> Services</a>
                         <a href="#documentation" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-book w-4"></i> Documentation</a>
+                        <a href="#testimonials" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-comments w-4"></i> Testimonials</a>
                     </div>
                     
                     <div class="flex items-center justify-between py-2 border-t border-white/10 mt-2 pt-2">
@@ -164,6 +170,7 @@
                              alt="Hero illustration showcasing professional portfolio" 
                              class="hero-image w-full h-auto max-h-[450px] object-cover rounded-2xl shadow-2xl"
                              loading="eager"
+                             decoding="async"
                              width="600"
                              height="450"
                              onerror="this.src='https://via.placeholder.com/600x400?text=Hero+Image'">
@@ -264,18 +271,18 @@
                 <div class="ts-card scroll-animate scale-in delay-100" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#264de4,#2965f1)"><i class="fa-brands fa-css3-alt"></i></div><span class="ts-name">CSS3</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:90%"></div></div></div>
                 <div class="ts-card scroll-animate scale-in delay-200" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#f0db4f,#e5c100)"><i class="fa-brands fa-js" style="color:#1a1a1a"></i></div><span class="ts-name">JavaScript</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:88%"></div></div></div>
                 <div class="ts-card scroll-animate scale-in delay-200" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#61dafb,#21b8d4)"><i class="fa-brands fa-react" style="color:#1a1a1a"></i></div><span class="ts-name">React</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:80%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-300" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#06b6d4,#0891b2)"><img src="https://cdn.simpleicons.org/tailwindcss/white" alt="Tailwind" style="width:28px;height:28px"></div><span class="ts-name">Tailwind</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:92%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-300" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#7952b3,#5a3d8a)"><img src="https://cdn.simpleicons.org/bootstrap/white" alt="Bootstrap" style="width:28px;height:28px"></div><span class="ts-name">Bootstrap</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:85%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#06b6d4,#0891b2)"><img src="https://cdn.simpleicons.org/tailwindcss/white" alt="Tailwind" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">Tailwind</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:92%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="frontend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#7952b3,#5a3d8a)"><img src="https://cdn.simpleicons.org/bootstrap/white" alt="Bootstrap" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">Bootstrap</span><span class="ts-badge frontend">Frontend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:85%"></div></div></div>
                 <div class="ts-card scroll-animate scale-in delay-100" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#3c873a,#215732)"><i class="fa-brands fa-node-js"></i></div><span class="ts-name">Node.js</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:75%"></div></div></div>
                 <div class="ts-card scroll-animate scale-in delay-200" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#3776ab,#1c4f80)"><i class="fa-brands fa-python"></i></div><span class="ts-name">Python</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:70%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-300" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#4479a1,#2e6390)"><img src="https://cdn.simpleicons.org/mysql/white" alt="MySQL" style="width:28px;height:28px"></div><span class="ts-name">MySQL</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:72%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-300" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#47a248,#2d6e2e)"><img src="https://cdn.simpleicons.org/mongodb/white" alt="MongoDB" style="width:28px;height:28px"></div><span class="ts-name">MongoDB</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:65%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#4479a1,#2e6390)"><img src="https://cdn.simpleicons.org/mysql/white" alt="MySQL" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">MySQL</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:72%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="backend"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#47a248,#2d6e2e)"><img src="https://cdn.simpleicons.org/mongodb/white" alt="MongoDB" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">MongoDB</span><span class="ts-badge backend">Backend</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:65%"></div></div></div>
                 <div class="ts-card scroll-animate scale-in delay-100" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#f05032,#bd3a22)"><i class="fa-brands fa-git-alt"></i></div><span class="ts-name">Git</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:88%"></div></div></div>
                 <div class="ts-card scroll-animate scale-in delay-200" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#181717,#444)"><i class="fa-brands fa-github"></i></div><span class="ts-name">GitHub</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:90%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-200" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#007acc,#005a9e)"><img src="https://cdn.simpleicons.org/visualstudiocode/white" alt="VS Code" style="width:28px;height:28px"></div><span class="ts-name">VS Code</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:95%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-300" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#ff6c37,#e04e1f)"><img src="https://cdn.simpleicons.org/postman/white" alt="Postman" style="width:28px;height:28px"></div><span class="ts-name">Postman</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:80%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-100" data-ts="design"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#f24e1e,#c93d13)"><img src="https://cdn.simpleicons.org/figma/white" alt="Figma" style="width:28px;height:28px"></div><span class="ts-name">Figma</span><span class="ts-badge design">Design</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:85%"></div></div></div>
-                <div class="ts-card scroll-animate scale-in delay-200" data-ts="design"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#31a8ff,#0070c0)"><img src="https://cdn.simpleicons.org/adobephotoshop/white" alt="Photoshop" style="width:28px;height:28px"></div><span class="ts-name">Photoshop</span><span class="ts-badge design">Design</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:70%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#007acc,#005a9e)"><img src="https://cdn.simpleicons.org/visualstudiocode/white" alt="VS Code" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">VS Code</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:95%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-300" data-ts="tools"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#ff6c37,#e04e1f)"><img src="https://cdn.simpleicons.org/postman/white" alt="Postman" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">Postman</span><span class="ts-badge tools">Tools</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:80%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-100" data-ts="design"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#f24e1e,#c93d13)"><img src="https://cdn.simpleicons.org/figma/white" alt="Figma" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">Figma</span><span class="ts-badge design">Design</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:85%"></div></div></div>
+                <div class="ts-card scroll-animate scale-in delay-200" data-ts="design"><div class="ts-icon-wrap" style="background:linear-gradient(135deg,#31a8ff,#0070c0)"><img src="https://cdn.simpleicons.org/adobephotoshop/white" alt="Photoshop" loading="lazy" decoding="async" style="width:28px;height:28px"></div><span class="ts-name">Photoshop</span><span class="ts-badge design">Design</span><div class="ts-bar-wrap"><div class="ts-bar" style="--bar:70%"></div></div></div>
             </div>
         </div>
     </section>
@@ -1222,6 +1229,101 @@
         </div>
     </section>
 
+    <section id="testimonials" class="py-20 bg-gradient-to-br from-[#0b1220] to-[#0f172a]">
+        <div class="container mx-auto px-4 md:px-8 lg:px-12">
+            <div class="text-center mb-14">
+                <div class="flex items-center justify-center gap-2 mb-4 scroll-animate fade-up">
+                    <span class="dot-green-small" aria-hidden="true"></span>
+                    <p class="text-[#00ff88] text-lg">Testimonials</p>
+                </div>
+                <h2 class="text-3xl lg:text-4xl text-white font-bold mb-4 scroll-animate fade-up delay-200">What Clients Say</h2>
+                <p class="text-white/70 text-lg max-w-2xl mx-auto scroll-animate fade-up delay-300">Cerita nyata dari klien yang puas dengan hasil kerja saya.</p>
+            </div>
+
+            <div class="testimonial-carousel-wrapper scroll-animate fade-up delay-400">
+                <div class="testimonial-overflow">
+                    <div class="testimonial-track" id="testimonialTrack">
+                        <div class="testimonial-card">
+                            <div class="testimonial-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Wilbert delivered an outstanding website that exceeded our expectations. His attention to detail and clean code made the entire process smooth and professional."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">A</div>
+                                <div>
+                                    <p class="testimonial-name">Ahmad Fauzi</p>
+                                    <p class="testimonial-role">CEO, TechStart ID</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Sangat profesional! Project e-commerce kami selesai tepat waktu dan hasilnya sangat memuaskan. Highly recommended untuk siapa saja yang butuh web developer handal."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706)">S</div>
+                                <div>
+                                    <p class="testimonial-name">Siti Rahma</p>
+                                    <p class="testimonial-role">Founder, Batik Online Store</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <p class="testimonial-text">"The dashboard he built for our analytics team is incredibly intuitive. The UI/UX is top-notch and our team productivity improved significantly after deployment."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar" style="background: linear-gradient(135deg, #10b981, #059669)">R</div>
+                                <div>
+                                    <p class="testimonial-name">Ryan Kusuma</p>
+                                    <p class="testimonial-role">Product Manager, DataViz Corp</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Komunikasi yang sangat baik selama proses pengerjaan. Wilbert selalu update progress dan siap menerima revisi dengan cepat. Pekerjaan selesai jauh melebihi ekspektasi kami."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar" style="background: linear-gradient(135deg, #ec4899, #db2777)">D</div>
+                                <div>
+                                    <p class="testimonial-name">Diana Pratiwi</p>
+                                    <p class="testimonial-role">Marketing Director, Kreasi Media</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Working with Wilbert was a great experience. He understood our requirements from the start and delivered a polished, responsive web app. Will definitely work with him again!"</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed)">B</div>
+                                <div>
+                                    <p class="testimonial-name">Budi Santoso</p>
+                                    <p class="testimonial-role">CTO, Startup Nusantara</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-nav">
+                    <button class="testimonial-btn" id="testimonialPrev" aria-label="Previous testimonial">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="testimonial-dots" id="testimonialDots"></div>
+                    <button class="testimonial-btn" id="testimonialNext" aria-label="Next testimonial">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="contact" class="py-20 bg-gradient-to-br from-[#0a1628] to-[#162647]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="flex flex-col lg:flex-row gap-12">
@@ -1299,7 +1401,7 @@
                         </div>
                         <div>
                             <p class="text-white text-lg">Email</p>
-                            <p class="text-white/60 break-all"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1067797c727562643e7c797d202850777d71797c3e737f7d">[email&#160;protected]</a></p>
+                            <p class="text-white/60 break-all">wilbert.lim08@gmail.com</p>
                         </div>
                         <div>
                             <p class="text-white text-lg mb-3">Follow Us</p>
@@ -1350,8 +1452,10 @@
                     <ul class="footer-links">
                         <li><a href="#hero">Home</a></li>
                         <li><a href="#about">About Us</a></li>
+                        <li><a href="#techstack">Tech Stack</a></li>
                         <li><a href="#services">Services</a></li>
                         <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
@@ -1375,7 +1479,7 @@
                     </div>
                     <div class="footer-contact-item">
                         <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                        <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f4839d9896918680da989d99c4ccb49399959d98da979b99">[email&#160;protected]</a></span>
+                        <span>wilbert.lim08@gmail.com</span>
                     </div>
                     <div class="footer-contact-item">
                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
