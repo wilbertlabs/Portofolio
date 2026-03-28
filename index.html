@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center">
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12 w-full relative">
             <div class="flex items-center h-[80px]">
                 <div class="flex items-center gap-2 flex-shrink-0">
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <div id="mobile-menu" class="hidden lg:hidden bg-[#061A36] rounded-lg mt-2 p-4" role="menu">
+            <div id="mobile-menu" class="lg:hidden bg-[#061A36] rounded-lg mt-2 p-4" role="menu">
                 <div class="flex flex-col space-y-3">
                     <a href="#hero" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-house w-4"></i> Home</a>
                     <a href="#about" class="mobile-nav-link" role="menuitem"><i class="fa-solid fa-user w-4"></i> About</a>
@@ -124,16 +124,16 @@
                         </button>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-2 pt-2">
+                    <!-- <div class="grid grid-cols-2 gap-2 pt-2">
                         <button onclick="window.location.href='signin/signin.html'" class="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition">Sign In</button>
                         <button onclick="window.location.href='signup/signup.html'" class="px-4 py-2 bg-[#00bbff] text-white rounded-lg hover:bg-[#00ddff] transition">Sign Up</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
     </nav>
 
-    <section id="hero" class="min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-screen flex items-center pt-0">
+    <section id="hero" class="flex items-center pt-[80px] bg-gradient-to-br from-[#0b1533] to-[#0f1d4a]">
         <div class="container mx-auto px-4 md:px-8 lg:px-12">
             <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
                 <div class="w-full lg:w-1/2 space-y-5">
@@ -157,7 +157,7 @@
                             <img src="avatar/avatar9.jpg" alt="Team member 2" loading="lazy" width="40" height="40" onerror="this.src='https://via.placeholder.com/40'">
                             <img src="avatar/avatar7.jpg" alt="Team member 3" loading="lazy" width="40" height="40" onerror="this.src='https://via.placeholder.com/40'">
                         </div>
-                        <div>
+                        <div class="text-left">
                             <p class="text-white text-sm">Need help? <span class="text-[#4da3ff]">Contact our experts</span></p>
                             <p class="text-white/60 text-xs">Tell us about your project</p>
                         </div>
@@ -165,14 +165,12 @@
                 </div>
 
                 <div class="w-full lg:w-1/2 flex justify-center scroll-animate fade-right delay-600">
-                    <div class="w-full max-w-lg">
+                    <div class="w-full">
                         <img src="assets/Gemini_Generated_Image_o1ja0to1ja0to1ja.png" 
                              alt="Hero illustration showcasing professional portfolio" 
-                             class="hero-image w-full h-auto max-h-[450px] object-cover rounded-2xl shadow-2xl"
+                             class="hero-image w-full object-cover rounded-2xl shadow-2xl"
                              loading="eager"
                              decoding="async"
-                             width="600"
-                             height="450"
                              onerror="this.src='https://via.placeholder.com/600x400?text=Hero+Image'">
                     </div>
                 </div>
@@ -1401,7 +1399,7 @@
                         </div>
                         <div>
                             <p class="text-white text-lg">Email</p>
-                            <p class="text-white/60 break-all">wilbert.lim08@gmail.com</p>
+                            <p class="text-white/60 break-all"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d8afb1b4babdaaacf6b4b1b5e8e098bfb5b9b1b4f6bbb7b5">[email&#160;protected]</a></p>
                         </div>
                         <div>
                             <p class="text-white text-lg mb-3">Follow Us</p>
@@ -1479,7 +1477,7 @@
                     </div>
                     <div class="footer-contact-item">
                         <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                        <span>wilbert.lim08@gmail.com</span>
+                        <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2156484d434453550f4d484c111961464c40484d0f424e4c">[email&#160;protected]</a></span>
                     </div>
                     <div class="footer-contact-item">
                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
@@ -1494,7 +1492,7 @@
         </div>
     </footer>
 
-    <button id="scroll-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-[#00bbff] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-[#00ddff] transition z-50 opacity-0 pointer-events-none" aria-label="Scroll to top">
+    <button id="scroll-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-[#00bbff] text-white rounded-full shadow-lg shadow-[#00bbff]/50 flex items-center justify-center hover:bg-[#00ddff] transition z-50" aria-label="Scroll to top">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
